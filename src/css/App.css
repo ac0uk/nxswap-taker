@@ -1,0 +1,409 @@
+#app {
+  max-width: 1440px;
+  margin: 0px auto;
+  height: 100%;
+  display: flex;
+  flex-flow: column;
+  justify-content: space-between;
+}
+
+#header {
+  height: 50px;
+  padding: 30px 60px;
+  display: flex;
+  justify-content: space-between;
+}
+
+#header .logo
+{
+  width: 160px;
+  height: 50px;
+}
+
+#header .logo a
+{
+  width: 160px;
+  height: 50px;
+  display: block;
+  background-image: url(/img/logo-nxswap.png);
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center center;
+}
+
+#header nav
+{
+  height: 50px;
+  display: flex;
+  align-items: center;
+}
+
+#header nav a
+{
+  color: white;
+  text-decoration: none;
+  padding: 14px 18px;
+  margin-left: 16px;
+  display: block;
+}
+ 
+#header nav a:hover
+{
+  opacity: 0.7;
+}
+
+#header nav a.circled
+{
+  border: 1px solid white;
+  border-radius: 4px;
+}
+
+#header nav a.twitter
+{
+  width: 26px;
+  height: 26px;
+  background-image: url(/img/twitter.png);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: contain;
+  padding: 0px;
+  margin-left: 24px;
+}
+
+#header nav a.disabled {
+  opacity: 0.4;
+}
+
+#content
+{
+  flex-grow: 1;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#footer
+{
+  padding: 40px 80px;
+  display: flex;
+  justify-content: space-between;
+}
+
+#footer a
+{
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+  opacity: 0.7;
+}
+
+#footer a:hover
+{
+  opacity: 1;
+}
+
+#footer span
+{
+  opacity: 0.3;
+  padding: 0px 12px;
+}
+
+.homecolumn
+{
+  flex-grow: 1;
+  max-width: 1200px;
+  display: flex;
+  height: 400px;
+}
+
+.homecolumn .blurb,
+.homecolumn .formc
+{
+  flex-grow: 1;
+  flex-basis: 0;
+}
+
+.homecolumn .blurb
+{
+  display: flex;
+  align-items: center;
+}
+
+.homecolumn .blurby
+{
+  max-width: 500px;
+}
+.homecolumn .blurb h1,
+.homecolumn .blurb h2,
+.homecolumn .blurb h3,
+.homecolumn .blurb h4
+{
+  display: block;
+  font-weight: 400;
+}
+
+.homecolumn .blurb h1
+{
+  padding-bottom: 8px;
+  font-size: 30px;
+}
+
+.homecolumn .blurb h2
+{
+  font-size: 24px;
+  padding-bottom: 20px;
+}
+
+.homecolumn .blurb h3
+{
+  font-size: 18px;
+  opacity: 0.6;
+  line-height: 30px;
+}
+
+.homecolumn .blurb h4
+{
+  opacity: 0.4;
+  line-height: 26px;
+  font-size: 14px;
+}
+
+.homecolumn .supported-icons
+{
+  padding: 36px 0px;
+}
+
+.homecolumn .supported-icons img
+{
+  width: 30px;
+  height: 30px;
+  margin-right: 12px;
+  box-shadow: 1px 1px 2px 0px rgba(0,0,0,0.3);
+  border-radius: 99em;
+}
+
+.homecolumn .formc
+{
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.homecolumn .formb
+{
+  background: white;
+  border-radius: 6px;
+  color: #666;
+  width: 420px;
+}
+
+.homecolumn .formw
+{
+  background: white;
+  border-radius: 6px;
+  color: #666;
+  flex-grow: 1;
+}
+
+.homecolumn .formi
+{
+  padding: 24px;
+}
+
+.homecolumn .formb #swap_form_currency_selector
+{
+  display: none;
+  padding: 24px;
+}
+
+.homecolumn .formb .formi .label
+{
+  display: block;
+  padding: 0px 1px;
+  font-size: 14px;
+}
+
+.homecolumn .formb .formi .currency_select
+{
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 20px 16px;
+  margin: 12px 0px 24px 0px;
+}
+
+.homecolumn .formb .formi .currency_select:hover
+{
+  cursor: pointer;
+  border: 1px solid #aaa;
+}
+
+.homecolumn .formb .formi .currency_select img
+{
+  width: 26px;
+  height: 26px;
+  vertical-align: middle;
+  margin-top: -2px;
+}
+
+.homecolumn .formb .formi .currency_select span
+{
+  margin-left: 14px;
+  font-size: 18px;
+  line-height: 26px;
+}
+
+.homecolumn .formb .formi .currency_select i
+{
+  width: 10px;
+  height: 26px;
+  background-image: url(/img/chevron-right.png);
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center center;
+  display: inline-block;
+  float: right;
+}
+
+.homecolumn .formb .formi button.submit
+{
+  border-radius: 3px;
+  background: green;
+  padding: 24px 12px;
+  text-align: center;
+  display: block;
+  width: 100%;
+  border: none;
+  font-size: 18px;
+  color: white;
+  cursor: pointer;
+}
+
+.homecolumn .formb .formi button.submit.disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.trackswap
+{
+  flex-grow: 1;
+  height: 400px;
+  max-width: 1000px;
+  background: white;
+  border-radius: 6px;
+}
+
+.trackswap .trackheader
+{
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  background: #bdbcbc;
+  display: flex;
+  justify-content: space-between;
+}
+
+.trackswap .trackheader ul.trackprogress {
+  list-style: none;
+  overflow: hidden;
+}
+
+.trackswap .trackheader ul.trackprogress li {
+  float: left;
+}
+
+.trackswap .trackheader ul.trackprogress li span {
+  color: white;
+  text-decoration: none; 
+  padding: 20px 36px 20px 44px;
+  text-transform: uppercase;
+  font-weight: 500;
+  position: relative; 
+  display: block;
+  float: left;
+  opacity: 0.7;
+}
+
+.trackswap .trackheader ul.trackprogress li:first-child span{
+  padding-left: 28px;
+}
+
+.trackswap .trackheader ul.trackprogress li.active {
+  background: #636161;
+  opacity: 1;
+}
+
+.trackswap .trackheader ul.trackprogress li.active span {
+  opacity: 1;
+}
+
+.trackswap .trackheader ul.trackprogress li.completed {
+  background: #636161;
+  opacity: 1;
+}
+
+.trackswap .trackheader ul.trackprogress li.completed span {
+  opacity: 0.3;
+}
+
+
+.trackswap .trackheader ul.trackprogress li span::after { 
+  content: " "; 
+  display: block; 
+  width: 0; 
+  height: 0;
+  border-top: 50px solid transparent;
+  border-bottom: 50px solid transparent;
+  border-left: 30px solid transparent;
+  position: absolute;
+  top: 50%;
+  margin-top: -50px; 
+  left: 100%;
+  z-index: 2; 
+}
+
+.trackswap .trackheader ul.trackprogress li.active span::after {
+  border-left: 30px solid #636161;
+}
+
+.trackswap .trackheader ul.trackprogress li.completed span::after {
+  opacity: 0.5;
+}
+
+
+.trackswap .trackheader ul.trackprogress li span::before { 
+  content: " "; 
+  display: block; 
+  width: 0; 
+  height: 0;
+  border-top: 50px solid transparent;       
+  border-bottom: 50px solid transparent;
+  border-left: 30px solid transparent;
+  position: absolute;
+  top: 50%;
+  margin-top: -50px; 
+  margin-left: 1px;
+  left: 100%;
+  z-index: 1; 
+}
+
+.trackswap .trackheader ul.trackprogress li.active span::before {
+  border-left: 30px solid #636161;
+}
+
+.trackswap .trackheader ul.trackprogress li.completed span::before {
+  opacity: 0.5;
+}
+
+#dynamic_content {
+  display: none;
+}
+
+.form_loading {
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.form_hidden,
+.hidden {
+  display: none;
+}

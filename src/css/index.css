@@ -1,0 +1,12 @@
+* { margin: 0; padding: 0; }
+
+html, body, #root, #app { height: 100%; }
+
+body {
+  background: rgb(31,52,90);
+  background: linear-gradient(180deg, rgba(31,52,90,1) 0%, rgba(13,29,56,1) 100%);
+  color: white;
+  font-family: Helvetica Neue, Helvetica;
+  font-style: normal;
+  font-weight: 400;
+}
