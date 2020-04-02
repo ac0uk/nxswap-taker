@@ -10,6 +10,8 @@ class NXBackup {
 		// Backup Object
 		this.NXBackupLocalObject = this.fetchOrCreateLocalStoredObject("NXSwapBackup");
 		
+		this.NXBackupObject = {}
+		
 		// Supported Backup Methods Settings
 		this.backupDropbox = backupDropbox
 	}
@@ -28,6 +30,7 @@ class NXBackup {
 		if( this.backupConnected ) {
 			return true;
 		}
+		
 		return false;
 	}
 	
@@ -46,6 +49,21 @@ class NXBackup {
 		this.backupDropbox.setAccessToken(dropboxObj.accessToken);
 		
 		let recoveryObj = await this.backupDropbox.fetchRecoveryObject();
+		
+		if( ! recoveryObj ) {
+			console.log( 'failed to fetch from dropbox')
+			return false;
+		}
+		
+		console.log('[DROPBOX]: got recovery obj' )
+		console.log(recoveryObj)
+		
+		// Backup is good!
+		
+		this.NXBackupObject = recoveryObj;
+		this.backupConnected = true;
+		
+		//this.clearLocalNXBackupObject();
 		
 		return false;
 	}
@@ -83,8 +101,8 @@ class NXBackup {
 		store("NXSwapBackup", this.NXBackupLocalObject);
 	}
 	
-	clearLocalObject ( objectName ) {
-		store(objectName, false);
+	clearLocalNXBackupObject ( ) {
+		store("NXSwapBackup", false);
 	}
 }
 

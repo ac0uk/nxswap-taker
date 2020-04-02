@@ -22,6 +22,10 @@ class Backup extends React.Component {
 	
 	BackupIncomingDropbox () {
 		const { NXBackupClient } = this.context
+		
+		if( ! NXBackupClient ) {
+			return false
+		}
 		let extractAccessToken = NXBackupClient.backupDropbox.extractAccessToken(window.location.hash);
 		
 		if( ! extractAccessToken  || ! NXBackupClient.saveDropboxBackup(extractAccessToken) ) {
@@ -32,14 +36,22 @@ class Backup extends React.Component {
 		}
 	}
 	
-	render() {		 
+	render() {
+		const { backupConnecting, backupConnected } = this.context
+				
+		let mainBackupContent = ( backupConnected ) ? ( <Redirect to='/backup/manage' /> ) : 
+			(<div>
+				<button onClick={() => this.connectDropboxClick()}>connect dropbox?</button>
+			</div>)
+		
 		return (
 			<Switch>
         <Route path="/backup/incomingDropboxConnect" render={() => { return this.BackupIncomingDropbox(); }}></Route>
+				<Route path="/backup/manage">
+				manage
+				</Route>
         <Route path="/backup">
-          <div>
-						<button onClick={() => this.connectDropboxClick()}>connect dropbox?</button>
-					</div>
+          {mainBackupContent}
         </Route>
       </Switch>
 		)

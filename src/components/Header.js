@@ -7,7 +7,7 @@ import { NXContext } from "../contexts/NXContext.js"
 
 class Header extends React.Component {	
   render() {
-		const { NXBackupClient, backupConnecting, backupConnected } = this.context
+		const { backupConnecting, backupConnected } = this.context
 		
 		let backupLink
 		let trackLink
@@ -18,7 +18,7 @@ class Header extends React.Component {
 			backupLink = ( <Link to="/backup" className={backupLinkClass}>Restore Backup</Link> )
 			trackLink = ( <Link to="/backup" className={`circled ${backupLinkClass}`}>Get Started</Link> )
 		} else {
-			backupLink = ( <Link to="/backup">Manage Backup</Link> )
+			backupLink = ( <Link to="/backup/manage">Manage Backup</Link> )
 			trackLink = ( <Link to="/track" className="circled">Track Your Swaps</Link> )
 		}
 				

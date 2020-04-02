@@ -13,7 +13,7 @@ const NXProvider = ({children}) => {
     const initNXBackup = async () => {
 			
 			// Initialise NX Backup Client
-			const backupClient = new NXBackup();
+			const backupClient = await new NXBackup();
 			setNXBackupClient(backupClient);
 			
 			let backupConnectedStatus = await backupClient.determineCurrentBackupStatus();

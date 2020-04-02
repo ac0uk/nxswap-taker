@@ -1,5 +1,6 @@
 var fetch = require('isomorphic-fetch');
 var Dropbox = require('dropbox').Dropbox;
+const dch = require('./Dropbox/dropbox-content-hasher');
 
 class NXBackupDropbox {
 	constructor({ dropboxClientID }) {
@@ -25,16 +26,120 @@ class NXBackupDropbox {
 		this.dbx.setAccessToken(accessToken)
 	}
 	
+	
+	////
+	// ERGH
+	// ARGH
+	// 
+	
 	async fetchRecoveryObject () {
-		await this.dbx.filesListFolder({path: ''})
+		
+		var recoveryObj = false;
+		var fetchedBlob = false
+		var createObject = false;
+		
+		await this.dbx.filesDownload({ path: '/recovery.nxswap.json'})
+      .then(function(data){
+					fetchedBlob = data.fileBlob
+      })
+      .catch(function (err) {
+				var error;
+				try {
+					error = JSON.parse(err.error);
+				}
+				catch(error) {
+					// not json
+					return false;
+				}
+				if( error.error.path[".tag"] === "not_found" ) {
+					console.log( 'create it?' )
+					createObject = true;
+				} else {
+					console.log( 'unknown fetch error:' );
+					console.log( error );
+				}
+    	});
+		
+		if( createObject ) {
+			await this.createRecoveryObject().then( function (result) {
+				recoveryObj = result;
+			});
+		}
+		else if( fetchedBlob !== false ) {
+			let readBlob = await this.readBlobPromise(fetchedBlob)
+			
+			try {
+				recoveryObj = JSON.parse(readBlob)
+			}
+			catch(e) {
+				console.log(e);
+			}
+		}
+		
+		return recoveryObj;
+	}
+	
+	async readBlobPromise (blob) {
+		return new Promise((resolve) => {
+			const fileReader = new FileReader();
+			fileReader.onload = function() {
+					resolve(this.result);
+			};
+
+			fileReader.readAsText(blob);
+		});
+	}
+	
+	// END ARGH ERGH
+	
+	async createRecoveryObject() {
+		let recoveryObject = {}
+		let saveObject = await this.saveRecoveryObject(recoveryObject);
+		
+		if( ! saveObject ) {
+			return false;
+		}
+		
+		return recoveryObject;
+	}
+	
+	async saveRecoveryObject ( recoveryObject ) {
+		let jsonString = JSON.stringify(recoveryObject);
+		
+		let hashedContents = false
+		
+		try {
+			const hasher = dch.create();
+			hasher.update(jsonString);
+			hashedContents = hasher.digest('hex')
+		}
+		catch( error ) {
+			return false
+		}
+		
+		var successSave = false;
+		
+		await this.dbx.filesUpload({path: '/recovery.nxswap.json', contents: jsonString, mode: 'overwrite' })
 			.then(function(response) {
-				console.log( response )
-				return true;
+				let content_hash = response.content_hash;
+								
+				if( content_hash === hashedContents ) {
+					// good hash
+					successSave = true;
+				} else {
+					// Delete bad hashed recovery?
+					// Rename to corrupt? er
+					// shouldn't continue?
+					successSave = false;
+					// return false?
+					// but reloading will try and load the recovery file?
+				}
 			})
 			.catch(function(error) {
 				console.error(error);
-				return false;
 			});
+			
+		return successSave;
 	}
 	
 	// argh? really? annoying..
