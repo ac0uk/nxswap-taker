@@ -49,15 +49,14 @@ class Backup extends React.Component {
     }
 
     if( backupRequiresEncryption || backupRequiresDecryption || backupConnected ) {
-      console.log('moving')
       return ( <Redirect to="/backup/manage" /> )
     }
 
-    console.log( 'get started');
-
 		return (
 			<div>
-				get started
+				get started<br />
+        nxswap only gets access to its own folder, it does not get access to your whole dropbox<br />
+        nxswap does not access any of your personal information<br />
 				<button onClick={() => this.connectDropboxClick()}>connect dropbox?</button>
 			</div>
 		)

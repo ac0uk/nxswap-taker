@@ -27,12 +27,6 @@ class NXBackupDropbox {
 	setAccessToken (accessToken) {
 		this.dbx.setAccessToken(accessToken)
 	}
-	
-	
-	////
-	// ERGH
-	// ARGH
-  // 
   
   async fetchRecoveryObject ( localRecoveryObject ) {
     var fetchCompleted = false;
@@ -103,69 +97,6 @@ class NXBackupDropbox {
     }
 	}
   
-  /*
-	async fetchRecoveryObject ( localRecoveryObject ) {
-
-		var recoveryObj = false;
-		var fetchedBlob = false
-		var createObject = false;
-		
-		await this.dbx.filesDownload({ path: '/recovery.nxswap.json'})
-      .then(function(data){
-					fetchedBlob = data.fileBlob
-      })
-      .catch(function (err) {
-			var error;
-			try {
-				error = JSON.parse(err.error);
-			}
-			catch(error) {
-				// not json
-				return false;
-			}
-			if( error.error.path[".tag"] === "not_found" ) {
-				console.log( 'create it?' )
-				createObject = true;
-			} else {
-				console.log( 'unknown fetch error:' );
-				console.log( error );
-			}
-    	});
-		
-		if( createObject ) {
-			await this.createRecoveryObject(localRecoveryObject).then( function (result) {
-				recoveryObj = result;
-			});
-		}
-		else if( fetchedBlob !== false ) {
-			let readBlob = await this.readBlobPromise(fetchedBlob)
-			
-			try {
-        // Attempt decrypt...
-        let encryptionHash = localRecoveryObject.encryptionHash;
-
-        let encryptionHashHash = this.sha256Hash(encryptionHash);
-
-        let decryptRecoveryFile = sjcl.decrypt( encryptionHashHash, readBlob );	
-       
-        let parseJSON = JSON.parse( decryptRecoveryFile );
-
-        if( ! parseJSON.recoveryObject ) {
-          recoveryObj = {}
-        } else {
-          recoveryObj = parseJSON.recoveryObject;
-        }
-			}
-			catch(e) {
-        console.log(e);
-        return false;
-			}
-		}
-		
-		return recoveryObj;
-	}
-  */
-  
 	async readBlobPromise (blob) {
 		return new Promise((resolve) => {
 			const fileReader = new FileReader();
@@ -176,8 +107,6 @@ class NXBackupDropbox {
 			fileReader.readAsText(blob);
 		});
 	}
-	
-	// END ARGH ERGH
 	
 	async saveEncryptedRecoveryObject ( encryptedRecoveryObject ) {
     if( ! encryptedRecoveryObject ) return false;

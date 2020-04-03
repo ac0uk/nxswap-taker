@@ -30,8 +30,6 @@ class NXBackup {
 		let backupMethod = this.NXBackupLocalObject.backupMethod;
     let encryptionHash = this.NXBackupLocalObject.encryptionHash;
     
-    console.log(this.NXBackupLocalObject);
-
 		if( ! backupMethod ) {
       this.setBackupConnecting(false);
 			return false;
@@ -57,7 +55,6 @@ class NXBackup {
     this.clearLocalNXBackupObject();
     this.backupConnected = false;
     this.setBackupConnected(false);
-    console.log('disconnected local backup');
   }
 
   // Encryption Password..
@@ -81,8 +78,6 @@ class NXBackup {
     
     // Attempt to decode...
 
-    console.log( 'attempt to decode..' );
-
     let attemptDecrypt = this.decodeEncryptedRecoveryObject();
 
     if( ! attemptDecrypt ) {
@@ -90,7 +85,6 @@ class NXBackup {
     }
 
     this.saveLocalNXBackupObject();
-    
     return true;
   }
   
@@ -170,7 +164,6 @@ class NXBackup {
     this.setBackupRequiresEncryption(false);
     this.backupConnected = true;
     this.setBackupConnected(true);
-
     return true;
   }
 	
@@ -182,9 +175,7 @@ class NXBackup {
 		if( ! dropboxObj || ! dropboxObj.accessToken ) {
 			return false
 		}
-		
-    console.log( 'connecting dropbox..' );
-				
+						
     this.backupDropbox.setAccessToken(dropboxObj.accessToken);
     
     let { fetchCompleted, fetchedRecoveryObject } = await this.backupDropbox.fetchRecoveryObject(this.NXBackupLocalObject);
@@ -195,13 +186,9 @@ class NXBackup {
       return false;
     }
 
-    console.log( 'Fetch from dropbox completed..' );
-
     if( ! fetchedRecoveryObject ) {
       // Fetch returned as completed..
       // Recovery object does not exist?
-
-      console.log( 'no fetched recovery object' );
 
       let encryptedRecoveryObject = await this.returnEncryptedRecoveryObject();
 
@@ -214,7 +201,6 @@ class NXBackup {
       let saveRecoveryObject = await this.backupDropbox.saveEncryptedRecoveryObject(encryptedRecoveryObject);
 
       if( ! saveRecoveryObject ) {
-        console.log( 'save recovery object failed?');
         return false;
       }
 
@@ -227,8 +213,6 @@ class NXBackup {
     let decodeRecoveryObject = this.decodeEncryptedRecoveryObject();
 
     if( ! decodeRecoveryObject ) {
-      console.log( 'failed to decode recovery object' );
-      console.log( this.encryptedRecoveryObject );
       return false;
     }
 
