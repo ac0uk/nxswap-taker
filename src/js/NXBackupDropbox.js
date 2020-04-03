@@ -1,3 +1,5 @@
+import crypto from 'crypto';
+
 var fetch = require('isomorphic-fetch');
 var Dropbox = require('dropbox').Dropbox;
 const dch = require('./Dropbox/dropbox-content-hasher');
@@ -30,10 +32,80 @@ class NXBackupDropbox {
 	////
 	// ERGH
 	// ARGH
-	// 
-	
-	async fetchRecoveryObject () {
-		
+  // 
+  
+  async fetchRecoveryObject ( localRecoveryObject ) {
+    var fetchCompleted = false;
+		var fetchedBlob = false;
+    var fetchError = false;
+    var fetchedRecoveryObject = false;
+
+    // Attempt to download
+		await this.dbx.filesDownload({ path: '/recovery.nxswap.json'}).then( function(data) {
+		  fetchedBlob = data.fileBlob;
+    }).catch(function (err) {
+      var error;
+      try {
+        error = JSON.parse(err.error);
+        fetchError = error;
+      }
+      catch(error) {
+        // not json
+        return false;
+      }
+    });
+
+    if( ! fetchedBlob ) {
+      // Unable to download recovery object..
+      // Unknown Error?
+      if( ! fetchError ) {
+        return {
+          fetchCompleted,
+          fetchedRecoveryObject
+        };
+      }
+
+      // File not found?
+      // Considered fetch completed, return
+
+      if( fetchError.error.path[".tag"] === "not_found" ) {
+        fetchCompleted = true;
+        return {
+          fetchCompleted,
+          fetchedRecoveryObject
+        }
+      }
+
+      // Other errors?
+      console.log( 'Fetch Error:' );
+      console.log( fetchError );
+
+      return {
+        fetchCompleted,
+        fetchedRecoveryObject
+      }
+    }
+
+    // Blob fetched?
+
+    let readBlob = await this.readBlobPromise(fetchedBlob);
+
+    if( ! readBlob ) {
+      return false;
+    }
+    
+    fetchCompleted = true;
+    fetchedRecoveryObject = readBlob;
+
+		return {
+      fetchCompleted,
+      fetchedRecoveryObject
+    }
+	}
+  
+  /*
+	async fetchRecoveryObject ( localRecoveryObject ) {
+
 		var recoveryObj = false;
 		var fetchedBlob = false
 		var createObject = false;
@@ -43,25 +115,25 @@ class NXBackupDropbox {
 					fetchedBlob = data.fileBlob
       })
       .catch(function (err) {
-				var error;
-				try {
-					error = JSON.parse(err.error);
-				}
-				catch(error) {
-					// not json
-					return false;
-				}
-				if( error.error.path[".tag"] === "not_found" ) {
-					console.log( 'create it?' )
-					createObject = true;
-				} else {
-					console.log( 'unknown fetch error:' );
-					console.log( error );
-				}
+			var error;
+			try {
+				error = JSON.parse(err.error);
+			}
+			catch(error) {
+				// not json
+				return false;
+			}
+			if( error.error.path[".tag"] === "not_found" ) {
+				console.log( 'create it?' )
+				createObject = true;
+			} else {
+				console.log( 'unknown fetch error:' );
+				console.log( error );
+			}
     	});
 		
 		if( createObject ) {
-			await this.createRecoveryObject().then( function (result) {
+			await this.createRecoveryObject(localRecoveryObject).then( function (result) {
 				recoveryObj = result;
 			});
 		}
@@ -69,16 +141,31 @@ class NXBackupDropbox {
 			let readBlob = await this.readBlobPromise(fetchedBlob)
 			
 			try {
-				recoveryObj = JSON.parse(readBlob)
+        // Attempt decrypt...
+        let encryptionHash = localRecoveryObject.encryptionHash;
+
+        let encryptionHashHash = this.sha256Hash(encryptionHash);
+
+        let decryptRecoveryFile = sjcl.decrypt( encryptionHashHash, readBlob );	
+       
+        let parseJSON = JSON.parse( decryptRecoveryFile );
+
+        if( ! parseJSON.recoveryObject ) {
+          recoveryObj = {}
+        } else {
+          recoveryObj = parseJSON.recoveryObject;
+        }
 			}
 			catch(e) {
-				console.log(e);
+        console.log(e);
+        return false;
 			}
 		}
 		
 		return recoveryObj;
 	}
-	
+  */
+  
 	async readBlobPromise (blob) {
 		return new Promise((resolve) => {
 			const fileReader = new FileReader();
@@ -92,44 +179,34 @@ class NXBackupDropbox {
 	
 	// END ARGH ERGH
 	
-	async createRecoveryObject() {
-		let recoveryObject = {}
-		let saveObject = await this.saveRecoveryObject(recoveryObject);
-		
-		if( ! saveObject ) {
-			return false;
-		}
-		
-		return recoveryObject;
-	}
-	
-	async saveRecoveryObject ( recoveryObject ) {
-		let jsonString = JSON.stringify(recoveryObject);
-		
+	async saveEncryptedRecoveryObject ( encryptedRecoveryObject ) {
+    if( ! encryptedRecoveryObject ) return false;
+
 		let hashedContents = false
 		
 		try {
 			const hasher = dch.create();
-			hasher.update(jsonString);
+			hasher.update(encryptedRecoveryObject);
 			hashedContents = hasher.digest('hex')
 		}
 		catch( error ) {
 			return false
-		}
+    }
 		
 		var successSave = false;
 		
-		await this.dbx.filesUpload({path: '/recovery.nxswap.json', contents: jsonString, mode: 'overwrite' })
+		await this.dbx.filesUpload({path: '/recovery.nxswap.json', contents: encryptedRecoveryObject, mode: 'overwrite' })
 			.then(function(response) {
 				let content_hash = response.content_hash;
 								
 				if( content_hash === hashedContents ) {
-					// good hash
+          // good hash
 					successSave = true;
 				} else {
 					// Delete bad hashed recovery?
 					// Rename to corrupt? er
-					// shouldn't continue?
+          // shouldn't continue?
+          console.log( 'bad hash check');
 					successSave = false;
 					// return false?
 					// but reloading will try and load the recovery file?
@@ -140,6 +217,11 @@ class NXBackupDropbox {
 			});
 			
 		return successSave;
+  }
+  
+  sha256Hash (string) {
+		let stringHash = crypto.createHash('sha256').update(string).digest('hex');
+		return stringHash;
 	}
 	
 	// argh? really? annoying..

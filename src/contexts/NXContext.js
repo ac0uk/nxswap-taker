@@ -7,22 +7,22 @@ const NXProvider = ({children}) => {
 	
 	const [NXBackupClient, setNXBackupClient] = useState();
 	const [backupConnecting, setBackupConnecting] = useState(true);
+	const [backupRequiresEncryption, setBackupRequiresEncryption] = useState(false);
+	const [backupRequiresDecryption, setBackupRequiresDecryption] = useState(false);
 	const [backupConnected, setBackupConnected] = useState(false);
 		
 	useEffect(() => {
     const initNXBackup = async () => {
-			
 			// Initialise NX Backup Client
 			const backupClient = await new NXBackup();
+
+			backupClient.setBackupConnecting = setBackupConnecting;
+			backupClient.setBackupConnected = setBackupConnected;
+			backupClient.setBackupRequiresEncryption = setBackupRequiresEncryption;
+			backupClient.setBackupRequiresDecryption = setBackupRequiresDecryption;
+
 			setNXBackupClient(backupClient);
-			
-			let backupConnectedStatus = await backupClient.determineCurrentBackupStatus();
-			
-			if( backupConnectedStatus ) {
-				setBackupConnected(true);
-			}
-			
-			setBackupConnecting(false);
+			await backupClient.determineCurrentBackupStatus();
     };
 	
     initNXBackup();
@@ -32,6 +32,8 @@ const NXProvider = ({children}) => {
     <NXContext.Provider
       value={{
 				backupConnecting,
+				backupRequiresEncryption,
+				backupRequiresDecryption,
 				backupConnected,
 				NXBackupClient
       }}
