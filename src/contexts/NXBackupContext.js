@@ -23,14 +23,6 @@ const NXBackupProvider = ({children}) => {
 
 			setNXBackupClient(backupClient);
 			await backupClient.determineCurrentBackupStatus();
-
-			// Initialise NXWS Client
-		//	const nxwsClient = new NXWS();
-			//nxwsClient.setNXWSConnected = setNXWSConnected;
-			//nxwsClient.setNXWSCurrencies = setNXWSCurrencies;
-
-			//setNXWSClient(nxwsClient);
-			//await nxwsClient.setupNXWS();
     };
 	
     initNXBackup();

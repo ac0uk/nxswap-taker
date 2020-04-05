@@ -26,7 +26,7 @@ const NXWSProvider = ({children}) => {
 	return (
     <NXWSContext.Provider
       value={{
-				NXWSClient,
+			  NXWSClient,
 				nxwsConnected,
 				nxwsCurrencies
       }}
