@@ -4,13 +4,16 @@ import './css/index.css';
 import App from './components/App';
 import * as serviceWorker from './serviceWorker';
 
-import { NXProvider } from "./contexts/NXContext.js";
+import { NXBackupProvider } from "./contexts/NXBackupContext.js";
+import { NXWSProvider } from "./contexts/NXWSContext.js";
 
 ReactDOM.render(
   <React.StrictMode>
-    <NXProvider>
-    <App />
-    </NXProvider>
+    <NXBackupProvider>
+      <NXWSProvider>
+      <App />
+      </NXWSProvider>
+    </NXBackupProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

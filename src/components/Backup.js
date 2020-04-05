@@ -6,7 +6,7 @@ import {
   Link
 } from "react-router-dom";
 
-import { NXContext } from "../contexts/NXContext.js"
+import { NXBackupContext } from "../contexts/NXBackupContext.js"
 
 class Backup extends React.Component {
   constructor(props) {
@@ -147,7 +147,7 @@ class Backup extends React.Component {
 
     return (
       <div>
-        please decrypt your backup, you set this password when you connected dropbox.. <br />
+        please decrypt your backup, you set this password when you originally connected this dropbox account.. <br />
         <form onSubmit={this.handleDecryptionSubmit} className={formDisabledClassName}>
           <input type="password" onChange={this.handleDecryptionInputChange} disabled={formInputDisabled}></input>
           <input type="submit" value="Submit"></input>
@@ -213,5 +213,5 @@ class Backup extends React.Component {
   }
 }
 
-Backup.contextType = NXContext;
+Backup.contextType = NXBackupContext;
 export default Backup;

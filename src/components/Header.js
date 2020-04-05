@@ -3,7 +3,7 @@ import {
 	Link
 } from "react-router-dom";
 
-import { NXContext } from "../contexts/NXContext.js"
+import { NXBackupContext } from "../contexts/NXBackupContext.js"
 
 class Header extends React.Component {
 
@@ -68,5 +68,5 @@ class Header extends React.Component {
   }
 }
 
-Header.contextType = NXContext;
+Header.contextType = NXBackupContext;
 export default Header;

@@ -1,9 +1,9 @@
 import React, {useState, useEffect } from 'react';
+import NXBackup from '../js/NXBackup.js';
 
-import NXBackup from '../js/NXBackup.js'
+const NXBackupContext = React.createContext();
 
-const NXContext = React.createContext();
-const NXProvider = ({children}) => {
+const NXBackupProvider = ({children}) => {
 	
 	const [NXBackupClient, setNXBackupClient] = useState();
 	const [backupConnecting, setBackupConnecting] = useState(true);
@@ -14,7 +14,7 @@ const NXProvider = ({children}) => {
 	useEffect(() => {
     const initNXBackup = async () => {
 			// Initialise NX Backup Client
-			const backupClient = await new NXBackup();
+			const backupClient = new NXBackup();
 
 			backupClient.setBackupConnecting = setBackupConnecting;
 			backupClient.setBackupConnected = setBackupConnected;
@@ -23,24 +23,32 @@ const NXProvider = ({children}) => {
 
 			setNXBackupClient(backupClient);
 			await backupClient.determineCurrentBackupStatus();
+
+			// Initialise NXWS Client
+		//	const nxwsClient = new NXWS();
+			//nxwsClient.setNXWSConnected = setNXWSConnected;
+			//nxwsClient.setNXWSCurrencies = setNXWSCurrencies;
+
+			//setNXWSClient(nxwsClient);
+			//await nxwsClient.setupNXWS();
     };
 	
     initNXBackup();
   }, []);
 	
 	return (
-    <NXContext.Provider
+    <NXBackupContext.Provider
       value={{
+				NXBackupClient,
 				backupConnecting,
 				backupRequiresEncryption,
 				backupRequiresDecryption,
-				backupConnected,
-				NXBackupClient
+				backupConnected
       }}
     >
       {children}
-    </NXContext.Provider>
+    </NXBackupContext.Provider>
   );
 }
 
-export { NXContext, NXProvider }
+export { NXBackupContext, NXBackupProvider }
