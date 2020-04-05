@@ -7,38 +7,38 @@ import { NXBackupContext } from "../contexts/NXBackupContext.js"
 
 class Header extends React.Component {
 
-	HeaderLinks () {
+	HeaderLinks() {
 		const { backupConnecting, backupConnected, backupRequiresDecryption, backupRequiresEncryption } = this.context;
-		let linkClass = ( backupConnecting ) ? "disabled" : "";
+		let linkClass = (backupConnecting) ? "disabled" : "";
 
-		if( backupConnecting || ( ! backupConnected && ! backupRequiresDecryption && ! backupRequiresEncryption ) ) {
+		if (backupConnecting || (!backupConnected && !backupRequiresDecryption && !backupRequiresEncryption)) {
 			return (
 				<Link to="/backup" className={`circled ${linkClass}`}>Get Started</Link>
 			)
-		} else if( backupRequiresEncryption ) {
+		} else if (backupRequiresEncryption) {
 			return (
 				<>
-				<Link to="/backup" className={`circled ${linkClass}`}>Finish Backup</Link>
-				<Link to="/track" className={`disabled ${linkClass}`}>Track Your Swaps</Link>
+					<Link to="/backup" className={`circled ${linkClass}`}>Finish Backup</Link>
+					<Link to="/track" className={`disabled ${linkClass}`}>Track Your Swaps</Link>
 				</>
 			)
-		} else if( backupRequiresDecryption ) {
+		} else if (backupRequiresDecryption) {
 			return (
 				<>
-				<Link to="/backup" className={`circled ${linkClass}`}>Decrypt Backup</Link>
-				<Link to="/track" className={`disabled ${linkClass}`}>Track Your Swaps</Link>
+					<Link to="/backup" className={`circled ${linkClass}`}>Decrypt Backup</Link>
+					<Link to="/track" className={`disabled ${linkClass}`}>Track Your Swaps</Link>
 				</>
 			)
-		} else if( backupConnected ) {
+		} else if (backupConnected) {
 			return (
 				<>
-				<Link to="/backup" className={`${linkClass}`}>Manage Backup</Link>
-				<Link to="/track" className={`circled ${linkClass}`}>Track Your Swaps</Link>
+					<Link to="/backup" className={`${linkClass}`}>Manage Backup</Link>
+					<Link to="/track" className={`circled ${linkClass}`}>Track Your Swaps</Link>
 				</>
 			)
 		}
 
-	
+
 
 
 		/*
@@ -51,9 +51,9 @@ class Header extends React.Component {
 		}*/
 	}
 
-  render() {				
+	render() {
 		let HeaderLinks = this.HeaderLinks()
-    return (
+		return (
 			<div id="header">
 				<div className="logo">
 					<Link to="/"></Link>
@@ -65,7 +65,7 @@ class Header extends React.Component {
 				</nav>
 			</div>
 		)
-  }
+	}
 }
 
 Header.contextType = NXBackupContext;

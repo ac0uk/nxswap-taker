@@ -4,7 +4,7 @@ import sjcl from 'sjcl';
 import store from 'store2';
 
 class NXBackup {
-	constructor() {
+  constructor() {
     this.backupRequiresEncrypting = false;
     this.backupRequiresDecrypting = false;
     this.backupConnected = false;
@@ -15,31 +15,31 @@ class NXBackup {
     this.setBackupConnected = false;
     this.setBackupRequiresEncryption = false;
     this.setBackupRequiresDecryption = false;
-		
+
     // Backup Object
     this.recoveryObject = {}
-		this.NXBackupLocalObject = this.fetchOrCreateLocalStoredObject("NXSwapBackup");
-		
-		this.backupDropbox = new NXBackupDropbox({ dropboxClientID: 'eo6gmwgr2vwbavh' })
-	}
-	
-	// Determine Backup Status
-	
-	async determineCurrentBackupStatus () {
+    this.NXBackupLocalObject = this.fetchOrCreateLocalStoredObject("NXSwapBackup");
+
+    this.backupDropbox = new NXBackupDropbox({ dropboxClientID: 'eo6gmwgr2vwbavh' })
+  }
+
+  // Determine Backup Status
+
+  async determineCurrentBackupStatus() {
     this.setBackupConnecting(true);
-		let backupMethod = this.NXBackupLocalObject.backupMethod;
+    let backupMethod = this.NXBackupLocalObject.backupMethod;
     let encryptionHash = this.NXBackupLocalObject.encryptionHash;
-    
-		if( ! backupMethod ) {
+
+    if (!backupMethod) {
       this.setBackupConnecting(false);
-			return false;
-    }
-    
-    if( backupMethod === "Dropbox") {
-			await this.connectDropbox()
+      return false;
     }
 
-    if( ! this.backupRequiresDecrypting && ! encryptionHash ) {
+    if (backupMethod === "Dropbox") {
+      await this.connectDropbox()
+    }
+
+    if (!this.backupRequiresDecrypting && !encryptionHash) {
       this.backupRequiresEncrypting = true;
     }
 
@@ -51,7 +51,7 @@ class NXBackup {
 
   // Disconnect Backup
 
-  async disconnectBackup () {
+  async disconnectBackup() {
     this.clearLocalNXBackupObject();
     this.backupConnected = false;
     this.setBackupConnected(false);
@@ -59,10 +59,10 @@ class NXBackup {
 
   // Encryption Password..
 
-  setInitialEncryptionPassword ( encryptionPassword ) {
+  setInitialEncryptionPassword(encryptionPassword) {
     let hashEncryptionPassword = this.sha256Hash(encryptionPassword);
-    
-    if( ! this.NXBackupLocalObject.encryptionHash ) {
+
+    if (!this.NXBackupLocalObject.encryptionHash) {
       this.NXBackupLocalObject.encryptionHash = hashEncryptionPassword;
       this.saveLocalNXBackupObject();
       this.determineCurrentBackupStatus();
@@ -72,25 +72,25 @@ class NXBackup {
     return false;
   }
 
-  setCurrentEncryptionPassword ( encryptionPassword ) {
+  setCurrentEncryptionPassword(encryptionPassword) {
     let hashEncryptionPassword = this.sha256Hash(encryptionPassword);
     this.NXBackupLocalObject.encryptionHash = hashEncryptionPassword;
-    
+
     // Attempt to decode...
 
     let attemptDecrypt = this.decodeEncryptedRecoveryObject();
 
-    if( ! attemptDecrypt ) {
+    if (!attemptDecrypt) {
       return false;
     }
 
     this.saveLocalNXBackupObject();
     return true;
   }
-  
+
   // Recovery Object
 
-  returnEncryptedRecoveryObject () {
+  returnEncryptedRecoveryObject() {
     let localBackupObject = this.NXBackupLocalObject;
     let recoveryObject = this.recoveryObject;
 
@@ -98,7 +98,7 @@ class NXBackup {
 
     let encryptionHash = localBackupObject.encryptionHash;
 
-    if( ! encryptionHash ) {
+    if (!encryptionHash) {
       return false;
     }
 
@@ -108,26 +108,26 @@ class NXBackup {
 
     // Convert to string..
     let jsonString = JSON.stringify(localBackupObject);
-    
+
     // Encrypt Recovery Object..
     let encryptionHashHash = this.sha256Hash(encryptionHash);
-    let encryptedRecoveryObject = sjcl.encrypt( encryptionHashHash, jsonString );
+    let encryptedRecoveryObject = sjcl.encrypt(encryptionHashHash, jsonString);
 
     return encryptedRecoveryObject
   }
 
-  decodeEncryptedRecoveryObject () {
+  decodeEncryptedRecoveryObject() {
     let encryptedRecoveryObject = this.encryptedRecoveryObject;
     let encryptionHash = this.NXBackupLocalObject.encryptionHash;
 
-    if( ! encryptedRecoveryObject ) {
+    if (!encryptedRecoveryObject) {
       return false;
     }
 
     this.backupRequiresDecrypting = true;
     this.setBackupRequiresDecryption(true); // Callback
 
-    if( ! encryptionHash ) {
+    if (!encryptionHash) {
       return false;
     }
 
@@ -135,26 +135,26 @@ class NXBackup {
     let decryptRecoveryObject = false;
 
     try {
-      decryptRecoveryObject = sjcl.decrypt( encryptionHashHash, encryptedRecoveryObject );	
-    } catch( error ) {
-      console.log( 'decrypt error:');
-      console.log( error );
+      decryptRecoveryObject = sjcl.decrypt(encryptionHashHash, encryptedRecoveryObject);
+    } catch (error) {
+      console.log('decrypt error:');
+      console.log(error);
       return false;
     }
-   
-    let parseJSON = JSON.parse( decryptRecoveryObject );
 
-    if( ! parseJSON ) {
+    let parseJSON = JSON.parse(decryptRecoveryObject);
+
+    if (!parseJSON) {
       return false;
     }
 
     let recoveryObject = parseJSON.recoveryObject;
 
-    if( ! recoveryObject ) {
+    if (!recoveryObject) {
       return false;
     }
 
-    console.log('got recovery obj::' )
+    console.log('got recovery obj::')
     console.log(recoveryObject)
 
     this.recoveryObject = recoveryObject;
@@ -166,33 +166,33 @@ class NXBackup {
     this.setBackupConnected(true);
     return true;
   }
-	
-	// Dropbox
-	
-	async connectDropbox () {
-		let dropboxObj = this.NXBackupLocalObject.backupDropbox;
-		
-		if( ! dropboxObj || ! dropboxObj.accessToken ) {
-			return false
-		}
-						
+
+  // Dropbox
+
+  async connectDropbox() {
+    let dropboxObj = this.NXBackupLocalObject.backupDropbox;
+
+    if (!dropboxObj || !dropboxObj.accessToken) {
+      return false
+    }
+
     this.backupDropbox.setAccessToken(dropboxObj.accessToken);
-    
+
     let { fetchCompleted, fetchedRecoveryObject } = await this.backupDropbox.fetchRecoveryObject(this.NXBackupLocalObject);
 
-    if( ! fetchCompleted ) {
+    if (!fetchCompleted) {
       // Fetch failed?
       // See error console?
       return false;
     }
 
-    if( ! fetchedRecoveryObject ) {
+    if (!fetchedRecoveryObject) {
       // Fetch returned as completed..
       // Recovery object does not exist?
 
       let encryptedRecoveryObject = await this.returnEncryptedRecoveryObject();
 
-      if( ! encryptedRecoveryObject ) {
+      if (!encryptedRecoveryObject) {
         this.setBackupRequiresEncryption(true);
         return false;
       }
@@ -200,7 +200,7 @@ class NXBackup {
       // Save recovery object...
       let saveRecoveryObject = await this.backupDropbox.saveEncryptedRecoveryObject(encryptedRecoveryObject);
 
-      if( ! saveRecoveryObject ) {
+      if (!saveRecoveryObject) {
         return false;
       }
 
@@ -208,33 +208,33 @@ class NXBackup {
       // For the purpose of closing out..
       fetchedRecoveryObject = encryptedRecoveryObject;
     }
-    
+
     this.encryptedRecoveryObject = fetchedRecoveryObject;
     let decodeRecoveryObject = this.decodeEncryptedRecoveryObject();
 
-    if( ! decodeRecoveryObject ) {
+    if (!decodeRecoveryObject) {
       return false;
     }
 
     // Check it's different? maybe against the local stored backup?
     // to do....
-    
+
     let recoveryObject = decodeRecoveryObject.recoveryObject;
 
-    if( ! recoveryObject ) {
+    if (!recoveryObject) {
       return false;
     }
 
     // Still here? should eb good..
 
-    if( this.backupConnected ) {
+    if (this.backupConnected) {
       return true;
     }
 
     return false;
   }
 
-  saveDropboxAccessToken ( accessToken ) {
+  saveDropboxAccessToken(accessToken) {
     let newBackupObject = {
       backupMethod: "Dropbox",
       backupDropbox: {
@@ -246,40 +246,40 @@ class NXBackup {
     this.NXBackupLocalObject = newBackupObject;
     this.saveLocalNXBackupObject();
     this.determineCurrentBackupStatus();
-		return true;
+    return true;
   }
-  
-	// Local Storage Functions
-	
-	fetchOrCreateLocalStoredObject ( objectName ) {
-		let getObject = store(objectName)
-		
-		if( ! getObject || getObject.length === 0 ) {
-			getObject = {
-				backupMethod: false
-			}
 
-			// Save..
-			store(objectName,getObject)
-		}
-		
-		return getObject
-	}
-	
-	saveLocalNXBackupObject ( ) {
-		store("NXSwapBackup", this.NXBackupLocalObject);
-	}
-	
-	clearLocalNXBackupObject ( ) {
+  // Local Storage Functions
+
+  fetchOrCreateLocalStoredObject(objectName) {
+    let getObject = store(objectName)
+
+    if (!getObject || getObject.length === 0) {
+      getObject = {
+        backupMethod: false
+      }
+
+      // Save..
+      store(objectName, getObject)
+    }
+
+    return getObject
+  }
+
+  saveLocalNXBackupObject() {
+    store("NXSwapBackup", this.NXBackupLocalObject);
+  }
+
+  clearLocalNXBackupObject() {
     store("NXSwapBackup", false);
     this.NXBackupLocalObject = {};
     this.recoveryObject = {};
-	}
+  }
 
-	sha256Hash (string) {
-		let stringHash = crypto.createHash('sha256').update(string).digest('hex');
-		return stringHash;
-	}
+  sha256Hash(string) {
+    let stringHash = crypto.createHash('sha256').update(string).digest('hex');
+    return stringHash;
+  }
 }
 
 export default NXBackup
