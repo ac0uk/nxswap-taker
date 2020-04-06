@@ -245,7 +245,7 @@ class NXBackup {
 
     this.NXBackupLocalObject = newBackupObject;
     this.saveLocalNXBackupObject();
-    this.determineCurrentBackupStatus();
+    //this.determineCurrentBackupStatus();
     return true;
   }
 
