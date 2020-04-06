@@ -109,7 +109,7 @@
   padding: 0px 12px;
 }
 
-.homecolumn
+.splitcolumn
 {
   flex-grow: 1;
   max-width: 1200px;
@@ -117,64 +117,60 @@
   height: 400px;
 }
 
-.homecolumn .blurb,
-.homecolumn .formc
+.splitcolumn .blurb,
+.splitcolumn .formc
 {
   flex-grow: 1;
   flex-basis: 0;
 }
 
-.homecolumn .blurb
+.splitcolumn .blurb
 {
   display: flex;
   align-items: center;
 }
 
-.homecolumn .blurby
+.splitcolumn .blurby
 {
   max-width: 500px;
+  line-height: 30px;
 }
-.homecolumn .blurb h1,
-.homecolumn .blurb h2,
-.homecolumn .blurb h3,
-.homecolumn .blurb h4
+.splitcolumn .blurb h1,
+.splitcolumn .blurb h2,
+.splitcolumn .blurb h3,
+.splitcolumn .blurb h4
 {
   display: block;
   font-weight: 400;
-}
-
-.homecolumn .blurb h1
-{
   padding-bottom: 8px;
-  font-size: 30px;
 }
 
-.homecolumn .blurb h2
+.splitcolumn .blurb h1
 {
-  font-size: 24px;
-  padding-bottom: 20px;
+  font-size: 26px;
 }
 
-.homecolumn .blurb h3
+.splitcolumn .blurb h2
+{
+  font-size: 22px;
+}
+
+.splitcolumn .blurb h3
 {
   font-size: 18px;
-  opacity: 0.6;
-  line-height: 30px;
 }
 
-.homecolumn .blurb h4
+.splitcolumn .blurb h4
 {
-  opacity: 0.4;
-  line-height: 26px;
-  font-size: 14px;
+  font-size: 16px;
 }
 
-.homecolumn .supported-icons
+.splitcolumn .supported-icons
 {
   padding: 36px 0px;
 }
 
-.homecolumn .supported-icons img
+.splitcolumn .supported-icons img
 {
   width: 30px;
   height: 30px;
@@ -183,14 +179,14 @@
   border-radius: 99em;
 }
 
-.homecolumn .formc
+.splitcolumn .formc
 {
   display: flex;
   align-items: center;
   justify-content: flex-end;
 }
 
-.homecolumn .formb
+.splitcolumn .formb
 {
   background: white;
   border-radius: 6px;
@@ -198,7 +194,7 @@
   width: 420px;
 }
 
-.homecolumn .formw
+.splitcolumn .formw
 {
   background: white;
   border-radius: 6px;
@@ -206,25 +202,25 @@
   flex-grow: 1;
 }
 
-.homecolumn .formi
+.splitcolumn .formi
 {
   padding: 24px;
 }
 
-.homecolumn .formb #swap_form_currency_selector
+.splitcolumn .formb #swap_form_currency_selector
 {
   display: none;
   padding: 24px;
 }
 
-.homecolumn .formb .formi .label
+.splitcolumn .formb .formi .label
 {
   display: block;
   padding: 0px 1px;
   font-size: 14px;
 }
 
-.homecolumn .formb .formi .currency_select
+.splitcolumn .formb .formi .currency_select
 {
   border: 1px solid #ccc;
   border-radius: 3px;
@@ -232,13 +228,13 @@
   margin: 12px 0px 24px 0px;
 }
 
-.homecolumn .formb .formi .currency_select:hover
+.splitcolumn .formb .formi .currency_select:hover
 {
   cursor: pointer;
   border: 1px solid #aaa;
 }
 
-.homecolumn .formb .formi .currency_select img
+.splitcolumn .formb .formi .currency_select img
 {
   width: 26px;
   height: 26px;
@@ -246,14 +242,14 @@
   margin-top: -2px;
 }
 
-.homecolumn .formb .formi .currency_select span
+.splitcolumn .formb .formi .currency_select span
 {
   margin-left: 14px;
   font-size: 18px;
   line-height: 26px;
 }
 
-.homecolumn .formb .formi .currency_select i
+.splitcolumn .formb .formi .currency_select i
 {
   width: 10px;
   height: 26px;
@@ -265,7 +261,7 @@
   float: right;
 }
 
-.homecolumn .formb .formi button.submit
+.splitcolumn .formb .formi button.submit
 {
   border-radius: 3px;
   background: green;
@@ -279,7 +275,7 @@
   cursor: pointer;
 }
 
-.homecolumn .formb .formi button.submit.disabled {
+.splitcolumn .formb .formi button.submit.disabled {
   opacity: 0.6;
   pointer-events: none;
 }

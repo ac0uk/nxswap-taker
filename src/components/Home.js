@@ -7,7 +7,7 @@ function Home(props) {
 	console.log(nxwsCurrencies);
 
 	return (
-		<div className="homecolumn">
+		<div className="splitcolumn">
 			<div className="blurb">
 				<div className="blurby">
 					<h1>Swap between Cryptocurrencies</h1>
