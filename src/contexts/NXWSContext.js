@@ -2,22 +2,19 @@ import React, { useState, useEffect } from 'react';
 import NXWS from '../js/NXWS.js';
 
 const NXWSContext = React.createContext();
+const NXWSClient = new NXWS();
 
 const NXWSProvider = ({ children }) => {
 
-  const [NXWSClient, setNXWSClient] = useState();
   const [nxwsConnected, setNXWSConnected] = useState(false);
   const [nxwsCurrencies, setNXWSCurrencies] = useState(false);
 
   useEffect(() => {
     const initNXWS = async () => {
-      // Initialise NXWS Client
-      const nxwsClient = new NXWS();
-      nxwsClient.setNXWSConnected = setNXWSConnected;
-      nxwsClient.setNXWSCurrencies = setNXWSCurrencies;
+      NXWSClient.setNXWSConnected = setNXWSConnected;
+      NXWSClient.setNXWSCurrencies = setNXWSCurrencies;
 
-      setNXWSClient(nxwsClient);
-      await nxwsClient.setupNXWS();
+      await NXWSClient.setupNXWS();
     };
 
     initNXWS();
@@ -26,7 +23,6 @@ const NXWSProvider = ({ children }) => {
   return (
     <NXWSContext.Provider
       value={{
-        NXWSClient,
         nxwsConnected,
         nxwsCurrencies
       }}
@@ -44,4 +40,4 @@ function useNXWSContext() {
   return context
 }
 
-export { NXWSProvider, useNXWSContext }
+export { NXWSProvider, useNXWSContext, NXWSClient }

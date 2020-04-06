@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import NXBackup from '../js/NXBackup.js';
 
 const NXBackupContext = React.createContext();
-
 const NXBackupClient = new NXBackup();
 
 const NXBackupProvider = ({ children }) => {
@@ -14,8 +13,6 @@ const NXBackupProvider = ({ children }) => {
 
 	useEffect(() => {
 		const initNXBackup = async () => {
-			// Initialise NX Backup Client
-
 			NXBackupClient.setBackupConnecting = setBackupConnecting;
 			NXBackupClient.setBackupConnected = setBackupConnected;
 			NXBackupClient.setBackupRequiresEncryption = setBackupRequiresEncryption;
