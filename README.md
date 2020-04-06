@@ -6,7 +6,9 @@ This is the open source front-end of NXSwap..
 
 You will need node and npm installed
 
-```npm install
-npm run start```
+```
+npm install
+npm run start
+```
 
 Accessible at http://localhost:3000/
