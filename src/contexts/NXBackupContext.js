@@ -3,9 +3,10 @@ import NXBackup from '../js/NXBackup.js';
 
 const NXBackupContext = React.createContext();
 
+const NXBackupClient = new NXBackup();
+
 const NXBackupProvider = ({ children }) => {
 
-	const [NXBackupClient, setNXBackupClient] = useState();
 	const [backupConnecting, setBackupConnecting] = useState(true);
 	const [backupRequiresEncryption, setBackupRequiresEncryption] = useState(false);
 	const [backupRequiresDecryption, setBackupRequiresDecryption] = useState(false);
@@ -14,15 +15,13 @@ const NXBackupProvider = ({ children }) => {
 	useEffect(() => {
 		const initNXBackup = async () => {
 			// Initialise NX Backup Client
-			const backupClient = new NXBackup();
 
-			backupClient.setBackupConnecting = setBackupConnecting;
-			backupClient.setBackupConnected = setBackupConnected;
-			backupClient.setBackupRequiresEncryption = setBackupRequiresEncryption;
-			backupClient.setBackupRequiresDecryption = setBackupRequiresDecryption;
+			NXBackupClient.setBackupConnecting = setBackupConnecting;
+			NXBackupClient.setBackupConnected = setBackupConnected;
+			NXBackupClient.setBackupRequiresEncryption = setBackupRequiresEncryption;
+			NXBackupClient.setBackupRequiresDecryption = setBackupRequiresDecryption;
 
-			setNXBackupClient(backupClient);
-			await backupClient.determineCurrentBackupStatus();
+			await NXBackupClient.determineCurrentBackupStatus();
 		};
 
 		initNXBackup();
@@ -31,7 +30,6 @@ const NXBackupProvider = ({ children }) => {
 	return (
 		<NXBackupContext.Provider
 			value={{
-				NXBackupClient,
 				backupConnecting,
 				backupRequiresEncryption,
 				backupRequiresDecryption,
@@ -43,4 +41,12 @@ const NXBackupProvider = ({ children }) => {
 	);
 }
 
-export { NXBackupContext, NXBackupProvider }
+function useNXBackupContext() {
+  const context = React.useContext(NXBackupContext)
+  if (context === undefined) {
+    throw new Error('NXBackupContext must be used within a NXBackupProvider')
+  }
+  return context
+}
+
+export { NXBackupProvider, useNXBackupContext, NXBackupContext, NXBackupClient }
