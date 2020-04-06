@@ -22,7 +22,7 @@ function BackupManage() {
   }
 
   return (
-    <div>backup manage<br /><button onClick={() => { NXBackupClient.disconnectBackup() }}>disconnect</button></div>
+    <div>manage backup.. you are connected to dropbox<br /><button onClick={() => { NXBackupClient.disconnectBackup() }}>disconnect</button></div>
   )
 }
 

@@ -14,7 +14,7 @@ class NXWS {
 
     // Currencies this version supports. Hardcoded for reasons.
     this.loadedCurrencies = []
-    this.supportedCurrencies = ["BTC_TESTNET", "LTC_TESTNET"];
+    this.supportedCurrencies = ["TBTC", "TLTC"];
   }
 
   async setupNXWS() {
