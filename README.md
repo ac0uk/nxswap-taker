@@ -1,6 +1,6 @@
-# NXSwap Taker (nxswap.com frontend)
+# NXSwap Taker (nxswap-taker)
 
-This is the open source front-end of NXSwap..
+This is the open source front-end of NXSwap.
 
 ## Building Locally
 
