@@ -9,7 +9,7 @@ import '../css/App.css';
 
 import Header from './Header.js'
 import Home from './Home.js'
-import Backup from './backup/Backup.js'
+import GetStarted from './GetStarted/GetStarted'
 import Footer from './Footer.js'
 
 class App extends React.Component {
@@ -20,8 +20,8 @@ class App extends React.Component {
         <Header />
         <div id="content">
         <Switch>
-          <Route path="/backup">
-            <Backup />
+          <Route path="/get-started">
+            <GetStarted />
           </Route>
           <Route path="/track">
             track

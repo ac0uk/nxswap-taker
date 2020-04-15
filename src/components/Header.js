@@ -3,7 +3,8 @@ import {
 	Link
 } from "react-router-dom";
 
-import { useNXBackupContext } from "../contexts/NXBackupContext.js"
+import { useNXRecoveryKeyContext } from "../contexts/NXRecoveryKeyContext.js"
+
 
 function Header () {
 	return (
@@ -20,32 +21,26 @@ function Header () {
 	)
 }
 
-function HeaderLinks() {
-	const { backupConnecting, backupConnected, backupRequiresDecryption, backupRequiresEncryption } = useNXBackupContext();
-	let linkClass = (backupConnecting) ? "disabled" : "";
 
-	if (backupConnecting || (!backupConnected && !backupRequiresDecryption && !backupRequiresEncryption)) {
+function HeaderLinks() {
+	const { recoveryKeyLoading, recoveryKeyRequiresDecryption, recoveryKeyLoaded } = useNXRecoveryKeyContext();
+	let linkClass = (recoveryKeyLoading) ? "disabled" : "";
+
+	if (recoveryKeyLoading || (!recoveryKeyRequiresDecryption && !recoveryKeyLoaded)) {
 		return (
-			<Link to="/backup" className={`circled ${linkClass}`}>Get Started</Link>
+			<Link to="/get-started" className={`circled ${linkClass}`}>Get Started</Link>
 		)
-	} else if (backupRequiresEncryption) {
+	} else if (recoveryKeyRequiresDecryption) {
 		return (
 			<>
-				<Link to="/backup" className={`circled ${linkClass}`}>Finish Backup</Link>
+				<Link to="/get-started" className={`circled ${linkClass}`}>Decrypt Backup</Link>
 				<Link to="/track" className={`disabled ${linkClass}`}>Track Your Swaps</Link>
 			</>
 		)
-	} else if (backupRequiresDecryption) {
+	} else if (recoveryKeyLoaded) {
 		return (
 			<>
-				<Link to="/backup" className={`circled ${linkClass}`}>Decrypt Backup</Link>
-				<Link to="/track" className={`disabled ${linkClass}`}>Track Your Swaps</Link>
-			</>
-		)
-	} else if (backupConnected) {
-		return (
-			<>
-				<Link to="/backup" className={`${linkClass}`}>Manage Backup</Link>
+				<Link to="/wallet" className={`${linkClass}`}>Wallet</Link>
 				<Link to="/track" className={`circled ${linkClass}`}>Track Your Swaps</Link>
 			</>
 		)

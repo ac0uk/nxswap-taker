@@ -1,4 +1,3 @@
-import NXBackupDropbox from './NXBackupDropbox'
 import crypto from 'crypto';
 import sjcl from 'sjcl';
 import store from 'store2';

@@ -150,7 +150,8 @@
 }
 
 .splitcolumn .blurb,
-.splitcolumn .formc
+.splitcolumn .formc,
+.splitcolumn .column
 {
   flex-grow: 1;
   flex-basis: 0;

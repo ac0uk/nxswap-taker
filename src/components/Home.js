@@ -1,10 +1,6 @@
 import React from 'react';
-import { useNXWSContext } from "../contexts/NXWSContext.js"
 
 function Home(props) {
-	const { nxwsConnected, nxwsCurrencies } = useNXWSContext();
-	console.log('connected:' + nxwsConnected);
-	console.log(nxwsCurrencies);
 
 	return (
 		<div className="singlecolumn">

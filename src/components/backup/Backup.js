@@ -25,7 +25,6 @@ function Backup() {
 }
 
 // Page > Incoming Dropbox Connect
-
 function IncomingDropboxConnect() {
   if (!NXBackupClient) {
     return false
