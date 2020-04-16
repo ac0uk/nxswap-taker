@@ -1,7 +1,7 @@
 {
   "build": {
     "env": {
-      "NPM_RC": "@nxswap:registry=https://npm.pkg.github.com/nxswap"
+      "NPM_RC": "registry=https://npm.pkg.github.com/nxswap"
     }
   }
 }
