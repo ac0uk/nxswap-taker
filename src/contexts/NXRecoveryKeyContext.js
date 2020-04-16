@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { NXRecoveryKey } from 'nxswap-js';
+import { NXRecoveryKey } from '@nxswap/nxswap-js';
 import localStorage from '../js/NXLocalStorage';
 
 const NXRecoveryKeyContext = React.createContext();

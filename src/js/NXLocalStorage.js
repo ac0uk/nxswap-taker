@@ -1,4 +1,4 @@
-import { NXLocalStorage } from 'nxswap-js';
+import { NXLocalStorage } from '@nxswap/nxswap-js';
 
 const localStorage = new NXLocalStorage();
 
