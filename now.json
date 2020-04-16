@@ -1,8 +1,7 @@
 {
   "build": {
     "env": {
-      "TEST": "@test",
-      "NPM_RC": "@my-app-npmrc"
+      "NPM_RC": "@npmrc"
     }
   }
 }
