@@ -1,7 +1,7 @@
 {
   "build": {
     "env": {
-      "NPM_RC": "//npm.pkg.github.com/:_authToken=@githubauth\n@nxswap:registry=https://npm.pkg.github.com/nxswap"
+      "NPM_RC": "@my-app-npmrc"
     }
   }
 }
