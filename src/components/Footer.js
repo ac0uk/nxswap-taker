@@ -4,7 +4,6 @@ import {
 } from "react-router-dom";
 
 console.log(process.env);
-console.log(NOW_GITHUB_COMMIT_REF);
 
 class Footer extends React.Component {
   render() {
