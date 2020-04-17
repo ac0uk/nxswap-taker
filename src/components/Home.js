@@ -4,7 +4,7 @@ function Home(props) {
 
 	return (
 		<div className="singlecolumn">
-			<h1>Make your next Swap an Atomic Swap</h1>
+			<h1>Make your next Swap an Atomic Swap. testnet!</h1>
 			<h2>Using NXSwap, your swaps are truly non-custodial</h2>
 			<div className="swapstartform">
 				<div className="depositCurrency">
