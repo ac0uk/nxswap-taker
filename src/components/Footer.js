@@ -3,6 +3,8 @@ import {
 	Link,
 } from "react-router-dom";
 
+console.log(process.env.NOW_GITHUB_COMMIT_REF);
+
 class Footer extends React.Component {
   render() {
 		return (
