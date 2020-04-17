@@ -11,6 +11,8 @@ class Footer extends React.Component {
 					<Link to="/about">About NXSwap</Link>
 					<span>|</span>
 					<Link to="/market-makers">Market Makers</Link>
+					<span>|</span>
+					{process.env.NOW_GITHUB_REPO}
 				</div>
 				<div className="right">
 					<Link to="/support">Get Support</Link>
