@@ -12,7 +12,7 @@ class Footer extends React.Component {
 					<span>|</span>
 					<Link to="/market-makers">Market Makers</Link>
 					<span>|</span>
-					{process.env.NOW_GITHUB_REPO}
+					{process.env.NOW_GITHUB_REPO} | {process.env.NOW_GITHUB_COMMIT_REF}
 				</div>
 				<div className="right">
 					<Link to="/support">Get Support</Link>
