@@ -34,6 +34,19 @@ function GetStartedDropzone(props) {
   const onDrop = useCallback(acceptedFiles => {
     // Do something with the files
     console.log(acceptedFiles);
+
+    if( acceptedFiles.length == 0 ) return false;
+
+    for( let file of acceptedFiles ) {
+      const fileReader = new FileReader();
+      fileReader.onload = function () {
+        console.log(this.result);
+      };
+
+    fileReader.readAsText(file);
+      //console.log(file);
+    }
+
   }, [])
 
   const {
