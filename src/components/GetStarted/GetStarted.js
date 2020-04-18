@@ -4,6 +4,7 @@ import {
   Route
 } from "react-router-dom";
 
+import '../../css/GetStarted.css';
 import GetStartedMain from "./GetStartedMain";
 
 function GetStarted() {

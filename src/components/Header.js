@@ -9,14 +9,16 @@ import { useNXRecoveryKeyContext } from "../contexts/NXRecoveryKeyContext.js"
 function Header () {
 	return (
 		<div id="header">
-			<div className="logo">
-				<Link to="/"></Link>
+			<div className="max-width">
+				<div className="logo">
+					<Link to="/"></Link>
+				</div>
+				<nav>
+					<Link to="/how-it-works">How It Works</Link>
+					<HeaderLinks />
+					<a href="https://www.twitter.com/nxswap" rel="noopener noreferrer" target="_blank" className="twitter">&nbsp;</a>
+				</nav>
 			</div>
-			<nav>
-				<Link to="/how-it-works">How It Works</Link>
-				<HeaderLinks />
-				<a href="https://www.twitter.com/nxswap" rel="noopener noreferrer" target="_blank" className="twitter">&nbsp;</a>
-			</nav>
 		</div>
 	)
 }
@@ -28,12 +30,12 @@ function HeaderLinks() {
 
 	if (recoveryKeyLoading || (!recoveryKeyRequiresDecryption && !recoveryKeyLoaded)) {
 		return (
-			<Link to="/get-started" className={`circled ${linkClass}`}>Get Started</Link>
+			<Link to="/get-started" className={`featured ${linkClass}`}>Get Started</Link>
 		)
 	} else if (recoveryKeyRequiresDecryption) {
 		return (
 			<>
-				<Link to="/get-started" className={`circled ${linkClass}`}>Decrypt Backup</Link>
+				<Link to="/get-started" className={`featured ${linkClass}`}>Decrypt Backup</Link>
 				<Link to="/track" className={`disabled ${linkClass}`}>Track Your Swaps</Link>
 			</>
 		)
@@ -41,7 +43,7 @@ function HeaderLinks() {
 		return (
 			<>
 				<Link to="/wallet" className={`${linkClass}`}>Wallet</Link>
-				<Link to="/track" className={`circled ${linkClass}`}>Track Your Swaps</Link>
+				<Link to="/track" className={`featured ${linkClass}`}>Track Your Swaps</Link>
 			</>
 		)
 	}
