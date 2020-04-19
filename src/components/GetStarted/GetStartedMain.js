@@ -168,11 +168,11 @@ class GetStartedMain extends React.Component {
   }
 
   render() {
-    const { recoveryKeyLoading, recoveryKeyRequiresDecryption, recoveryKeyLoaded } = this.context;
+    const { recoveryKeyLoading, recoveryKeyLocked, recoveryKeyLoaded } = this.context;
 
     if (recoveryKeyLoading) return false;
-    if (recoveryKeyRequiresDecryption) {
-      return (<Redirect to="/get-started/decrypt" />)
+    if (recoveryKeyLocked) {
+      return (<Redirect to="/wallet/unlock" />)
     }
     if(recoveryKeyLoaded) {
       return (<Redirect to="/" />)

@@ -25,26 +25,29 @@ function Header () {
 
 
 function HeaderLinks() {
-	const { recoveryKeyLoading, recoveryKeyRequiresDecryption, recoveryKeyLoaded } = useNXRecoveryKeyContext();
+	const { recoveryKeyLoading, recoveryKeyLocked, recoveryKeyLoaded } = useNXRecoveryKeyContext();
 	let linkClass = (recoveryKeyLoading) ? "disabled" : "";
 
-	if (recoveryKeyLoading || (!recoveryKeyRequiresDecryption && !recoveryKeyLoaded)) {
+	if (recoveryKeyLoading || (!recoveryKeyLocked && !recoveryKeyLoaded)) {
 		return (
 			<Link to="/get-started" className={`featured ${linkClass}`}>Get Started</Link>
 		)
-	} else if (recoveryKeyRequiresDecryption) {
+	} else if ( recoveryKeyLoaded && recoveryKeyLocked) {
 		return (
 			<>
-				<Link to="/get-started" className={`featured ${linkClass}`}>Decrypt Backup</Link>
-				<Link to="/track" className={`disabled ${linkClass}`}>Track Your Swaps</Link>
+				<Link to="/wallet/unlock" className={`featured ${linkClass}`}>Unlock Wallet</Link>
 			</>
 		)
-	} else if (recoveryKeyLoaded) {
+	} else if (recoveryKeyLoaded && ! recoveryKeyLocked) {
 		return (
 			<>
 				<Link to="/wallet" className={`${linkClass}`}>Wallet</Link>
 				<Link to="/track" className={`featured ${linkClass}`}>Track Your Swaps</Link>
 			</>
+		)
+	} else {
+		return (
+			<></>
 		)
 	}
 }

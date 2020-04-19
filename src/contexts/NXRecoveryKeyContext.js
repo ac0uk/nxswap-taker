@@ -9,13 +9,13 @@ const NXRecoveryKeyClient = new NXRecoveryKey({
 
 const NXRecoveryKeyProvider = ({ children }) => {
 	const [recoveryKeyLoading, setRecoveryKeyLoading] = useState(true);
-	const [recoveryKeyRequiresDecryption, setRecoveryKeyRequiresDecryption] = useState(false);
+	const [recoveryKeyLocked, setRecoveryKeyLocked] = useState(false);
 	const [recoveryKeyLoaded, setRecoveryKeyLoaded] = useState(false);
 
 	useEffect(() => {
 		const init = async () => {
 			NXRecoveryKeyClient.setRecoveryKeyLoading = setRecoveryKeyLoading;
-			NXRecoveryKeyClient.setRecoveryKeyRequiresDecryption = setRecoveryKeyRequiresDecryption;
+			NXRecoveryKeyClient.setRecoveryKeyLocked = setRecoveryKeyLocked;
 			NXRecoveryKeyClient.setRecoveryKeyLoaded = setRecoveryKeyLoaded;
 
 			await NXRecoveryKeyClient.loadRecoveryKey({
@@ -30,7 +30,7 @@ const NXRecoveryKeyProvider = ({ children }) => {
 		<NXRecoveryKeyContext.Provider
 			value={{
 				recoveryKeyLoading,
-				recoveryKeyRequiresDecryption,
+				recoveryKeyLocked,
 				recoveryKeyLoaded
 			}}
 		>

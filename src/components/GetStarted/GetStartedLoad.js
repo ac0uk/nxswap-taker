@@ -15,32 +15,52 @@ class GetStartedLoad extends React.Component {
   async processAcceptedFiles (acceptedFiles) {
     this.setState({loading: true});
     let loadError = false;
-    let attemptLoad = false;
+    let loadedRecoveryKey = false;
     if( acceptedFiles.length > 1 ) {
       loadError = 'Please only attempt to load 1 file.';
     } else if( acceptedFiles.length === 1 ) {
       let attemptFile = acceptedFiles[0];
       let fileType = attemptFile.type;
       if( fileType === "text/plain" ) {
-        attemptLoad = await this.readAcceptedFile(attemptFile);
+        let attemptRead = await this.readAcceptedFile(attemptFile);
+        if( attemptRead !== false && attemptRead !== undefined && attemptRead.length > 0 ) {
+          // Attempt to load recovery key..
+          let validateRecoveryKey = NXRecoveryKeyClient.validateEncryptedRecoveryKey(attemptRead);
+          if( ! validateRecoveryKey ) {
+            loadError = 'This is not a valid Recovery Key';
+          } else {
+            // Good..save it..
+            let saveRecoveryKey = await NXRecoveryKeyClient.saveEncryptedRecoveryKeyBrowser(attemptRead);
+            if( ! saveRecoveryKey ) {
+              loadError = 'Failed to load recovery key to local storage.';
+            } else {
+              // good.
+              loadedRecoveryKey = true;
+            }
+          }
+        } else {
+          loadError = 'Unable to load file';
+        }
       } else {
         loadError = "This file type is not valid";
       }
     }
+
+    if( loadedRecoveryKey ) {
+      return false;
+    }
+
     this.setState({loading: false, loadError: loadError});
   }
 
-  readAcceptedFile(file) {
-    const fileReader = new FileReader();
-    fileReader.onload = (result) => {
-      this.onloadAcceptedFile(result.currentTarget.result);
-    };
-
-    fileReader.readAsText(file);
-  }
-
-  onloadAcceptedFile(result) {
-    console.log(result);
+  async readAcceptedFile(file) {
+    return new Promise((resolve) => {
+      const fileReader = new FileReader();
+      fileReader.onload = function () {
+        resolve(this.result);
+      };
+      fileReader.readAsText(file);
+    });
   }
 
   render () {
