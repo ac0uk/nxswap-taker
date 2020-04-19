@@ -156,7 +156,7 @@ class GetStartedMain extends React.Component {
         <h2>Success! Your Recovery Key</h2>
         <span className="desc">You can copy the contents of your recovery key manually below. Please ensure you copy all of it and store it somewhere safe.</span>
         <div className="manualRecoveryKey">
-          <textarea id="createEncryptedRecoveryKey">{this.state.encryptedRecoveryKey}</textarea>
+          <textarea id="createEncryptedRecoveryKey" defaultValue={this.state.encryptedRecoveryKey}></textarea>
           <button className="copy-clipboard" data-clipboard-target="#createEncryptedRecoveryKey">Copy To Your Clipboard</button>
         </div>
         
@@ -171,10 +171,10 @@ class GetStartedMain extends React.Component {
     const { recoveryKeyLoading, recoveryKeyLocked, recoveryKeyLoaded } = this.context;
 
     if (recoveryKeyLoading) return false;
-    if (recoveryKeyLocked) {
+    if (recoveryKeyLoaded && recoveryKeyLocked) {
       return (<Redirect to="/wallet/unlock" />)
     }
-    if(recoveryKeyLoaded) {
+    else if(recoveryKeyLoaded) {
       return (<Redirect to="/" />)
     }
 

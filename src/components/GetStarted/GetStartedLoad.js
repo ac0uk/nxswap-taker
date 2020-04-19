@@ -51,6 +51,7 @@ class GetStartedLoad extends React.Component {
     }
 
     if( loadedRecoveryKey ) {
+      console.log('its good its loaded!')
       return false;
     }
 
@@ -172,83 +173,6 @@ class GetStartedLoad extends React.Component {
     }
   }
 }
-
-/*function GetStartedLoad(props) {
-  let loadError = false;
-  console.log(props);
-
-  const onDrop = useCallback(acceptedFiles => {
-    console.log(acceptedFiles);
-    if( acceptedFiles.length === 0 ) return false;
-    if( acceptedFiles.length === 1 ) {
-      loadError = true;
-      return false;
-    }
-
-    for( let file of acceptedFiles ) {
-      const fileReader = new FileReader();
-      fileReader.onload = function () {
-        console.log(this.result);
-      };
-
-    fileReader.readAsText(file);
-      //console.log(file);
-    }
-
-  }, [])
-
-  const {
-    getRootProps,
-    getInputProps,
-    isDragActive,
-    isDragAccept,
-    isDragReject
-  } = useDropzone({onDrop: onDrop});
-
-  const style = useMemo(() => ({
-    ...baseStyle,
-    ...(isDragActive ? activeStyle : {}),
-    ...(isDragAccept ? acceptStyle : {}),
-    ...(isDragReject ? rejectStyle : {})
-  }), [
-    isDragActive,
-    isDragReject
-  ]);
-
-  console.log(loadError)
-
-  return (
-    <div className="cont get-started get-started-load">
-      <h2>Load your Recovery Key</h2>
-      <span className="desc">If you have got a NXSwap Recovery Key, you can load it below!</span>
-      <div className="LoadError">error</div>
-      <div className="dropzone">
-        <div {...getRootProps({style})} className="dropzonecont">
-          <input {...getInputProps()} />
-          <p>Drag and Drop It Here<br />Or Click Here to Select It</p>
-        </div>
-      </div>
-      <span className="manually" >Or click here to enter it manually</span>
-    </div>
-  );
-}
-
-const baseStyle = {
-  
-};
-
-const activeStyle = {
-  borderColor: '#2196f3'
-};
-
-const acceptStyle = {
-  borderColor: '#00e676'
-};
-
-const rejectStyle = {
-  borderColor: '#ff1744'
-};
-*/
 
 GetStartedLoad.contextType = NXRecoveryKeyContext;
 export default GetStartedLoad;

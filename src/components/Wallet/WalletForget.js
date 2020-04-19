@@ -27,7 +27,7 @@ class WalletForget extends React.Component {
         <h2>Confirm Forget Wallet?</h2>
         <span className="desc">Once you have forgotten your Wallet, you will need to re-load it using your Recovery Key.</span>
         <div className="actionButton">
-          <button class="action" onClick={this.forgetWallet}>Confirm Forget Wallet</button>
+          <button className="action" onClick={this.forgetWallet}>Confirm Forget Wallet</button>
         </div>
         <Link to="/wallet/unlock" className="otheraction">Cancel</Link>
         </div>
