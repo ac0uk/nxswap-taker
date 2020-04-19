@@ -140,3 +140,49 @@
   padding: 12px;
   margin-bottom: 30px;
 }
+
+/** Get Started Load **/
+
+.get-started-load .dropzone.disabled {
+  pointer-events: none;
+  user-select: none;
+  opacity: 0.2;
+}
+
+.get-started-load .dropzonecont {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 64px 20px;
+  margin-top: 20px;
+  border-width: 3px;
+  border-radius: 3px;
+  border-color: #2767fd;
+  border-style: dashed;
+  color: #bdbdbd;
+  outline: none;
+  transition: border .24s ease-in-out;
+  text-align: center;
+  line-height: 28px;
+}
+
+.get-started-load .manually {
+  font-size: 13px;
+  display: block;
+  margin-top: 14px;
+  padding: 4px 0px;
+  text-align: center;
+  opacity: 0.4;
+  cursor: pointer;
+}
+
+.get-started-load .LoadError {
+  display: none;
+  color: red;
+  padding: 10px 0px;
+}
+
+.get-started-load .LoadError.vis {
+  display: block;
+}

@@ -7,7 +7,7 @@ import { NXRecoveryKeyContext, NXRecoveryKeyClient } from "../../contexts/NXReco
 
 import zxcvbn from 'zxcvbn';
 import ClipboardJS from 'clipboard';
-import GetStartedDropzone from './GetStartedDropzone';
+import GetStartedLoad from './GetStartedLoad';
 
 new ClipboardJS('.copy-clipboard');
 
@@ -193,11 +193,7 @@ class GetStartedMain extends React.Component {
         </div>
         <div className="divider"></div>
         <div className="column">
-          <div className="cont get-started get-started-load">
-            <h2>Load your Recovery Key</h2>
-            <span className="desc">If you have got a NXSwap Recovery Key, you can load it below!</span>
-            <GetStartedDropzone />
-          </div>
+          <GetStartedLoad />
         </div>
       </div>
     )
