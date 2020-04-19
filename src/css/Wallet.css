@@ -31,7 +31,9 @@
   cursor: pointer;
 }
 
-.wallet-unlock button.unlock {
+.wallet-unlock button.unlock,
+.wallet-lock button.action,
+.wallet-forget button.action {
   width: 100%;
   display: block;
   padding: 18px 12px;
@@ -45,14 +47,22 @@
   text-decoration: none;
 }
 
-.wallet-unlock button.unlock:disabled {
+.wallet-lock .actionButton,
+.wallet-forget .actionButton {
+  margin: 30px 0px 20px 0px;
+}
+.wallet-unlock button.unlock:disabled,
+.wallet-lock button.action:disabled,
+.wallet-forget button.action:disabled {
   background: #6d6d6d;
   border: 1px solid #6d6d6d;
   color: #525252;
   cursor: not-allowed;
 }
 
-.wallet-unlock .manually {
+.wallet-unlock .manually,
+.wallet-lock .otheraction, 
+.wallet-forget .otheraction {
   font-size: 13px;
   display: block;
   margin-top: 10px;

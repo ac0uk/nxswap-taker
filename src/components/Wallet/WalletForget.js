@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Redirect
+  Redirect, Link
 } from "react-router-dom";
 
 import { NXRecoveryKeyContext, NXRecoveryKeyClient } from "../../contexts/NXRecoveryKeyContext";
@@ -8,6 +8,7 @@ import { NXRecoveryKeyContext, NXRecoveryKeyClient } from "../../contexts/NXReco
 class WalletForget extends React.Component {
   async forgetWallet () {
     await NXRecoveryKeyClient.clearSavedRecoveryKey();
+    // Now hard reload.. to ensure reset..
     window.location.reload();
   }
 
@@ -20,9 +21,18 @@ class WalletForget extends React.Component {
     }
 
     return (
-      <>
-      <button onClick={this.forgetWallet}>confirm forget yo</button>
-      </>
+      <div className="singlecolumn">
+        <div className="column wallet-lock">
+        <div className="cont wallet-unlock">
+        <h2>Confirm Forget Wallet?</h2>
+        <span className="desc">Once you have forgotten your Wallet, you will need to re-load it using your Recovery Key.</span>
+        <div className="actionButton">
+          <button class="action" onClick={this.forgetWallet}>Confirm Forget Wallet</button>
+        </div>
+        <Link to="/wallet/unlock" className="otheraction">Cancel</Link>
+        </div>
+        </div>
+      </div>
     )
   }
 }

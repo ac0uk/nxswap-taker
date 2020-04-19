@@ -98,7 +98,7 @@ class WalletUnlock extends React.Component {
           </div>
           <button className="unlock" disabled={canUnlock}>Unlock</button>
         </form>    
-        <Link to="/wallet/forget" className="manually">Click Here to forget your Recovery Key from Storage</Link>
+        <Link to="/wallet/forget" className="manually">Click Here to Forget Your Wallet</Link>
         </div>
         </div>
       </div>
