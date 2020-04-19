@@ -8,8 +8,12 @@ class GetStartedLoad extends React.Component {
     super(props);
     this.state = {
       loading: false,
+      manualLoad: false,
       loadError: false
     }
+
+    this.toggleEnterManually = this.toggleEnterManually.bind(this);
+    this.manualLoadOnChange = this.manualLoadOnChange.bind(this);
   }
 
   async processAcceptedFiles (acceptedFiles) {
@@ -63,12 +67,49 @@ class GetStartedLoad extends React.Component {
     });
   }
 
-  render () {
-    let loadErrorClass = "LoadError";
+  toggleEnterManually () {
+    this.setState({
+      manualLoad: this.state.manualLoad ? false : true
+    });
+  }
+
+  async manualLoadOnChange (event) {
+    let recoveryKey = event.target.value;
+    let loadError = false;
+    let loadedRecoveryKey = false;
+    
+    if( recoveryKey !== undefined && recoveryKey !== null && recoveryKey.length > 0 ) {
+      // Attempt to validate it..
+      let validateRecoveryKey = NXRecoveryKeyClient.validateEncryptedRecoveryKey(recoveryKey);
+      if( ! validateRecoveryKey ) {
+        loadError = 'This is not a valid Recovery Key';
+      } else {
+        // Good..save it..
+        let saveRecoveryKey = await NXRecoveryKeyClient.saveEncryptedRecoveryKeyBrowser(recoveryKey);
+        if( ! saveRecoveryKey ) {
+          loadError = 'Failed to load recovery key to local storage.';
+        } else {
+          // good.
+          loadedRecoveryKey = true;
+        }
+      }
+    }
+
+    if( loadedRecoveryKey ) {
+      return false;
+    }
+
+    this.setState({
+      loading: false, loadError: loadError
+    })
+  }
+
+  renderDropzone () {
+    let loadErrorClass = "Error";
     let loadError;
 
     if( this.state.loadError !== false ) {
-      loadErrorClass = "LoadError vis";
+      loadErrorClass = "Error vis";
       loadError = this.state.loadError;
     }
 
@@ -93,10 +134,42 @@ class GetStartedLoad extends React.Component {
             </section>
           )}
         </Dropzone>
-        <span className="manually" >Or click here to enter it manually</span>
+        <span className="manually" onClick={this.toggleEnterManually}>Or click here to enter it manually</span>
         </div>
       </div>
     );
+  }
+
+  renderManual () {
+    let loadErrorClass = "LoadError";
+    let loadError;
+
+    if( this.state.loadError !== false ) {
+      loadErrorClass = "LoadError vis";
+      loadError = this.state.loadError;
+    }
+
+    return (
+      <div className="cont get-started get-started-load">
+        <h2>Load your Recovery Key</h2>
+        <span className="desc">If you have got a NXSwap Recovery Key, you can load it below!</span>
+        <div className={loadErrorClass}>{loadError}</div>
+        <div className="manualLoad">
+          <textarea onChange={this.manualLoadOnChange} placeholder="Paste your Recovery Key here"></textarea>
+        
+        
+        <span className="manually" onClick={this.toggleEnterManually}>Or click here to upload it</span>
+        </div>
+      </div>
+    )
+  }
+
+  render () {
+    if( this.state.manualLoad ) {
+      return this.renderManual();
+    } else {
+      return this.renderDropzone();
+    }
   }
 }
 

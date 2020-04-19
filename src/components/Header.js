@@ -43,6 +43,7 @@ function HeaderLinks() {
 			<>
 				<Link to="/wallet" className={`${linkClass}`}>Wallet</Link>
 				<Link to="/track" className={`featured ${linkClass}`}>Track Your Swaps</Link>
+				<Link to="/wallet/lock" className={linkClass}>Lock</Link>
 			</>
 		)
 	} else {
