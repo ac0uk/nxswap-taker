@@ -8,14 +8,12 @@ const NXRecoveryKeyClient = new NXRecoveryKey({
 	storage: localStorage
 });
 
-TrezorConnect.init({
-	manifest: {
-		email: 'info@nxswap.com',
-		appUrl: 'https://www.nxswap.com',
-	}
+TrezorConnect.manifest({
+	email: 'info@nxswap.com',
+	appUrl: 'https://www.nxswap.com'
 })
 
-const result = TrezorConnect.getDeviceState().then( (result) => {
+TrezorConnect.getDeviceState().then( (result) => {
 	console.log(result);
 });
 
