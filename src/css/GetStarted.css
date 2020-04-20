@@ -158,6 +158,14 @@
   line-height: 28px;
 }
 
+.get-started-load .dropzonecont.active {
+  border-color: orange;
+}
+
+.get-started-load .dropzonecont.success {
+  border-color: red;
+}
+
 .get-started-load .manually {
   font-size: 13px;
   display: block;

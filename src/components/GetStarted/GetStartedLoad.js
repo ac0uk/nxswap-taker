@@ -105,6 +105,11 @@ class GetStartedLoad extends React.Component {
     })
   }
 
+  getDropzoneClass(isDragActive) {
+    let dragActive = (isDragActive) ? "active" : "";
+    return `dropzonecont ${dragActive}`;
+  }
+
   renderDropzone () {
     let loadErrorClass = "Error";
     let loadError;
@@ -126,9 +131,9 @@ class GetStartedLoad extends React.Component {
         <div className={loadErrorClass}>{loadError}</div>
         <div className={dropzoneClass}>
         <Dropzone accept="text/plain" onDrop={acceptedFiles => this.processAcceptedFiles(acceptedFiles)}>
-          {({getRootProps, getInputProps}) => (
+          {({getRootProps, getInputProps, isDragActive}) => (
             <section>
-              <div {...getRootProps()} className="dropzonecont">
+              <div {...getRootProps()} className={this.getDropzoneClass(isDragActive)}>
                 <input {...getInputProps()} />
                 <p>Drag and Drop It Here<br />Or Click Here to Select It</p>
               </div>
