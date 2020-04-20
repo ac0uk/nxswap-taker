@@ -1,30 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { NXRecoveryKey } from '@nxswap/nxswap-js';
 import localStorage from '../js/NXLocalStorage';
-import TrezorConnect, { DEVICE_EVENT, DEVICE } from 'trezor-connect';
 
 const NXRecoveryKeyContext = React.createContext();
 const NXRecoveryKeyClient = new NXRecoveryKey({
 	storage: localStorage
-});
-
-TrezorConnect.manifest({
-	email: 'info@nxswap.com',
-	appUrl: 'https://www.nxswap.com'
-})
-
-TrezorConnect.getDeviceState().then( (result) => {
-	console.log(result);
-});
-
-TrezorConnect.on(DEVICE_EVENT, (event) => {
-	console.log('event!');
-	console.log(event);
-	if (event.type === DEVICE.CONNECT) {
-
-	} else if (event.type === DEVICE.DISCONNECT) {
-
-	}
 });
 
 const NXRecoveryKeyProvider = ({ children }) => {
