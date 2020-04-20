@@ -5,6 +5,6 @@
     }
   },
   "env": {
-    "NOW_GITHUB_REPO"
+    "NOW_GITHUB_REPO": ""
   }
 }
