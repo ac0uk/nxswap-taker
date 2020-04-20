@@ -18,6 +18,7 @@
     "react-scripts": "3.4.1",
     "sjcl": "^1.0.8",
     "store2": "^2.11.0",
+    "trezor-connect": "^8.1.1",
     "webpack": "4.42.0",
     "zxcvbn": "^4.4.2"
   },
