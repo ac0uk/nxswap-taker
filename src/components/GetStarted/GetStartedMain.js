@@ -135,7 +135,7 @@ class GetStartedMain extends React.Component {
     return (
       <div className="cont get-started get-started-create">
         <h2>Success! Your Recovery Key</h2>
-        <span className="desc">We have created you a Recovery Key. This has been encrypted with the passphrase you entered.</span>
+        <span className="desc">We have created your Recovery Key. This has been encrypted with the passphrase you entered.</span>
         <span className="desc">If you lose your Recovery Key or forget your passphrase, your funds could be at risk.</span>
         <span className="desc">You can now download the Recovery Key and store it somewhere safe! You can now Load your Recovery Key!</span>
         <div className="downloadRecoveryKey">

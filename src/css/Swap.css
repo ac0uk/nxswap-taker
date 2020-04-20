@@ -1,0 +1,97 @@
+.homepage {
+  margin-bottom: 35px;
+}
+
+.homepage .meta {
+  display: flex;
+}
+
+.homepage .metaMain {
+  line-height: 46px;
+}
+
+.homepage .metaSub {
+  margin-left: 70px;
+  color: rgba(255,255,255,0.7);
+  padding: 10px 0px;
+  max-width: 400px;
+  line-height: 27px;
+}
+
+.swap {
+  margin-top: 35px
+}
+
+.swap .swapamountbar {
+  display: flex;
+  justify-content: space-between;
+  align-content: flex-end;
+}
+
+.swap .swapamountbar .amountfield {
+  flex-grow: 1;
+  flex-basis: 0;
+  margin-right: 40px;
+  position: relative;
+}
+
+.swap .swapamountbar .amountfield label {
+  display: block;
+  padding-bottom: 18px;
+  color: rgba(255,255,255,0.7);
+  font-size: 14px;
+  font-weight: 500;
+  padding-left: 2px;
+  cursor: pointer;
+}
+
+.swap .swapamountbar .amountfield input[type=text] {
+  background-color: #060606;
+  border: 1px solid #393939;
+  outline: none;
+  font-size: 23px;
+  padding: 22px 16px 22px 100px;
+  width: calc(100% - 118px);
+  color: white;
+  line-height: 1;
+}
+
+.swap .swapamountbar .amountfield span.icon {
+  position: absolute;
+  bottom: 1px;
+  left: 0;
+  border-right: 1px solid #393939;
+}
+
+.swap .swapamountbar .amountfield span.icon img {
+  width: 38px;
+  height: 38px;
+  margin-right: 22px;
+  margin-left: 23px;
+  margin-bottom: 14px;
+  margin-top: 15px;
+}
+
+.swap .swapamountbar .amountfield span.select {
+  position: absolute;
+  right: 0;
+  cursor: pointer;
+  padding: 24px 36px 24px 36px;
+  font-size: 20px;
+  font-weight: 400;
+  border-left: 1px solid #393939;
+}
+
+.swap .swapamountbar .buttonfield {
+  
+}
+
+.swap .swapamountbar .buttonfield button {
+  background-color: #1f6cf7;
+  border: 1px solid #1f6cf7;
+  color: white;
+  outline: 0;
+  padding: 24px 42px;
+  font-size: 18px;
+  cursor: pointer;
+}
