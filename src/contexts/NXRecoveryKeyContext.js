@@ -9,11 +9,9 @@ const NXRecoveryKeyClient = new NXRecoveryKey({
 });
 
 TrezorConnect.init({
-	connectSrc: 'https://localhost:8088/',
-	lazyLoad: true,
 	manifest: {
 		email: 'info@nxswap.com',
-		appUrl: 'http://your.application.com',
+		appUrl: 'https://www.nxswap.com',
 	}
 })
 
