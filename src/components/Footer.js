@@ -6,7 +6,7 @@ import {
 class Footer extends React.Component {
 
 	render() {
-		let currentRepo = ( process.env.NODE_ENV === "production" ) ? `${process.env.REACT_APP_NOW_GITHUB_REPO}/${process.env.NOW_GITHUB_COMMIT_REF}` : "DEV VERSION";
+		let currentRepo = ( process.env.NODE_ENV === "production" ) ? `${process.env.REACT_APP_NOW_GITHUB_REPO}/${process.env.REACT_APP_NOW_GITHUB_COMMIT_REF}` : "DEV VERSION";
 		let currentRepoURL = (process.env.NODE_ENV === "production" ) ? `https://www.github.com/nxswap/${process.env.REACT_APP_NOW_GITHUB_REPO}` : "https://www.github.com/nxswap/nxswap-taker";
 		return (
 			<div id="footer">
