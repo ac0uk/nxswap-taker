@@ -20,16 +20,16 @@ class WalletUnlock extends React.Component {
     this.handleSubmitLocked = this.handleSubmitLocked.bind(this);
   }
 
-  handleShowHidePassword () {
+  handleShowHidePassword() {
     this.setState({
       showPassphrase: (this.state.showPassphrase) ? false : true
     });
   }
 
-  handleEncryptionInputChange (event) {
+  handleEncryptionInputChange(event) {
     let encryptionPassphrase = event.target.value;
     let canUnlock = false;
-    if( encryptionPassphrase !== undefined && encryptionPassphrase !== null && encryptionPassphrase.length > 0 ) {
+    if (encryptionPassphrase !== undefined && encryptionPassphrase !== null && encryptionPassphrase.length > 0) {
       canUnlock = true;
     }
 
@@ -40,16 +40,16 @@ class WalletUnlock extends React.Component {
     });
   }
 
-  async handleSubmitLocked (event) {
+  async handleSubmitLocked(event) {
     event.preventDefault();
-    this.setState({loading: true});
+    this.setState({ loading: true });
     let encryptionPassphrase = this.state.encryptionPassphrase;
-    if( ! this.state.canUnlock ) return false;
-    if( ! encryptionPassphrase || encryptionPassphrase.length <= 0 ) return false;
+    if (!this.state.canUnlock) return false;
+    if (!encryptionPassphrase || encryptionPassphrase.length <= 0) return false;
 
     let attemptUnlock = await RecoveryKey.saveEncryptionPassphrase(encryptionPassphrase);
-    
-    if( ! attemptUnlock ) {
+
+    if (!attemptUnlock) {
       this.setState({
         loading: false,
         unlockError: 'Unlock failed. Wrong Passphrase?'
@@ -64,7 +64,7 @@ class WalletUnlock extends React.Component {
     const { recoveryKeyLoading, recoveryKeyLocked, recoveryKeyLoaded } = this.context;
 
     if (recoveryKeyLoading) return false;
-    if( !recoveryKeyLoaded) {
+    if (!recoveryKeyLoaded) {
       return (<Redirect to="/get-started" />)
     }
     else if (!recoveryKeyLocked) {
@@ -74,7 +74,7 @@ class WalletUnlock extends React.Component {
     let unlockErrorClass = "Error";
     let unlockError;
 
-    if( this.state.unlockError !== false ) {
+    if (this.state.unlockError !== false) {
       unlockErrorClass = "Error vis";
       unlockError = this.state.unlockError;
     }
@@ -86,20 +86,20 @@ class WalletUnlock extends React.Component {
     return (
       <div className="singlecolumn">
         <div className="column">
-        <div className="cont wallet-unlock">
-        <h2>Your Wallet Is Locked</h2>
-        <span className="desc">Your Recovery Key is loaded into your browsers local storage, however it is stored encrypted.</span>
-        <span className="desc">You'll need to enter the passphrase you set when you created your Recovery Key.</span>
-        <div className={unlockErrorClass}>{unlockError}</div>
-        <form onSubmit={this.handleSubmitLocked}>
-          <div className="encryptionPassphrase">
-            <span className="showhide" onClick={this.handleShowHidePassword}>{showHideText}</span>
-            <input onChange={this.handleEncryptionInputChange} type={showHideType} name="password" placeholder="Enter Your Passphrase" />
+          <div className="cont wallet-unlock">
+            <h2>Your Wallet Is Locked</h2>
+            <span className="desc">Your Recovery Key is loaded into your browsers local storage, however it is stored encrypted.</span>
+            <span className="desc">You'll need to enter the passphrase you set when you created your Recovery Key.</span>
+            <div className={unlockErrorClass}>{unlockError}</div>
+            <form onSubmit={this.handleSubmitLocked}>
+              <div className="encryptionPassphrase">
+                <span className="showhide" onClick={this.handleShowHidePassword}>{showHideText}</span>
+                <input onChange={this.handleEncryptionInputChange} type={showHideType} name="password" placeholder="Enter Your Passphrase" />
+              </div>
+              <button className="unlock" disabled={canUnlock}>Unlock</button>
+            </form>
+            <Link to="/wallet/forget" className="manually">Click Here to Forget Your Wallet</Link>
           </div>
-          <button className="unlock" disabled={canUnlock}>Unlock</button>
-        </form>    
-        <Link to="/wallet/forget" className="manually">Click Here to Forget Your Wallet</Link>
-        </div>
         </div>
       </div>
     )

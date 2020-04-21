@@ -16,20 +16,20 @@ import Footer from './Footer.js';
 class App extends React.Component {
   render() {
     return (
-    <Router>
-      <div id="app">
-        <Header />
-        <div id="content">
-        <Switch>
-          <Route path="/get-started"><GetStarted /></Route>
-          <Route path="/wallet"><Wallet /></Route>
-          <Route path="/track">track</Route>
-          <Route path="/"><Home /></Route>
-        </Switch>
+      <Router>
+        <div id="app">
+          <Header />
+          <div id="content">
+            <Switch>
+              <Route path="/get-started"><GetStarted /></Route>
+              <Route path="/wallet"><Wallet /></Route>
+              <Route path="/track">track</Route>
+              <Route path="/"><Home /></Route>
+            </Switch>
+          </div>
+          <Footer />
         </div>
-        <Footer />
-      </div>
-    </Router>
+      </Router>
     )
   }
 }

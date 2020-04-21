@@ -37,7 +37,7 @@ class GetStartedMain extends React.Component {
     let strength = zxcvbn(passphrase);
     let score = strength.score;
 
-    if( passphrase.length > 0 && score > 1 ) {
+    if (passphrase.length > 0 && score > 1) {
       canCreate = true;
     }
 
@@ -52,10 +52,10 @@ class GetStartedMain extends React.Component {
 
   handleCreateSubmit(event) {
     event.preventDefault();
-    if( !this.state.canCreate) return false;
+    if (!this.state.canCreate) return false;
 
     let createRecoveryKey = RecoveryKey.createNewRecoveryKey(this.state.encryptionPassphraseInput);
-    if( ! createRecoveryKey) return false;
+    if (!createRecoveryKey) return false;
 
     let encryptedRecoveryKey = createRecoveryKey.encryptedRecoveryKey;
 
@@ -67,25 +67,25 @@ class GetStartedMain extends React.Component {
     return false;
   }
 
-  preCreate () {
+  preCreate() {
     let canCreate = this.state.canCreate ? false : "disabled";
     let showHideText = this.state.showPassphrase ? "Hide" : "Show";
     let showHideType = this.state.showPassphrase ? "text" : "password";
 
     let strength = this.state.passphraseStrength;
-    let strengthScore = ( this.state.encryptionPassphraseInput.length > 0 ) ? strength.score : false; 
-    let passphraseScoreClass = ( strengthScore === false ) ? "" : `score${strengthScore}`;
+    let strengthScore = (this.state.encryptionPassphraseInput.length > 0) ? strength.score : false;
+    let passphraseScoreClass = (strengthScore === false) ? "" : `score${strengthScore}`;
 
     let passphraseSuggestClass = "passphraseSuggest";
     let passphraseSuggest = "";
 
-    if( strengthScore === 0  ) {
+    if (strengthScore === 0) {
       let warning = strength.feedback.warning;
       let suggestions = strength.feedback.suggestions;
-      if( warning.length > 0) {
+      if (warning.length > 0) {
         passphraseSuggestClass = "passphraseSuggest show";
         passphraseSuggest = warning;
-      } else if( suggestions.length > 0 ) {
+      } else if (suggestions.length > 0) {
         passphraseSuggestClass = "passphraseSuggest show";
         passphraseSuggest = suggestions;
       }
@@ -111,25 +111,25 @@ class GetStartedMain extends React.Component {
     )
   }
 
-  showCreatedRecoveryKeyManually () {
+  showCreatedRecoveryKeyManually() {
     this.setState({
-      showCreatedRecoveryKeyManually: ( this.state.showCreatedRecoveryKeyManually ) ? false : true
+      showCreatedRecoveryKeyManually: (this.state.showCreatedRecoveryKeyManually) ? false : true
     })
   }
 
-  createSuccess () {
+  createSuccess() {
     let manually = this.state.showCreatedRecoveryKeyManually;
-    if( ! manually ) {
+    if (!manually) {
       return this.createSuccessDownload();
     } else {
       return this.createSuccessManually();
     }
   }
 
-  createSuccessDownload () {
+  createSuccessDownload() {
     let downloadHref = 'data:text/plain;charset=utf-8,' + encodeURIComponent(this.state.encryptedRecoveryKey);
     var today = new Date();
-    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+    var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
     let downloadFileName = `NXSwap_RecoveryKey_${date}.txt`;
 
     return (
@@ -146,10 +146,10 @@ class GetStartedMain extends React.Component {
     )
   }
 
-  createSuccessManually () {
+  createSuccessManually() {
     let downloadHref = 'data:text/plain;charset=utf-8,' + encodeURIComponent(this.state.encryptedRecoveryKey);
     var today = new Date();
-    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+    var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
     let downloadFileName = `NXSwap_RecoveryKey_${date}.txt`;
     return (
       <div className="cont get-started get-started-create">
@@ -159,9 +159,9 @@ class GetStartedMain extends React.Component {
           <textarea id="createEncryptedRecoveryKey" defaultValue={this.state.encryptedRecoveryKey}></textarea>
           <button className="copy-clipboard" data-clipboard-target="#createEncryptedRecoveryKey">Copy To Your Clipboard</button>
         </div>
-        
+
         <div className="downloadRecoveryKey">
-        <a href={downloadHref} download={downloadFileName} className="download">Or, Click to Download Your Recovery Key</a>
+          <a href={downloadHref} download={downloadFileName} className="download">Or, Click to Download Your Recovery Key</a>
         </div>
       </div>
     )
@@ -174,18 +174,18 @@ class GetStartedMain extends React.Component {
     if (recoveryKeyLoaded && recoveryKeyLocked) {
       return (<Redirect to="/wallet/unlock" />)
     }
-    else if(recoveryKeyLoaded) {
+    else if (recoveryKeyLoaded) {
       return (<Redirect to="/" />)
     }
 
     let createColumn;
 
-    if( ! this.state.createSuccess ) {
+    if (!this.state.createSuccess) {
       createColumn = this.preCreate();
     } else {
       createColumn = this.createSuccess();
     }
-    
+
     return (
       <div className="splitcolumn">
         <div className="column">

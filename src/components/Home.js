@@ -8,13 +8,13 @@ function Home(props) {
 		<div className="singlecolumn">
 			<div className="homepage">
 				<div className="meta">
-				<div className="metaMain">
-					<h1>Truly Non-Custodial Swaps</h1>
-					<h2>&ldquo;Not Your Keys, Not Your Coins&rdquo;</h2>
-				</div>
-				<div className="metaSub">
-					<span>Using the power of Atomic Swaps, your funds never leave your custody. It's secure, it's private and it's just as easy as your typical Swap platform.</span>
-				</div>
+					<div className="metaMain">
+						<h1>Truly Non-Custodial Swaps</h1>
+						<h2>&ldquo;Not Your Keys, Not Your Coins&rdquo;</h2>
+					</div>
+					<div className="metaSub">
+						<span>Using the power of Atomic Swaps, your funds never leave your custody. It's secure, it's private and it's just as easy as your typical Swap platform.</span>
+					</div>
 				</div>
 			</div>
 			<div className="swap">

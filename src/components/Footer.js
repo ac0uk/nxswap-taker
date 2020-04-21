@@ -6,7 +6,7 @@ import {
 console.log(process.env);
 
 class Footer extends React.Component {
-  render() {
+	render() {
 		return (
 			<div id="footer">
 				<div className="max-width">
@@ -25,7 +25,7 @@ class Footer extends React.Component {
 				</div>
 			</div>
 		)
-  }
+	}
 }
 
 export default Footer;

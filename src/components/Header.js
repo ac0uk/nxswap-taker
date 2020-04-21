@@ -6,7 +6,7 @@ import {
 import { useNXRecoveryKeyContext } from "../contexts/NXRecoveryKeyContext.js"
 
 
-function Header () {
+function Header() {
 	return (
 		<div id="header">
 			<div className="max-width">
@@ -32,13 +32,13 @@ function HeaderLinks() {
 		return (
 			<Link to="/get-started" className={`featured ${linkClass}`}>Get Started</Link>
 		)
-	} else if ( recoveryKeyLoaded && recoveryKeyLocked) {
+	} else if (recoveryKeyLoaded && recoveryKeyLocked) {
 		return (
 			<>
 				<Link to="/wallet/unlock" className={`featured ${linkClass}`}>Unlock Wallet</Link>
 			</>
 		)
-	} else if (recoveryKeyLoaded && ! recoveryKeyLocked) {
+	} else if (recoveryKeyLoaded && !recoveryKeyLocked) {
 		return (
 			<>
 				<Link to="/wallet" className={`${linkClass}`}>Wallet</Link>

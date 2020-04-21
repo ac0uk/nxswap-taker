@@ -16,26 +16,26 @@ class GetStartedLoad extends React.Component {
     this.manualLoadOnChange = this.manualLoadOnChange.bind(this);
   }
 
-  async processAcceptedFiles (acceptedFiles) {
-    this.setState({loading: true});
+  async processAcceptedFiles(acceptedFiles) {
+    this.setState({ loading: true });
     let loadError = false;
     let loadedRecoveryKey = false;
-    if( acceptedFiles.length > 1 ) {
+    if (acceptedFiles.length > 1) {
       loadError = 'Please only attempt to load 1 file.';
-    } else if( acceptedFiles.length === 1 ) {
+    } else if (acceptedFiles.length === 1) {
       let attemptFile = acceptedFiles[0];
       let fileType = attemptFile.type;
-      if( fileType === "text/plain" ) {
+      if (fileType === "text/plain") {
         let attemptRead = await this.readAcceptedFile(attemptFile);
-        if( attemptRead !== false && attemptRead !== undefined && attemptRead.length > 0 ) {
+        if (attemptRead !== false && attemptRead !== undefined && attemptRead.length > 0) {
           // Attempt to load recovery key..
           let validateRecoveryKey = RecoveryKey.validateEncryptedRecoveryKey(attemptRead);
-          if( ! validateRecoveryKey ) {
+          if (!validateRecoveryKey) {
             loadError = 'This is not a valid Recovery Key';
           } else {
             // Good..save it..
             let saveRecoveryKey = await RecoveryKey.saveEncryptedRecoveryKeyBrowser(attemptRead);
-            if( ! saveRecoveryKey ) {
+            if (!saveRecoveryKey) {
               loadError = 'Failed to load recovery key to local storage.';
             } else {
               // good.
@@ -50,12 +50,12 @@ class GetStartedLoad extends React.Component {
       }
     }
 
-    if( loadedRecoveryKey ) {
+    if (loadedRecoveryKey) {
       console.log('its good its loaded!')
       return false;
     }
 
-    this.setState({loading: false, loadError: loadError});
+    this.setState({ loading: false, loadError: loadError });
   }
 
   async readAcceptedFile(file) {
@@ -68,26 +68,26 @@ class GetStartedLoad extends React.Component {
     });
   }
 
-  toggleEnterManually () {
+  toggleEnterManually() {
     this.setState({
       manualLoad: this.state.manualLoad ? false : true
     });
   }
 
-  async manualLoadOnChange (event) {
+  async manualLoadOnChange(event) {
     let recoveryKey = event.target.value;
     let loadError = false;
     let loadedRecoveryKey = false;
-    
-    if( recoveryKey !== undefined && recoveryKey !== null && recoveryKey.length > 0 ) {
+
+    if (recoveryKey !== undefined && recoveryKey !== null && recoveryKey.length > 0) {
       // Attempt to validate it..
       let validateRecoveryKey = RecoveryKey.validateEncryptedRecoveryKey(recoveryKey);
-      if( ! validateRecoveryKey ) {
+      if (!validateRecoveryKey) {
         loadError = 'This is not a valid Recovery Key';
       } else {
         // Good..save it..
         let saveRecoveryKey = await RecoveryKey.saveEncryptedRecoveryKeyBrowser(recoveryKey);
-        if( ! saveRecoveryKey ) {
+        if (!saveRecoveryKey) {
           loadError = 'Failed to load recovery key to local storage.';
         } else {
           // good.
@@ -96,7 +96,7 @@ class GetStartedLoad extends React.Component {
       }
     }
 
-    if( loadedRecoveryKey ) {
+    if (loadedRecoveryKey) {
       return false;
     }
 
@@ -110,17 +110,17 @@ class GetStartedLoad extends React.Component {
     return `dropzonecont ${dragActive}`;
   }
 
-  renderDropzone () {
+  renderDropzone() {
     let loadErrorClass = "Error";
     let loadError;
 
-    if( this.state.loadError !== false ) {
+    if (this.state.loadError !== false) {
       loadErrorClass = "Error vis";
       loadError = this.state.loadError;
     }
 
     let dropzoneClass = "dropzone";
-    if( this.state.loading ) {
+    if (this.state.loading) {
       dropzoneClass = "dropzone disabled";
     }
 
@@ -130,27 +130,27 @@ class GetStartedLoad extends React.Component {
         <span className="desc">If you have got a NXSwap Recovery Key, you can load it below!</span>
         <div className={loadErrorClass}>{loadError}</div>
         <div className={dropzoneClass}>
-        <Dropzone accept="text/plain" onDrop={acceptedFiles => this.processAcceptedFiles(acceptedFiles)}>
-          {({getRootProps, getInputProps, isDragActive}) => (
-            <section>
-              <div {...getRootProps()} className={this.getDropzoneClass(isDragActive)}>
-                <input {...getInputProps()} />
-                <p>Drag and Drop It Here<br />Or Click Here to Select It</p>
-              </div>
-            </section>
-          )}
-        </Dropzone>
-        <span className="manually" onClick={this.toggleEnterManually}>Or click here to enter it manually</span>
+          <Dropzone accept="text/plain" onDrop={acceptedFiles => this.processAcceptedFiles(acceptedFiles)}>
+            {({ getRootProps, getInputProps, isDragActive }) => (
+              <section>
+                <div {...getRootProps()} className={this.getDropzoneClass(isDragActive)}>
+                  <input {...getInputProps()} />
+                  <p>Drag and Drop It Here<br />Or Click Here to Select It</p>
+                </div>
+              </section>
+            )}
+          </Dropzone>
+          <span className="manually" onClick={this.toggleEnterManually}>Or click here to enter it manually</span>
         </div>
       </div>
     );
   }
 
-  renderManual () {
+  renderManual() {
     let loadErrorClass = "LoadError";
     let loadError;
 
-    if( this.state.loadError !== false ) {
+    if (this.state.loadError !== false) {
       loadErrorClass = "LoadError vis";
       loadError = this.state.loadError;
     }
@@ -162,16 +162,16 @@ class GetStartedLoad extends React.Component {
         <div className={loadErrorClass}>{loadError}</div>
         <div className="manualLoad">
           <textarea onChange={this.manualLoadOnChange} placeholder="Paste your Recovery Key here"></textarea>
-        
-        
-        <span className="manually" onClick={this.toggleEnterManually}>Or click here to upload it</span>
+
+
+          <span className="manually" onClick={this.toggleEnterManually}>Or click here to upload it</span>
         </div>
       </div>
     )
   }
 
-  render () {
-    if( this.state.manualLoad ) {
+  render() {
+    if (this.state.manualLoad) {
       return this.renderManual();
     } else {
       return this.renderDropzone();

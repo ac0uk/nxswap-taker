@@ -36,11 +36,11 @@ const NXRecoveryKeyProvider = ({ children }) => {
 }
 
 function useNXRecoveryKeyContext() {
-  const context = React.useContext(NXRecoveryKeyContext)
-  if (context === undefined) {
-    throw new Error('NXRecoveryKeyContext must be used within a NXRecoveryKeyProvider')
-  }
-  return context
+	const context = React.useContext(NXRecoveryKeyContext)
+	if (context === undefined) {
+		throw new Error('NXRecoveryKeyContext must be used within a NXRecoveryKeyProvider')
+	}
+	return context
 }
 
 export { NXRecoveryKeyProvider, useNXRecoveryKeyContext, NXRecoveryKeyContext, RecoveryKey }
