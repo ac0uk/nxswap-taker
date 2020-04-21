@@ -3,7 +3,7 @@ import {
   Redirect, Link
 } from "react-router-dom";
 
-import { NXRecoveryKeyContext, RecoveryKey } from "../../contexts/NXRecoveryKeyContext";
+import { RecoveryKeyContext, RecoveryKey } from "../../contexts/RecoveryKeyContext";
 
 class WalletForget extends React.Component {
   async forgetWallet() {
@@ -37,5 +37,5 @@ class WalletForget extends React.Component {
   }
 }
 
-WalletForget.contextType = NXRecoveryKeyContext;
+WalletForget.contextType = RecoveryKeyContext;
 export default WalletForget;

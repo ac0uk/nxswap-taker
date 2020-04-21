@@ -7,7 +7,7 @@ class Footer extends React.Component {
 
 	render() {
 		let currentRepo = ( process.env.NODE_ENV === "production" ) ? `${process.env.REACT_APP_NOW_GITHUB_REPO}/${process.env.REACT_APP_NOW_GITHUB_COMMIT_REF}` : "DEV VERSION";
-		let currentRepoURL = (process.env.NODE_ENV === "production" ) ? `https://www.github.com/nxswap/${process.env.REACT_APP_NOW_GITHUB_REPO}` : "https://www.github.com/nxswap/nxswap-taker";
+		let currentRepoURL = (process.env.NODE_ENV === "production" ) ? `https://www.github.com/nxswap/${process.env.REACT_APP_NOW_GITHUB_REPO}/tree/${process.env.REACT_APP_NOW_GITHUB_COMMIT_REF}` : "https://www.github.com/nxswap/nxswap-taker";
 		return (
 			<div id="footer">
 				<div className="max-width">
@@ -21,9 +21,7 @@ class Footer extends React.Component {
 					<div className="right">
 						<Link to="/security">Security</Link>
 						<span>|</span>
-						<a href="https://www.github.com/nxswap/nxswap-taker" target="_blank" rel="noopener noreferrer">Open Source</a>
-						<span>|</span>
-						<a href={currentRepoURL}>{currentRepo}</a>
+						<a href={currentRepoURL} target="_blank" rel="noopener noreferrer">Open Source - {currentRepo}</a>
 					</div>
 				</div>
 			</div>

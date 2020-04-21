@@ -4,16 +4,16 @@ import './css/index.css';
 import App from './components/App';
 import * as serviceWorker from './serviceWorker';
 
-import { NXRecoveryKeyProvider } from "./contexts/NXRecoveryKeyContext.js";
+import { RecoveryKeyProvider } from "./contexts/RecoveryKeyContext.js";
 import { NXWSProvider } from "./contexts/NXWSContext.js";
 
 ReactDOM.render(
   <React.StrictMode>
-    <NXRecoveryKeyProvider>
+    <RecoveryKeyProvider>
       <NXWSProvider>
       <App />
       </NXWSProvider>
-    </NXRecoveryKeyProvider>
+    </RecoveryKeyProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

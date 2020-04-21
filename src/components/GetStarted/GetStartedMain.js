@@ -3,7 +3,7 @@ import {
   Redirect
 } from "react-router-dom";
 
-import { NXRecoveryKeyContext, RecoveryKey } from "../../contexts/NXRecoveryKeyContext";
+import { RecoveryKeyContext, RecoveryKey } from "../../contexts/RecoveryKeyContext";
 
 import zxcvbn from 'zxcvbn';
 import ClipboardJS from 'clipboard';
@@ -200,5 +200,5 @@ class GetStartedMain extends React.Component {
   }
 }
 
-GetStartedMain.contextType = NXRecoveryKeyContext;
+GetStartedMain.contextType = RecoveryKeyContext;
 export default GetStartedMain;

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Dropzone from 'react-dropzone'
-import { NXRecoveryKeyContext, RecoveryKey } from '../../contexts/NXRecoveryKeyContext';
+import { RecoveryKeyContext, RecoveryKey } from '../../contexts/RecoveryKeyContext';
 
 class GetStartedLoad extends React.Component {
   constructor(props) {
@@ -179,5 +179,5 @@ class GetStartedLoad extends React.Component {
   }
 }
 
-GetStartedLoad.contextType = NXRecoveryKeyContext;
+GetStartedLoad.contextType = RecoveryKeyContext;
 export default GetStartedLoad;

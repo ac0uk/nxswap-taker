@@ -4,7 +4,7 @@ import {
   Link
 } from "react-router-dom";
 
-import { NXRecoveryKeyContext, RecoveryKey } from "../../contexts/NXRecoveryKeyContext";
+import { RecoveryKeyContext, RecoveryKey } from "../../contexts/RecoveryKeyContext";
 
 class WalletUnlock extends React.Component {
   constructor(props) {
@@ -106,5 +106,5 @@ class WalletUnlock extends React.Component {
   }
 }
 
-WalletUnlock.contextType = NXRecoveryKeyContext;
+WalletUnlock.contextType = RecoveryKeyContext;
 export default WalletUnlock;

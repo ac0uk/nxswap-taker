@@ -3,7 +3,7 @@ import {
   Redirect, Link
 } from "react-router-dom";
 
-import { NXRecoveryKeyContext, RecoveryKey } from "../../contexts/NXRecoveryKeyContext";
+import { RecoveryKeyContext, RecoveryKey } from "../../contexts/RecoveryKeyContext";
 
 class WalletLock extends React.Component {
   lockWallet() {
@@ -38,5 +38,5 @@ class WalletLock extends React.Component {
   }
 }
 
-WalletLock.contextType = NXRecoveryKeyContext;
+WalletLock.contextType = RecoveryKeyContext;
 export default WalletLock;

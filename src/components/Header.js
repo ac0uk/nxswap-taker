@@ -3,7 +3,7 @@ import {
 	Link
 } from "react-router-dom";
 
-import { useNXRecoveryKeyContext } from "../contexts/NXRecoveryKeyContext.js"
+import { useRecoveryKeyContext } from "../contexts/RecoveryKeyContext.js"
 
 
 function Header() {
@@ -25,7 +25,7 @@ function Header() {
 
 
 function HeaderLinks() {
-	const { recoveryKeyLoading, recoveryKeyLocked, recoveryKeyLoaded } = useNXRecoveryKeyContext();
+	const { recoveryKeyLoading, recoveryKeyLocked, recoveryKeyLoaded } = useRecoveryKeyContext();
 	let linkClass = (recoveryKeyLoading) ? "disabled" : "";
 
 	if (recoveryKeyLoading || (!recoveryKeyLocked && !recoveryKeyLoaded)) {
