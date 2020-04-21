@@ -1,26 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { LocalStorage, RecoveryKey, Wallet } from '../js/NXSwapTaker';
 
 const NXRecoveryKeyContext = React.createContext();
 
 const NXRecoveryKeyProvider = ({ children }) => {
-	const [recoveryKeyLoading, setRecoveryKeyLoading] = useState(true);
-	const [recoveryKeyLocked, setRecoveryKeyLocked] = useState(false);
-	const [recoveryKeyLoaded, setRecoveryKeyLoaded] = useState(false);
+	const [recoveryKeyLoading, setRecoveryKeyLoading] = useState(RecoveryKey.recoveryKeyLoading);
+	const [recoveryKeyLocked, setRecoveryKeyLocked] = useState(RecoveryKey.recoveryKeyLocked);
+	const [recoveryKeyLoaded, setRecoveryKeyLoaded] = useState(RecoveryKey.recoveryKeyLoaded);
 
-	useEffect(() => {
-		const init = async () => {
-			RecoveryKey.setRecoveryKeyLoading = setRecoveryKeyLoading;
-			RecoveryKey.setRecoveryKeyLocked = setRecoveryKeyLocked;
-			RecoveryKey.setRecoveryKeyLoaded = setRecoveryKeyLoaded;
-
-			await RecoveryKey.loadRecoveryKey({
-				autoCreate: false
-			});
-		};
-
-		init();
-	}, []);
+	RecoveryKey.setRecoveryKeyLoading = setRecoveryKeyLoading;
+	RecoveryKey.setRecoveryKeyLocked = setRecoveryKeyLocked;
+	RecoveryKey.setRecoveryKeyLoaded = setRecoveryKeyLoaded;
 
 	return (
 		<NXRecoveryKeyContext.Provider

@@ -4,7 +4,6 @@ import {
 } from "react-router-dom";
 
 console.log(process.env);
-console.log(process.env.REACT_APP_TEST);
 
 class Footer extends React.Component {
 	render() {

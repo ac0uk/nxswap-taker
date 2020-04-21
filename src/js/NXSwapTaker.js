@@ -6,4 +6,12 @@ const RecoveryKey = new NXRecoveryKey({
 });
 const Wallet = new NXWallet();
 
+async function Setup () {
+	await RecoveryKey.loadRecoveryKey({
+		autoCreate: false
+	});
+}
+
+Setup();
+
 export { LocalStorage, RecoveryKey, Wallet };
