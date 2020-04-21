@@ -3,11 +3,11 @@ import {
   Redirect, Link
 } from "react-router-dom";
 
-import { NXRecoveryKeyContext, NXRecoveryKeyClient } from "../../contexts/NXRecoveryKeyContext";
+import { NXRecoveryKeyContext, RecoveryKey } from "../../contexts/NXRecoveryKeyContext";
 
 class WalletForget extends React.Component {
   async forgetWallet () {
-    await NXRecoveryKeyClient.clearSavedRecoveryKey();
+    await RecoveryKey.clearSavedRecoveryKey();
     // Now hard reload.. to ensure reset..
     window.location.reload();
   }

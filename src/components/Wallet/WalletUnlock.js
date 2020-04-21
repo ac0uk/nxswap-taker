@@ -4,7 +4,7 @@ import {
   Link
 } from "react-router-dom";
 
-import { NXRecoveryKeyContext, NXRecoveryKeyClient } from "../../contexts/NXRecoveryKeyContext";
+import { NXRecoveryKeyContext, RecoveryKey } from "../../contexts/NXRecoveryKeyContext";
 
 class WalletUnlock extends React.Component {
   constructor(props) {
@@ -47,7 +47,7 @@ class WalletUnlock extends React.Component {
     if( ! this.state.canUnlock ) return false;
     if( ! encryptionPassphrase || encryptionPassphrase.length <= 0 ) return false;
 
-    let attemptUnlock = await NXRecoveryKeyClient.saveEncryptionPassphrase(encryptionPassphrase);
+    let attemptUnlock = await RecoveryKey.saveEncryptionPassphrase(encryptionPassphrase);
     
     if( ! attemptUnlock ) {
       this.setState({

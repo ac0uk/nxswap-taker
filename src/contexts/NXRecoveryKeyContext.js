@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { NXRecoveryKey } from '@nxswap/nxswap-js';
-import localStorage from '../js/NXLocalStorage';
+import { LocalStorage, RecoveryKey, Wallet } from '../js/NXSwapTaker';
 
 const NXRecoveryKeyContext = React.createContext();
-const NXRecoveryKeyClient = new NXRecoveryKey({
-	storage: localStorage
-});
 
 const NXRecoveryKeyProvider = ({ children }) => {
 	const [recoveryKeyLoading, setRecoveryKeyLoading] = useState(true);
@@ -14,11 +10,11 @@ const NXRecoveryKeyProvider = ({ children }) => {
 
 	useEffect(() => {
 		const init = async () => {
-			NXRecoveryKeyClient.setRecoveryKeyLoading = setRecoveryKeyLoading;
-			NXRecoveryKeyClient.setRecoveryKeyLocked = setRecoveryKeyLocked;
-			NXRecoveryKeyClient.setRecoveryKeyLoaded = setRecoveryKeyLoaded;
+			RecoveryKey.setRecoveryKeyLoading = setRecoveryKeyLoading;
+			RecoveryKey.setRecoveryKeyLocked = setRecoveryKeyLocked;
+			RecoveryKey.setRecoveryKeyLoaded = setRecoveryKeyLoaded;
 
-			await NXRecoveryKeyClient.loadRecoveryKey({
+			await RecoveryKey.loadRecoveryKey({
 				autoCreate: false
 			});
 		};
@@ -47,4 +43,4 @@ function useNXRecoveryKeyContext() {
   return context
 }
 
-export { NXRecoveryKeyProvider, useNXRecoveryKeyContext, NXRecoveryKeyContext, NXRecoveryKeyClient }
+export { NXRecoveryKeyProvider, useNXRecoveryKeyContext, NXRecoveryKeyContext, RecoveryKey }

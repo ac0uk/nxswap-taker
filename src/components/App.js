@@ -7,11 +7,11 @@ import {
 
 import '../css/App.css';
 
-import Header from './Header.js'
-import Home from './Home.js'
-import GetStarted from './GetStarted/GetStarted'
-import Wallet from './Wallet/Wallet'
-import Footer from './Footer.js'
+import Header from './Header.js';
+import Home from './Home.js';
+import GetStarted from './GetStarted/GetStarted';
+import Wallet from './Wallet/Wallet';
+import Footer from './Footer.js';
 
 class App extends React.Component {
   render() {
@@ -23,12 +23,8 @@ class App extends React.Component {
         <Switch>
           <Route path="/get-started"><GetStarted /></Route>
           <Route path="/wallet"><Wallet /></Route>
-          <Route path="/track">
-            track
-          </Route>
-          <Route path="/">
-            <Home />
-          </Route>
+          <Route path="/track">track</Route>
+          <Route path="/"><Home /></Route>
         </Switch>
         </div>
         <Footer />
@@ -37,6 +33,5 @@ class App extends React.Component {
     )
   }
 }
-
 
 export default App;

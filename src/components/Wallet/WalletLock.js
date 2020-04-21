@@ -3,11 +3,11 @@ import {
   Redirect, Link
 } from "react-router-dom";
 
-import { NXRecoveryKeyContext, NXRecoveryKeyClient } from "../../contexts/NXRecoveryKeyContext";
+import { NXRecoveryKeyContext, RecoveryKey } from "../../contexts/NXRecoveryKeyContext";
 
 class WalletLock extends React.Component {
   lockWallet () {
-    NXRecoveryKeyClient.clearSavedEncryptionKey();
+    RecoveryKey.clearSavedEncryptionKey();
   }
 
   render() {

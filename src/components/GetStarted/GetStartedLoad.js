@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Dropzone from 'react-dropzone'
-import { NXRecoveryKeyContext, NXRecoveryKeyClient } from '../../contexts/NXRecoveryKeyContext';
+import { NXRecoveryKeyContext, RecoveryKey } from '../../contexts/NXRecoveryKeyContext';
 
 class GetStartedLoad extends React.Component {
   constructor(props) {
@@ -29,12 +29,12 @@ class GetStartedLoad extends React.Component {
         let attemptRead = await this.readAcceptedFile(attemptFile);
         if( attemptRead !== false && attemptRead !== undefined && attemptRead.length > 0 ) {
           // Attempt to load recovery key..
-          let validateRecoveryKey = NXRecoveryKeyClient.validateEncryptedRecoveryKey(attemptRead);
+          let validateRecoveryKey = RecoveryKey.validateEncryptedRecoveryKey(attemptRead);
           if( ! validateRecoveryKey ) {
             loadError = 'This is not a valid Recovery Key';
           } else {
             // Good..save it..
-            let saveRecoveryKey = await NXRecoveryKeyClient.saveEncryptedRecoveryKeyBrowser(attemptRead);
+            let saveRecoveryKey = await RecoveryKey.saveEncryptedRecoveryKeyBrowser(attemptRead);
             if( ! saveRecoveryKey ) {
               loadError = 'Failed to load recovery key to local storage.';
             } else {
@@ -81,12 +81,12 @@ class GetStartedLoad extends React.Component {
     
     if( recoveryKey !== undefined && recoveryKey !== null && recoveryKey.length > 0 ) {
       // Attempt to validate it..
-      let validateRecoveryKey = NXRecoveryKeyClient.validateEncryptedRecoveryKey(recoveryKey);
+      let validateRecoveryKey = RecoveryKey.validateEncryptedRecoveryKey(recoveryKey);
       if( ! validateRecoveryKey ) {
         loadError = 'This is not a valid Recovery Key';
       } else {
         // Good..save it..
-        let saveRecoveryKey = await NXRecoveryKeyClient.saveEncryptedRecoveryKeyBrowser(recoveryKey);
+        let saveRecoveryKey = await RecoveryKey.saveEncryptedRecoveryKeyBrowser(recoveryKey);
         if( ! saveRecoveryKey ) {
           loadError = 'Failed to load recovery key to local storage.';
         } else {

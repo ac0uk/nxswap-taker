@@ -3,8 +3,5 @@
     "env": {
       "NPM_RC": "@npmrc"
     }
-  },
-  "env": {
-    "NOW_GITHUB_REPO": ""
   }
 }

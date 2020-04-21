@@ -14,26 +14,17 @@ class NXWS {
 
     // Currencies this version supports. Hardcoded for reasons.
     this.loadedCurrencies = []
-    this.supportedCurrencies = ["TBTC", "TLTC"];
+    this.supportedCurrencies = ["TBTC", "TLTC", "TVTC"];
   }
 
   async setupNXWS() {
     this.ws = new Centrifuge("wss://ws-api-dev56.nxswap.com:8000/connection/websocket", {
-      debug: true,
-      onPrivateSubscribe: function (data, cb) {
-        NXWS.ws.rpc({ "method": "authenticateSwap", "payload": data }).then(function (res) {
-          var t = {};
-          t.data = res.data;
-          t.status = 200;
-          cb(t);
-        }, function (err) {
-          console.log('rpc error', err);
-        });
-      }
+      debug: true
     });
 
     this.ws.on('connect', (result) => {
       this.nxwsConnected = true;
+      console.log(result);
       this.setNXWSConnected(true);
       this.loadCurrencies();
     });
@@ -48,7 +39,7 @@ class NXWS {
       var t = Object.values(res);
       this.setCurrencies(t[0]);
       this.channels['currencies'] = this.ws.subscribe('currencies', (message) => {
-        this.setCurrencies(message.data)
+        this.setCurrencies(message.data);
       });
     }, (err) => {
       console.log('rpc error', err);
@@ -69,6 +60,7 @@ class NXWS {
         }
       }
       this.loadedCurrencies = res;
+      console.log(res);
       this.setNXWSCurrencies(this.loadedCurrencies);
     }
   }

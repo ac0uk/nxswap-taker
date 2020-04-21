@@ -3,7 +3,7 @@ import {
   Redirect
 } from "react-router-dom";
 
-import { NXRecoveryKeyContext, NXRecoveryKeyClient } from "../../contexts/NXRecoveryKeyContext";
+import { NXRecoveryKeyContext, RecoveryKey } from "../../contexts/NXRecoveryKeyContext";
 
 import zxcvbn from 'zxcvbn';
 import ClipboardJS from 'clipboard';
@@ -54,7 +54,7 @@ class GetStartedMain extends React.Component {
     event.preventDefault();
     if( !this.state.canCreate) return false;
 
-    let createRecoveryKey = NXRecoveryKeyClient.createNewRecoveryKey(this.state.encryptionPassphraseInput);
+    let createRecoveryKey = RecoveryKey.createNewRecoveryKey(this.state.encryptionPassphraseInput);
     if( ! createRecoveryKey) return false;
 
     let encryptedRecoveryKey = createRecoveryKey.encryptedRecoveryKey;

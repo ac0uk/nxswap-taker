@@ -5,7 +5,6 @@ const NXWSContext = React.createContext();
 const NXWSClient = new NXWS();
 
 const NXWSProvider = ({ children }) => {
-
   const [nxwsConnected, setNXWSConnected] = useState(false);
   const [nxwsCurrencies, setNXWSCurrencies] = useState(false);
 
@@ -13,7 +12,6 @@ const NXWSProvider = ({ children }) => {
     const initNXWS = async () => {
       NXWSClient.setNXWSConnected = setNXWSConnected;
       NXWSClient.setNXWSCurrencies = setNXWSCurrencies;
-
       await NXWSClient.setupNXWS();
     };
 

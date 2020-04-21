@@ -95,3 +95,7 @@
   font-size: 18px;
   cursor: pointer;
 }
+
+.swap .swapamountbar .buttonfield button:hover {
+  opacity: 0.8;
+}
