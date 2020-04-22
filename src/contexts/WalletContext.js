@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Wallet } from '../js/NXSwapTaker';
 
+import WalletModalReceive from '../components/Wallet/WalletModalReceive';
+
 const WalletContext = React.createContext();
 
 const WalletProvider = ({ children }) => {
 	const [walletInitialised, setWalletInitialised] = useState(false);
 	const [walletBalances, setWalletBalances] = useState(false);
+	const [modalReceiveOpen, setModalReceiveOpen] = useState(false);
 
 	useEffect(() => {
     const Setup = async () => {
@@ -27,10 +30,13 @@ const WalletProvider = ({ children }) => {
 		<WalletContext.Provider
 			value={{
 				walletInitialised,
-				walletBalances
+				walletBalances,
+				modalReceiveOpen,
+				setModalReceiveOpen
 			}}
 		>
 			{children}
+			<WalletModalReceive />
 		</WalletContext.Provider>
 	);
 }

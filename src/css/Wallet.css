@@ -168,3 +168,8 @@
 .walletOverview table tr td.actions button:hover {
   opacity: 0.8;
 }
+
+.walletOverview table tr td.actions button.disabled {
+  opacity: 0.1;
+  cursor: not-allowed;
+}

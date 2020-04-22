@@ -9,17 +9,12 @@
     "@testing-library/user-event": "^7.1.2",
     "centrifuge": "^2.5.0",
     "clipboard": "^2.0.6",
-    "isomorphic-fetch": "^2.2.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-dropzone": "^10.2.2",
     "react-router-dom": "^5.1.2",
-    "react-router-native": "^5.1.2",
     "react-scripts": "3.4.1",
-    "sjcl": "^1.0.8",
-    "store2": "^2.11.0",
     "trezor-connect": "^8.1.1",
-    "webpack": "4.42.0",
     "zxcvbn": "^4.4.2"
   },
   "scripts": {

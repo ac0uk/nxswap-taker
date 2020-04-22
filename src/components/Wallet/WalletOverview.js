@@ -1,29 +1,42 @@
 import React from 'react';
-import {
-  Link
-} from "react-router-dom";
 
-import { Wallet, NXMeta } from '../../js/NXSwapTaker';
+import { NXMeta } from '../../js/NXSwapTaker';
 import { useWalletContext } from '../../contexts/WalletContext';
 
 function OverviewTable (props) {
-  let currencies = Wallet.activeCurrencies;
-  let balances = props.balances;
-
-  console.log('updating balance table');
+  const { walletBalances, setModalReceiveOpen } = useWalletContext();
+  let balances = walletBalances;
+  let currencies = [];
+  let metaCurrencies = NXMeta.currencies;
+  for( let curr in metaCurrencies ) {
+    currencies.push(curr);
+  }
 
   if( currencies === undefined || currencies.length === 0 ) {
     return false
   }  
-
-  if( !balances ) return false;
   
   const listItems = currencies.map((curr) => {
     let meta = NXMeta.currencies[curr];
-    let confirmed = balances[curr].confirmed.formatted;
-    let confirmedClass = ( balances[curr].confirmed.raw > 0 ) ? "bal notZero" : "bal zero";
-    let unconfirmed = balances[curr].unconfirmed.formatted;
-    let unconfirmedClass = ( balances[curr].unconfirmed.raw > 0 ) ? "bal notZero" : "bal zero";
+    let balance = balances[curr];
+    let confirmed = "";
+    let confirmedClass = "";
+    let unconfirmed = "";
+    let unconfirmedClass = "";
+    let butClass = "disabled";
+    
+    if( balance !== undefined ) {
+      butClass = "";
+      confirmed = balances[curr].confirmed.formatted;
+      confirmedClass = ( balances[curr].confirmed.raw > 0 ) ? "bal notZero" : "bal zero";
+      unconfirmed = balances[curr].unconfirmed.formatted;
+      unconfirmedClass = ( balances[curr].unconfirmed.raw > 0 ) ? "bal notZero" : "bal zero";
+    }
+
+    const onReceiveClick = (curr) => {
+      setModalReceiveOpen(curr);
+    }
+    
     return (
       <tr key={curr}>
         <td className="icon"><img src={meta.icon} alt={curr} /></td>
@@ -31,7 +44,7 @@ function OverviewTable (props) {
         <td className={confirmedClass}>{confirmed}</td>
         <td className={unconfirmedClass}>{unconfirmed}</td>
         <td className="bal zero">0.00000000</td>
-        <td className="actions"><button>Send</button> <button>Receive</button> <button>Transactions</button></td>
+        <td className="actions"><button className={butClass}>Send</button> <button className={butClass} onClick={() => { onReceiveClick(curr) }}>Receive</button> <button className={butClass}>Transactions</button></td>
       </tr>
     )
   });
@@ -42,7 +55,6 @@ function OverviewTable (props) {
 }
 
 function WalletOverview () {
-  const { walletBalances } = useWalletContext();
 
   return (
     <div className="singlecolumn">
@@ -62,7 +74,7 @@ function WalletOverview () {
             <th className="actions">&nbsp;</th>
           </tr>
           </thead>
-          <OverviewTable balances={walletBalances} />
+          <OverviewTable />
         </table>
       </div>
     </div>
