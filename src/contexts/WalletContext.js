@@ -5,6 +5,7 @@ const WalletContext = React.createContext();
 
 const WalletProvider = ({ children }) => {
 	const [walletInitialised, setWalletInitialised] = useState(false);
+	const [walletBalances, setWalletBalances] = useState(false);
 
 	useEffect(() => {
     const Setup = async () => {
@@ -12,6 +13,10 @@ const WalletProvider = ({ children }) => {
       
 			Wallet.on('initialised', (state) => {
 				setWalletInitialised(state);
+			});
+
+			Wallet.on('balanceUpdate', (state) => {
+				setWalletBalances(state);
 			});
     };
 
@@ -21,7 +26,8 @@ const WalletProvider = ({ children }) => {
 	return (
 		<WalletContext.Provider
 			value={{
-				walletInitialised
+				walletInitialised,
+				walletBalances
 			}}
 		>
 			{children}

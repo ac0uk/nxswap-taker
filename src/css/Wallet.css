@@ -101,11 +101,70 @@
   background: #101010;
   border-bottom: 1px solid #2b2b2b;
   padding: 20px 20px;
+  color: #999;
 }
 
 .walletOverview table tr th.icon {
-  width: 60px;
+  width: 48px;
+  padding-right: 0px;
 }
 .walletOverview table tr th.details {
   width: 30px;
+}
+
+.walletOverview table tr td.icon {
+  padding-right: 0px;
+}
+
+.walletOverview table tr td.icon img {
+  width: 36px;
+  height: 36px;
+  margin-left: 6px;
+}
+
+.walletOverview table tr th.name {
+  width: 180px;
+}
+
+.walletOverview table tr td.name {
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.walletOverview table tr td.name span {
+  display: block;
+  padding-top: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  opacity: 0.7;
+}
+
+
+.walletOverview table tr td.bal.zero {
+  opacity: 0.5;
+}
+
+.walletOverview table tr td.bal.notZero {
+  color: white;
+}
+
+
+.walletOverview table tr th.actions,
+.walletOverview table tr td.actions {
+  width: 330px;
+}
+
+.walletOverview table tr td.actions button {
+  border: 1px solid white;
+  background: none;
+  color: white;
+  padding: 12px 16px;
+  font-size: 14px;
+  margin: 0px 8px;
+  cursor: pointer;
+  outline: 0;
+}
+
+.walletOverview table tr td.actions button:hover {
+  opacity: 0.8;
 }

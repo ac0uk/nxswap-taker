@@ -4,15 +4,18 @@ import './css/index.css';
 import App from './components/App';
 import * as serviceWorker from './serviceWorker';
 
-import { RecoveryKeyProvider } from "./contexts/RecoveryKeyContext.js";
-import { NXWSProvider } from "./contexts/NXWSContext.js";
+import { RecoveryKeyProvider } from "./contexts/RecoveryKeyContext";
+import { WalletProvider } from "./contexts/WalletContext";
+import { NXWSProvider } from "./contexts/NXWSContext";
 
 ReactDOM.render(
   <React.StrictMode>
     <RecoveryKeyProvider>
+      <WalletProvider>
       <NXWSProvider>
       <App />
       </NXWSProvider>
+      </WalletProvider>
     </RecoveryKeyProvider>
   </React.StrictMode>,
   document.getElementById('root')

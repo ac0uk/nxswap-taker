@@ -1,4 +1,5 @@
-import { NXLocalStorage, NXRecoveryKey, NXBlockbookExplorer, NXWallet, Networks } from '@nxswap/nxswap-js';
+import { NXLocalStorage, NXRecoveryKey, ExplorerBlockbook, NXWallet, Networks } from '@nxswap/nxswap-js';
+import NXMeta from './NXMeta';
 
 const SUPPORTED_CURRENCIES = ["TBTC", "TLTC", "TVTC"];
 
@@ -11,12 +12,11 @@ for( let net of SUPPORTED_CURRENCIES ) {
 	let network = Networks[net];
 	let defaultBlockbook = network.defaultBlockbook;
 	if( !defaultBlockbook || defaultBlockbook === undefined) continue;
-	let explorer = new NXBlockbookExplorer({
+	let explorer = new ExplorerBlockbook({
 		node: defaultBlockbook
 	});
 	explorers[net] = explorer;
 }
-
 // NXRecoveryKey
 const RecoveryKey = new NXRecoveryKey({
 	storage: LocalStorage
@@ -31,7 +31,6 @@ RecoveryKey.on('ready', (state) => {
 		// Init wallet..
 		Wallet.initialiseWallet({
 			fromMnemonic: mnemonic,
-			supportedCurrencies: SUPPORTED_CURRENCIES,
 			explorers: explorers 
 		})
 	} else {
@@ -52,4 +51,4 @@ RecoveryKey.loadRecoveryKey({
 	autoCreate: false
 });
 
-export { LocalStorage, RecoveryKey, Wallet };
+export { LocalStorage, RecoveryKey, Wallet, NXMeta };
