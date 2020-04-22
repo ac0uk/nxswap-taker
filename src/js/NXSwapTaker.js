@@ -35,16 +35,12 @@ RecoveryKey.on('ready', (state) => {
 		})
 	} else {
 		// Not ready.. lock..?
+		// Need to uninitialise Wallet..
 	}
 });
 
 // NXWallet
 const Wallet = new NXWallet();
-
-Wallet.on('initialised', (state) => {
-	console.log('wallet init event', state);
-	Wallet.syncWallet();
-});
 
 // Do Bits..
 RecoveryKey.loadRecoveryKey({
