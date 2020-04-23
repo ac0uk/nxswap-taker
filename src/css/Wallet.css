@@ -151,16 +151,16 @@
 
 .walletOverview table tr th.actions,
 .walletOverview table tr td.actions {
-  width: 330px;
+  width: 310px;
 }
 
 .walletOverview table tr td.actions button {
   border: 1px solid white;
   background: none;
   color: white;
-  padding: 12px 16px;
+  padding: 12px 12px;
   font-size: 14px;
-  margin: 0px 8px;
+  margin: 0px 4px;
   cursor: pointer;
   outline: 0;
 }

@@ -1,5 +1,4 @@
 import React from 'react';
-
 import Dropzone from 'react-dropzone'
 import { RecoveryKeyContext, RecoveryKey } from '../../contexts/RecoveryKeyContext';
 

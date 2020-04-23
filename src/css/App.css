@@ -303,6 +303,9 @@
   display: none;
 }
 
+.text-center {
+  text-align: center;
+}
 
 .Error {
   display: none;

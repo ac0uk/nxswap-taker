@@ -4,19 +4,171 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background:rgba(0,0,0,0.7);
+  background:rgba(0,0,0,0.8);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 800;
+  padding: 40px;
 }
 
 .modalWindow {
-  background: #333333;
-  padding: 40px;
-  min-width: 500px;
+  background: #232323;
+  border: 1px solid #333333;
+  padding: 40px 40px;
+  width: 500px;
   max-width: 100%;
   margin: 20px;
-  border-radius: 8px;
   z-index: 900;
+  overflow-y: scroll;
+  max-height: calc(100vh - 200px);
+}
+
+.modalWindow .modalHeader {
+  margin-bottom: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modalWindow .modalHeader h3 {
+  display: block;
+  text-align: left;
+  flex-grow: 1;
+}
+
+.modalWindow .modalHeader img {
+  width: 40px;
+  max-width: 40px;
+  vertical-align: middle;
+  margin-right: 20px;
+}
+
+.modalWindow .modalHeader span.close {
+  width: 40px;
+  max-width: 40px;
+  text-align: right;
+  cursor: pointer;
+}
+
+.modalWindow .modalHeader span.close:hover {
+  opacity: 0.8;
+}
+
+.modalWindow .modalHeader span.close img {
+  width: 24px;
+  height: 24px;
+  margin: 0px;
+}
+
+.modalWindow .modalInput label,
+.modalWindow small.label {
+  font-weight: 500;
+  padding: 4px 0px;
+  margin-bottom: 12px;
+  font-size: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modalWindow .modalInput label.noCurs {
+  cursor: default;
+}
+
+.modalWindow .modalInput label span.labelAction {
+  opacity: 0.8;
+  font-weight: 400;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.modalWindow .modalInput label span.labelAction:hover {
+  opacity: 1;
+}
+
+.modalWindow .modalInput {
+  position: relative;
+}
+
+.modalWindow .modalInput input[type=text] {
+  background-color: black;
+  border: 1px solid #363636;
+  padding: 18px 20px;
+  font-size: 14px;
+  color: white;
+  width: 100%;
+  display: block;
+  max-width: calc(100% - 42px); /* - horizontal padding + border */
+  outline: none;
+}
+
+.modalWindow .modalInput .inputAction {
+  position: absolute;
+  bottom: 1px;
+  right: 1px;
+  text-transform: uppercase;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 4px;
+  cursor: pointer;
+}
+
+.modalWindow .modalInput .inputAction .copy {
+  padding: 11px 14px;
+}
+
+.modalWindow .modalInput .inputAction .copy:hover {
+  opacity: 0.8;
+}
+
+.modalWindow .modalContent {
+  margin-top: 20px;
+}
+
+.modalWindow .modalLink {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.modalWindow .modalLink span,
+.modalWindow .modalLink a {
+  font-size: 14px;
+  opacity: 0.9;
+  cursor: pointer;
+}
+
+.modalWindow .modalTable {
+  margin-top: 20px;
+}
+
+.modalWindow .modalTable table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+.modalWindow .modalTable table th {
+  background: #000000;
+  color: #818181;
+  font-size: 13px;
+  text-align: left;
+  padding: 12px 12px;
+  border-bottom: 1px solid #2b2b2b;
+}
+
+.modalWindow .modalTable table td {
+  background: #101010;
+  padding: 10px 10px;
+  font-size: 13px;
+  color: #999;
+  border-bottom: 1px solid #2b2b2b;
+}
+
+
+.modalWindow .modalTable table.prevAddresses th.path {
+  width: 100px;
+}
+
+.modalWindow .modalTable table.prevAddresses .path {
+  font-size: 13px;
 }

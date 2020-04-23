@@ -4,7 +4,7 @@ import { NXMeta } from '../../js/NXSwapTaker';
 import { useWalletContext } from '../../contexts/WalletContext';
 
 function OverviewTable (props) {
-  const { walletBalances, setModalReceiveOpen } = useWalletContext();
+  const { walletBalances, setModalDepositOpen } = useWalletContext();
   let balances = walletBalances;
   let currencies = [];
   let metaCurrencies = NXMeta.currencies;
@@ -33,8 +33,8 @@ function OverviewTable (props) {
       unconfirmedClass = ( balances[curr].unconfirmed.raw > 0 ) ? "bal notZero" : "bal zero";
     }
 
-    const onReceiveClick = (curr) => {
-      setModalReceiveOpen(curr);
+    const onDepositClick = (curr) => {
+      setModalDepositOpen(curr);
     }
     
     return (
@@ -44,7 +44,7 @@ function OverviewTable (props) {
         <td className={confirmedClass}>{confirmed}</td>
         <td className={unconfirmedClass}>{unconfirmed}</td>
         <td className="bal zero">0.00000000</td>
-        <td className="actions"><button className={butClass}>Send</button> <button className={butClass} onClick={() => { onReceiveClick(curr) }}>Receive</button> <button className={butClass}>Transactions</button></td>
+        <td className="actions"><button className={butClass} onClick={() => { onDepositClick(curr) }}>Deposit</button> <button className={butClass}>Withdraw</button> <button className={butClass}>Transactions</button></td>
       </tr>
     )
   });

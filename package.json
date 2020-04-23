@@ -3,20 +3,22 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@nxswap/nxswap-js": "0.0.11",
+    "@nxswap/nxswap-js": "0.0.12",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "centrifuge": "^2.5.0",
     "clipboard": "^2.0.6",
+    "qrcode": "^1.4.4",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-dropzone": "^10.2.2",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
     "trezor-connect": "^8.1.1",
-    "zxcvbn": "^4.4.2",
-    "webpack": "4.42.0"
+    "webpack": "4.42.0",
+    "ws": "^7.2.3",
+    "zxcvbn": "^4.4.2"
   },
   "scripts": {
     "start": "react-scripts start",
