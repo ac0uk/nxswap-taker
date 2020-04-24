@@ -51,7 +51,8 @@
   outline: none;
   font-size: 23px;
   padding: 22px 16px 22px 100px;
-  width: calc(100% - 118px);
+  width: 100%;
+  box-sizing: border-box;
   color: white;
   line-height: 1;
 }

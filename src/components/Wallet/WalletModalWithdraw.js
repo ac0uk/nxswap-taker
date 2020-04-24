@@ -9,10 +9,12 @@ class WalletModalWithdraw extends React.Component {
     this.defaultState = {
       curr: false,
       isConfirm: false,
+      isSelectInputs: false,
       sendToAddress: false,
       validSendToAddress: false,
       sendAmount: false,
       sendAmountInvalid: false,
+      selectedInputs: false,
       sendFee: 'high',
       subtractFee: false
     }
@@ -68,7 +70,8 @@ class WalletModalWithdraw extends React.Component {
     if (availableBalance.float > 0) {
       this.setState({
         sendAmount: availableBalance.float,
-        subtractFee: true
+        subtractFee: true,
+        sendAmountInvalid: false
       });
     }
   }
@@ -98,7 +101,7 @@ class WalletModalWithdraw extends React.Component {
     let options = [
       {
         id: 'low',
-        label: 'Low'
+        label: 'Low',
       },
       {
         id: 'medium',
@@ -166,11 +169,17 @@ class WalletModalWithdraw extends React.Component {
     let subtractFee = (this.state.subtractFee) ? "yes" : "no";
     let SendDisabled = (this.state.validSendToAddress && sendAmount > 0 && sendAmount <= availableBalance.float) ? false : true;
 
+    let variableFee = meta.variableFee;
+
     return (
       <div className="modalWindow">
         <div className="modalHeader">
           <img src={meta.icon} alt={curr} />
-          <h3>Withdraw {meta.name}</h3>
+          <h3>Withdraw {meta.name}<small>Available {availableBalance.formatted}
+          {pendingBalance.raw > 0 && (
+            <> / Pending {pendingBalance.formatted}</>
+          )}</small></h3>
+          
           <span className="close" onClick={() => this.close()}>
             <img src="/img/close.svg" alt="Close" />
           </span>
@@ -187,18 +196,20 @@ class WalletModalWithdraw extends React.Component {
         <div className="modalInput">
           <label htmlFor="sendAmount">
             <span>Amount</span>
-            <span className="labelAction" onClick={() => this.SendMax(availableBalance)}>{curr} Available <strong>{availableBalance.formatted}</strong>, Pending <strong>{pendingBalance.formatted}</strong></span>
+            <span className="labelAction">Select Inputs (Auto)</span>
           </label>
           <input onChange={(event) => this.amountFieldChange(event, availableBalance)} id="sendAmount" name="sendAmount" type="text" value={sendAmount} placeholder="Send Amount" className={sendAmountInputClass} />
-          <span className="inputAction"><span className="amountCurr">{curr}</span></span>
-          <span className="inputAction"><span className={maxClass} onClick={() => this.SendMax(availableBalance)}>Max</span></span>
+          
+          <span className="inputAction"><span className={maxClass} onClick={() => this.SendMax(availableBalance)}>Send Max</span></span>
         </div>
         <div className="modalInput">
           <label htmlFor="sendAmount">
-            <span>Transaction Fee</span>
+            <span>Transaction Fee<small>0.0004 {curr}</small></span>
             <span className="labelAction" onClick={() => this.toggleSubtractFeeFromAmount(availableBalance)}>{subtractFee} Subtract Fee From Amount</span>
           </label>
-          {this.CustomSelectFee()}
+          {variableFee && (
+            this.CustomSelectFee()
+          )}
         </div>
         <div className="modalAction">
           <button disabled={SendDisabled} onClick={(event) => this.clickSend(event)}>Send</button>
