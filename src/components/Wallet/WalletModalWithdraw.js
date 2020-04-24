@@ -166,66 +166,73 @@ class WalletModalWithdraw extends React.Component {
       addressInputClass = "error";
     }
 
-    let subtractFee = (this.state.subtractFee) ? "yes" : "no";
+    let subtractFeeSelectedClass = (this.state.subtractFee) ? "customCheck textRight selected" : "customCheck textRight";
+    let subtractFeeActionClass = (this.state.subtractFee) ? "labelAction active" : "labelAction";
     let SendDisabled = (this.state.validSendToAddress && sendAmount > 0 && sendAmount <= availableBalance.float) ? false : true;
-
     let variableFee = meta.variableFee;
 
     return (
-      <div className="modalWindow">
-        <div className="modalHeader">
-          <img src={meta.icon} alt={curr} />
-          <h3>Withdraw {meta.name}<small>Available {availableBalance.formatted}
-          {pendingBalance.raw > 0 && (
-            <> / Pending {pendingBalance.formatted}</>
-          )}</small></h3>
-          
-          <span className="close" onClick={() => this.close()}>
-            <img src="/img/close.svg" alt="Close" />
-          </span>
-        </div>
-        <div className="modalInput">
-          <label htmlFor="sendToAddress">
-            <span>Send To Address</span>
-            {addressError && (
-              <span className="labelError">Invalid {curr} Address</span>
-            )}
-          </label>
-          <input id="sendToAddress" className={addressInputClass} onChange={(event) => this.addressFieldChange(event, curr)} name="sendToAddress" type="text" placeholder={addressPlaceholder} spellCheck={false} />
-        </div>
-        <div className="modalInput">
-          <label htmlFor="sendAmount">
-            <span>Amount</span>
-            <span className="labelAction">Select Inputs (Auto)</span>
-          </label>
-          <input onChange={(event) => this.amountFieldChange(event, availableBalance)} id="sendAmount" name="sendAmount" type="text" value={sendAmount} placeholder="Send Amount" className={sendAmountInputClass} />
-          
-          <span className="inputAction"><span className={maxClass} onClick={() => this.SendMax(availableBalance)}>Send Max</span></span>
-        </div>
-        <div className="modalInput">
-          <label htmlFor="sendAmount">
-            <span>Transaction Fee<small>0.0004 {curr}</small></span>
-            <span className="labelAction" onClick={() => this.toggleSubtractFeeFromAmount(availableBalance)}>{subtractFee} Subtract Fee From Amount</span>
-          </label>
-          {variableFee && (
-            this.CustomSelectFee()
+      <>
+      <div className="modalInput">
+        <label htmlFor="sendToAddress">
+          <span>Send To Address</span>
+          {addressError && (
+            <span className="labelError">Invalid {curr} Address</span>
           )}
-        </div>
-        <div className="modalAction">
-          <button disabled={SendDisabled} onClick={(event) => this.clickSend(event)}>Send</button>
-        </div>
+        </label>
+        <input id="sendToAddress" className={addressInputClass} onChange={(event) => this.addressFieldChange(event, curr)} name="sendToAddress" type="text" placeholder={addressPlaceholder} spellCheck={false} />
       </div>
+      <div className="modalInput">
+        <label htmlFor="sendAmount">
+          <span>Amount</span>
+          <span className="labelAction" onClick={() => this.showSelectInputs(true)}>Select Inputs (Auto)</span>
+        </label>
+        <input onChange={(event) => this.amountFieldChange(event, availableBalance)} id="sendAmount" name="sendAmount" type="text" value={sendAmount} placeholder="Send Amount" className={sendAmountInputClass} />
+        
+        <span className="inputAction"><span className={maxClass} onClick={() => this.SendMax(availableBalance)}>Send Max</span></span>
+      </div>
+      <div className="modalInput">
+        <label htmlFor="sendAmount">
+          <span>Transaction Fee<small>0.0004 {curr}</small></span>
+          <span className={subtractFeeActionClass} onClick={() => this.toggleSubtractFeeFromAmount(availableBalance)}><span className={subtractFeeSelectedClass}>&nbsp;</span>Subtract Fee From Amount</span>
+        </label>
+        {variableFee && (
+          this.CustomSelectFee()
+        )}
+      </div>
+      <div className="modalAction">
+        <button disabled={SendDisabled} onClick={(event) => this.clickSend(event)}>Send</button>
+      </div>
+      </>
+    )
+  }
+
+  showSelectInputs(state) {
+    this.setState({
+      isSelectInputs: state
+    });
+  }
+
+  WithdrawSelectInputs(curr,meta) {
+    return (
+      <>
+      <div className="modalContent">
+        <small className="label">
+          <span>Select Inputs</span>
+          <span className="labelAction" onClick={() => this.showSelectInputs(false)}>Close Input Selection</span></small>
+      </div>
+      <div className="modalTable">
+      
+      </div>
+      </>
     )
   }
 
   WithdrawConfirm(curr, meta) {
     return (
-      <div className="modalWindow">
-        <div className="modalHeader">
-          <img src={meta.icon} alt={curr} />
-          <h3>Withdraw {meta.name}</h3>
-        </div>
-      </div>
+      <>
+      confirm
+      </>
     )
   }
 
@@ -245,12 +252,30 @@ class WalletModalWithdraw extends React.Component {
     if (this.state.isConfirm) {
       withdrawContent = this.WithdrawConfirm(curr, meta);
     } else {
-      withdrawContent = this.WithdrawForm(curr, meta, availableBalance, pendingBalance);
+      if( this.state.isSelectInputs ) {
+        withdrawContent = this.WithdrawSelectInputs(curr, meta);
+      } else {
+        withdrawContent = this.WithdrawForm(curr, meta, availableBalance, pendingBalance);
+      }
+      
     }
 
     return (
       <div className="modalWindowOverlay">
+        <div className="modalWindow">
+        <div className="modalHeader">
+          <img src={meta.icon} alt={curr} />
+          <h3>Withdraw {meta.name}<small>Available {availableBalance.formatted}
+          {pendingBalance.raw > 0 && (
+            <> / Pending {pendingBalance.formatted}</>
+          )}</small></h3>
+          
+          <span className="close" onClick={() => this.close()}>
+            <img src="/img/close.svg" alt="Close" />
+          </span>
+        </div>
         {withdrawContent}
+        </div>
       </div>
     )
   }

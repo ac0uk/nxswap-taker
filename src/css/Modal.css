@@ -95,14 +95,23 @@
   cursor: default;
 }
 
-.modalWindow .modalInput label span.labelAction {
-  opacity: 0.8;
+.modalWindow .modalInput label span.labelAction,
+.modalWindow small.label span.labelAction {
+  opacity: 0.5;
   font-weight: 400;
   font-size: 13px;
   cursor: pointer;
 }
 
-.modalWindow .modalInput label span.labelAction:hover {
+
+
+.modalWindow .modalInput label span.labelAction:hover,
+.modalWindow small.label span.labelAction:hover {
+  opacity: 0.7;
+}
+
+.modalWindow .modalInput label span.labelAction.active,
+.modalWindow small.label span.labelAction.active {
   opacity: 1;
 }
 
@@ -261,6 +270,24 @@
   font-size: 12px;
   opacity: 0.5;
 }
+
+.modalWindow .modalInput span.customCheck {
+  width: 15px;
+  height: 15px;
+  display: inline-block;
+  border: 1px solid #666;
+}
+
+.modalWindow .modalInput span.customCheck.textRight {
+  margin-right: 9px;
+}
+
+.modalWindow .modalInput span.customCheck.selected {
+  background: url(/img/checked.svg);
+  background-size: contain;
+  border-color: #006dfa;
+}
+
 .modalWindow .modalAction button {
   width: 100%;
   display: block;
