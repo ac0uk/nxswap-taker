@@ -12,6 +12,7 @@ WalletModalWithdraw.contextType = WalletContext;
 const WalletProvider = ({ children }) => {
 	const [walletInitialised, setWalletInitialised] = useState(false);
 	const [walletBalances, setWalletBalances] = useState(false);
+	const [walletUtxos, setWalletUtxos] = useState(false);
 	const [modalDepositOpen, setModalDepositOpen] = useState(false);
 	const [modalWithdrawOpen, setModalWithdrawOpen] = useState(false);
 
@@ -26,6 +27,10 @@ const WalletProvider = ({ children }) => {
 			Wallet.on('balanceUpdate', (state) => {
 				setWalletBalances(state);
 			});
+
+			Wallet.on('utxoUpdate', (state) => {
+				setWalletUtxos(state);
+			});
     };
 
     Setup();
@@ -36,6 +41,7 @@ const WalletProvider = ({ children }) => {
 			value={{
 				walletInitialised,
 				walletBalances,
+				walletUtxos,
 				modalDepositOpen,
 				setModalDepositOpen,
 				modalWithdrawOpen,

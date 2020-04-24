@@ -63,7 +63,6 @@ function OverviewTable (props) {
 }
 
 function WalletOverview () {
-
   return (
     <div className="singlecolumn">
       <div className="walletOverview">

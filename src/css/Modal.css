@@ -239,6 +239,36 @@
   font-size: 13px;
 }
 
+.modalWindow .modalTable table.utxos th.checkbox {
+  width: 15px;
+  text-align: center;
+}
+
+.modalWindow .modalTable table.utxos td.checkbox {
+  text-align: center;
+}
+
+.modalWindow .modalTable table.utxos td.address {
+  font-size: 12px;
+}
+
+.modalWindow .modalTable table.utxos td.address small {
+  font-size: 9px;
+  opacity: 0.5;
+  padding-top: 5px;
+  display: block;
+}
+
+.modalWindow .modalTable table.utxos td.value {
+  font-size: 12px;
+  text-align: right;
+}
+
+.modalWindow .modalTable table.utxos th.value {
+  width: 100px;
+  text-align: right;
+}
+
 .modalWindow .customSelect {
   display: flex;
   justify-content: space-between;
@@ -271,18 +301,19 @@
   opacity: 0.5;
 }
 
-.modalWindow .modalInput span.customCheck {
+.modalWindow span.customCheck {
   width: 15px;
   height: 15px;
   display: inline-block;
   border: 1px solid #666;
+  cursor: pointer;
 }
 
-.modalWindow .modalInput span.customCheck.textRight {
+.modalWindow span.customCheck.textRight {
   margin-right: 9px;
 }
 
-.modalWindow .modalInput span.customCheck.selected {
+.modalWindow span.customCheck.selected {
   background: url(/img/checked.svg);
   background-size: contain;
   border-color: #006dfa;
