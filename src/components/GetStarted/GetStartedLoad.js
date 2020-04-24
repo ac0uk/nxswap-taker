@@ -161,8 +161,6 @@ class GetStartedLoad extends React.Component {
         <div className={loadErrorClass}>{loadError}</div>
         <div className="manualLoad">
           <textarea onChange={this.manualLoadOnChange} placeholder="Paste your Recovery Key here"></textarea>
-
-
           <span className="manually" onClick={this.toggleEnterManually}>Or click here to upload it</span>
         </div>
       </div>

@@ -85,9 +85,8 @@ class WalletModalDeposit extends React.Component {
   render () {
     const { modalDepositOpen, setModalDepositOpen } = this.context;
     let curr = modalDepositOpen;
-    if( ! curr ) {
-      return false;
-    }
+    if( ! curr ) return false;
+    
     let meta = NXMeta.currencies[curr];
 
     const onClickBG = (event) => {
@@ -130,7 +129,7 @@ class WalletModalDeposit extends React.Component {
           </div>
           <div className="modalInput">
             <label className="noCurs" htmlFor="receiveNextAddress">
-              <span>Your Address</span>
+              <span>Your Deposit Address</span>
               {showPrevAddressLink}
             </label>
             <input id="receiveNextAddress" name="receiveNextAddress" type="text" value={nextAddress.nextAddress} readOnly={true} />
