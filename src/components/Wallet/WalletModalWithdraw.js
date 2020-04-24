@@ -140,7 +140,7 @@ class WalletModalWithdraw extends React.Component {
   clickSend (event) {
     event.preventDefault();
 
-    console.log('send', this.state.sendToAddress, this.state.sendAmount, this.state.sendFee, this.state.subtractFee);
+    console.log('send!!', this.state.sendToAddress, this.state.sendAmount, this.state.sendFee, this.state.subtractFee);
   }
 
   WithdrawForm(curr, meta, availableBalance) {
