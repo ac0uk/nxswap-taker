@@ -137,10 +137,21 @@ class WalletModalWithdraw extends React.Component {
     )
   }
 
-  clickSend (event) {
+  async clickSend (event, curr, inputs, outputs) {
     event.preventDefault();
+    if( !this.canSend) return false;
 
     console.log('send!!', this.state.sendToAddress, this.state.sendAmount, this.state.sendFee, this.state.subtractFee);
+
+    let create = Wallet.createSendTransaction(curr, inputs, outputs, false);
+
+    console.log('hex', create);
+
+    if( ! create ) return false;
+
+    let send = await Wallet.sendTransaction(curr, create);
+    console.log('send complete');
+    console.log(send);
   }
 
   WithdrawForm(curr, meta, availableBalance) {
@@ -188,29 +199,29 @@ class WalletModalWithdraw extends React.Component {
     let addressInputClass = "";
     if (addressError) {
       addressInputClass = "error";
-    }
-
-    
+    }    
 
     let subtractFeeSelectedClass = (this.state.subtractFee) ? "customCheck textRight selected" : "customCheck textRight";
     let subtractFeeActionClass = (this.state.subtractFee) ? "labelAction active" : "labelAction";
     let SendDisabled = (this.state.validSendToAddress && sendAmount > 0 && sendAmount <= maximumAmountFloat) ? false : true;
+    this.canSend = (SendDisabled) ? false : true;
     let variableFee = meta.variableFee;
 
     // Calc Fee..
     let transactionFee = false;
+    let inputs = false;
+    let outputs = false;
 
     if( ! SendDisabled ) {
       let sendSatoshis = parseInt(this.state.sendAmount * 100000000);
-      let outputs = (isMax) ? [{ address: this.state.sendToAddress }] : [{ address: this.state.sendToAddress, value: sendSatoshis }];
+      outputs = (isMax) ? [{ address: this.state.sendToAddress }] : [{ address: this.state.sendToAddress, value: sendSatoshis }];
       // INputs?
-      let inputs = false;
       if( hasSelectedInputs ) {
         inputs = this.state.selectedInputs;
       }
-      let estimateFee = Wallet.estimateTransactionFee(curr, inputs, outputs, false);
+      let estimateFee = Wallet.calculateTransactionFee(curr, inputs, outputs, false);
       if( estimateFee !== false ) {
-        transactionFee = parseFloat(estimateFee / 100000000);
+        transactionFee = parseFloat(estimateFee.fee / 100000000);
       }
     }
 
@@ -248,7 +259,7 @@ class WalletModalWithdraw extends React.Component {
         )}
       </div>
       <div className="modalAction">
-        <button disabled={SendDisabled} onClick={(event) => this.clickSend(event)}>Send</button>
+        <button disabled={SendDisabled} onClick={(event) => this.clickSend(event, curr, inputs, outputs, false)}>Send</button>
       </div>
       </>
     )
