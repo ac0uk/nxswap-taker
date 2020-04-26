@@ -418,9 +418,16 @@ class WalletModalWithdraw extends React.Component {
             <img src="/img/close.svg" alt="Close" />
           </span>
         </div>
-        success!
-        <br />
-        {this.state.successTxid}
+        <div className="modalContent">
+          <small className="label">
+            <span>Success! Your transaction has been broadcast. Your transaction ID is below.</span>
+          </small>
+        </div>
+        <div className="modalContent">
+          <small className="label">
+            <span>{this.state.successTxid}</span>
+          </small>
+        </div>
         </div>
       </div>
     )
