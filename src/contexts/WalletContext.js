@@ -3,11 +3,13 @@ import { Wallet } from '../js/NXSwapTaker';
 
 import WalletModalDeposit from '../components/Wallet/WalletModalDeposit';
 import WalletModalWithdraw from '../components/Wallet/WalletModalWithdraw';
+import WalletModalTransactions from '../components/Wallet/WalletModalTransactions';
 
 const WalletContext = React.createContext();
 
 WalletModalDeposit.contextType = WalletContext;
 WalletModalWithdraw.contextType = WalletContext;
+WalletModalTransactions.contextType = WalletContext;
 
 const WalletProvider = ({ children }) => {
 	const [walletInitialised, setWalletInitialised] = useState(false);
@@ -15,6 +17,7 @@ const WalletProvider = ({ children }) => {
 	const [walletUtxos, setWalletUtxos] = useState(false);
 	const [modalDepositOpen, setModalDepositOpen] = useState(false);
 	const [modalWithdrawOpen, setModalWithdrawOpen] = useState(false);
+	const [modalTransactionsOpen, setModalTransactionsOpen] = useState(false);
 
 	useEffect(() => {
     const Setup = async () => {
@@ -45,12 +48,21 @@ const WalletProvider = ({ children }) => {
 				modalDepositOpen,
 				setModalDepositOpen,
 				modalWithdrawOpen,
-				setModalWithdrawOpen
+				setModalWithdrawOpen,
+				modalTransactionsOpen,
+				setModalTransactionsOpen
 			}}
 		>
 			{children}
-			<WalletModalDeposit />
-			<WalletModalWithdraw />
+			{modalDepositOpen && (
+				<WalletModalDeposit />
+			)}
+			{modalWithdrawOpen && (
+				<WalletModalWithdraw />
+			)}
+			{modalTransactionsOpen && (
+				<WalletModalTransactions />
+			)}
 		</WalletContext.Provider>
 	);
 }

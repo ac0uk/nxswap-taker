@@ -8,7 +8,10 @@ class WalletModalWithdraw extends React.Component {
     super(props);
     this.defaultState = {
       curr: false,
+      success: false,
+      successTxid: false,
       isConfirm: false,
+      isConfirmEnabled: false,
       isSelectInputs: false,
       sendToAddress: false,
       validSendToAddress: false,
@@ -137,24 +140,10 @@ class WalletModalWithdraw extends React.Component {
     )
   }
 
-  async clickSend (event, curr, inputs, outputs) {
-    event.preventDefault();
-    if( !this.canSend) return false;
-
-    console.log('send!!', this.state.sendToAddress, this.state.sendAmount, this.state.sendFee, this.state.subtractFee);
-
-    let create = Wallet.createSendTransaction(curr, inputs, outputs, false);
-
-    console.log('hex', create);
-
-    if( ! create ) return false;
-
-    let send = await Wallet.sendTransaction(curr, create);
-    console.log('send complete');
-    console.log(send);
-  }
-
   WithdrawForm(curr, meta, availableBalance) {
+    let isConfirm = this.state.isConfirm;
+    let isConfirmDisabled = this.state.isConfirmDisabled;
+    let disableConfirm = (isConfirmDisabled !== false) ? true : false;
     // select inputs..
     let hasSelectedInputs = (this.state.selectedInputs !== false ) ? true : false;
     let selectedInputsValue = 0;
@@ -166,7 +155,6 @@ class WalletModalWithdraw extends React.Component {
         let value = exp[2];
         selectedInputsValue += parseInt(value);
       }
-
       selectedInputsValueFormat = Wallet.formatBalanceDecimals(selectedInputsValue, 100000000, 8);
     }
 
@@ -186,7 +174,6 @@ class WalletModalWithdraw extends React.Component {
     }
 
     let sendAmountInputClass = "";
-
     if( this.state.sendAmountInvalid || ( sendAmount > 0 && sendAmount > maximumAmountFloat ) ) {
       sendAmountInputClass = "error";
     }
@@ -225,27 +212,29 @@ class WalletModalWithdraw extends React.Component {
       }
     }
 
+    let modalInputClass = (isConfirm) ? "modalInput disabled" : "modalInput";
+
     return (
       <>
-      <div className="modalInput">
+      <div className={modalInputClass}>
         <label htmlFor="sendToAddress">
           <span>Send To Address</span>
           {addressError && (
             <span className="labelError">Invalid {curr} Address</span>
           )}
         </label>
-        <input id="sendToAddress" className={addressInputClass} onChange={(event) => this.addressFieldChange(event, curr)} name="sendToAddress" type="text" value={sendToAddress} placeholder={addressPlaceholder} spellCheck={false} />
+        <input id="sendToAddress" className={addressInputClass} onChange={(event) => this.addressFieldChange(event, curr)} name="sendToAddress" type="text" value={sendToAddress} placeholder={addressPlaceholder} spellCheck={false} disabled={isConfirm} />
       </div>
-      <div className="modalInput">
+      <div className={modalInputClass}>
         <label htmlFor="sendAmount">
           <span>Amount</span>
           <span className="labelAction" onClick={() => this.showSelectInputs(true)}>{selectInputsText}</span>
         </label>
-        <input onChange={(event) => this.amountFieldChange(event, maximumAmountFloat)} id="sendAmount" name="sendAmount" type="text" value={sendAmount} placeholder="Send Amount" className={sendAmountInputClass} />
+        <input onChange={(event) => this.amountFieldChange(event, maximumAmountFloat)} id="sendAmount" name="sendAmount" type="text" value={sendAmount} placeholder="Send Amount" className={sendAmountInputClass} disabled={isConfirm} />
         
         <span className="inputAction"><span className={maxClass} onClick={() => this.SendMax(maximumAmountFloat)}>Send Max</span></span>
       </div>
-      <div className="modalInput">
+      <div className={modalInputClass}>
         <label htmlFor="sendAmount">
           <span>Transaction Fee
             {transactionFee !== false && (
@@ -258,11 +247,70 @@ class WalletModalWithdraw extends React.Component {
           this.CustomSelectFee()
         )}
       </div>
-      <div className="modalAction">
-        <button disabled={SendDisabled} onClick={(event) => this.clickSend(event, curr, inputs, outputs, false)}>Send</button>
-      </div>
+      {isConfirm ? (
+        <>
+        <div className="modalAction">
+          <button className="cancel" onClick={(event) => this.clickCancelSend(event)}>Cancel Send</button>
+          <button className="confirm" onClick={(event) => this.clickConfirmSend(event, curr, inputs, outputs, false)} disabled={disableConfirm}>Confirm Send {isConfirmDisabled !== false && (<>({isConfirmDisabled})</>)}</button>
+        </div> 
+        </>
+      ) : (
+        <div className="modalAction">
+          <button disabled={SendDisabled} onClick={(event) => this.clickSend(event, curr, inputs, outputs, false)}>Send</button>
+        </div>        
+      )}
       </>
     )
+  }
+
+  async clickSend (event) {
+    event.preventDefault();
+    if( !this.canSend) return false;
+
+    this.setState({
+      isConfirm: true,
+      isConfirmDisabled: 3
+    });
+
+    this.confirmInterval = setInterval(() => {
+      let currentTimeout = this.state.isConfirmDisabled;
+      if( currentTimeout === 1 ) {
+        currentTimeout = false;
+        clearInterval(this.confirmInterval);
+      } else {
+        currentTimeout -= 1;
+      }
+      if( this.state.isConfirm) {
+        this.setState({
+          isConfirm: true,
+          isConfirmDisabled: currentTimeout
+        })
+      }
+    }, 1000);
+  }
+
+  async clickCancelSend (event) {
+    event.preventDefault();
+
+    this.setState({
+      isConfirm: false
+    });
+  }
+
+  async clickConfirmSend(event, curr, inputs, outputs) {
+    event.preventDefault();
+    if( !this.canSend) return false;
+
+    let create = Wallet.createSendTransaction(curr, inputs, outputs, false);
+    if( ! create ) return false;
+
+    let send = await Wallet.sendTransaction(curr, create);
+    if( send !== false ) {
+      this.setState({
+        success: true,
+        successTxid: send
+      });
+    }
   }
 
   showSelectInputs(state) {
@@ -358,11 +406,22 @@ class WalletModalWithdraw extends React.Component {
     )
   }
 
-  WithdrawConfirm(curr, meta) {
+  WithdrawSuccess (curr, meta) {
     return (
-      <>
-      confirm
-      </>
+      <div className="modalWindowOverlay">
+        <div className="modalWindow">
+        <div className="modalHeader">
+          <img src={meta.icon} alt={curr} />
+          <h3>{meta.name} Transaction Sent</h3>
+          <span className="close" onClick={() => this.close()}>
+            <img src="/img/close.svg" alt="Close" />
+          </span>
+        </div>
+        success!
+        <br />
+        {this.state.successTxid}
+        </div>
+      </div>
     )
   }
 
@@ -378,8 +437,8 @@ class WalletModalWithdraw extends React.Component {
     let pendingBalance = walletBalances[curr].pending;
     let withdrawContent;
 
-    if (this.state.isConfirm) {
-      withdrawContent = this.WithdrawConfirm(curr, meta);
+    if(this.state.success) {
+      return this.WithdrawSuccess(curr, meta);
     } else {
       if( this.state.isSelectInputs ) {
         withdrawContent = this.WithdrawSelectInputs(utxos);
@@ -387,6 +446,7 @@ class WalletModalWithdraw extends React.Component {
         withdrawContent = this.WithdrawForm(curr, meta, availableBalance);
       }
     }
+    
 
     return (
       <div className="modalWindowOverlay">

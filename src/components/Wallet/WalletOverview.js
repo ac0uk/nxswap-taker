@@ -4,7 +4,7 @@ import { NXMeta } from '../../js/NXSwapTaker';
 import { useWalletContext } from '../../contexts/WalletContext';
 
 function OverviewTable (props) {
-  const { walletBalances, setModalDepositOpen, setModalWithdrawOpen } = useWalletContext();
+  const { walletBalances, setModalDepositOpen, setModalWithdrawOpen, setModalTransactionsOpen } = useWalletContext();
   let balances = walletBalances;
   let currencies = [];
   let metaCurrencies = NXMeta.currencies;
@@ -40,6 +40,10 @@ function OverviewTable (props) {
     const onWithdrawClick = (curr) => {
       setModalWithdrawOpen(curr);
     }
+
+    const onTransactionsClick = (curr) => {
+      setModalTransactionsOpen(curr);
+    }
     
     return (
       <tr key={curr}>
@@ -51,7 +55,7 @@ function OverviewTable (props) {
         <td className="actions">
           <button className={butClass} onClick={() => { onDepositClick(curr) }}>Deposit</button>
           <button className={butClass} onClick={() => { onWithdrawClick(curr) }}>Withdraw</button>
-          <button className={butClass}>Transactions</button>
+          <button className={butClass} onClick={() => { onTransactionsClick(curr) }}>Transactions</button>
         </td>
       </tr>
     )
