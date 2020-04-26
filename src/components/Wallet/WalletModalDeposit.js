@@ -17,9 +17,9 @@ class WalletModalDeposit extends React.Component {
     }
   }
 
-  close(callback) {
-    callback(false);
+  close() {
     this.setState({showQR: false, QRCodeSRC: false, showPreviousAddresses: false});
+    this.props.close();
   }
 
   showPreviousAddresses(show) {
@@ -83,8 +83,7 @@ class WalletModalDeposit extends React.Component {
   }
 
   render () {
-    const { modalDepositOpen, setModalDepositOpen } = this.context;
-    let curr = modalDepositOpen;
+    let curr = this.props.showDepositModal;
     if( ! curr ) return false;
     
     let meta = NXMeta.currencies[curr];
@@ -94,7 +93,7 @@ class WalletModalDeposit extends React.Component {
       let targetClass = target.getAttribute('class');
 
       if(targetClass === "modalWindowOverlay") {
-        this.close(setModalDepositOpen);
+        this.close();
       }
     }
 
@@ -123,7 +122,7 @@ class WalletModalDeposit extends React.Component {
           <div className="modalHeader">
             <img src={meta.icon} alt={curr} />
             <h3>Deposit {meta.name}</h3>
-            <span className="close" onClick={() => this.close(setModalDepositOpen)}>
+            <span className="close" onClick={() => this.close()}>
               <img src="/img/close.svg" alt="Close" />
             </span>
           </div>

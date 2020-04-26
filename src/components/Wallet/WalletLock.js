@@ -8,6 +8,8 @@ import { RecoveryKeyContext, RecoveryKey } from "../../contexts/RecoveryKeyConte
 class WalletLock extends React.Component {
   lockWallet() {
     RecoveryKey.clearSavedEncryptionKey();
+    // Now hard reload.. to ensure reset..
+    window.location.reload();
   }
 
   render() {

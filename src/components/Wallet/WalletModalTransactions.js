@@ -4,13 +4,8 @@ import { Wallet, NXMeta } from '../../js/NXSwapTaker';
 import '../../css/Modal.css';
 
 class WalletModalTransactions extends React.Component {
-  close(callback) {
-    callback(false);
-  } 
-
   render () {
-    const { modalTransactionsOpen, setModalTransactionsOpen } = this.context;
-    let curr = modalTransactionsOpen;
+    let curr = this.props.showTransactionsModal;
     if( ! curr ) return false;
     
     let meta = NXMeta.currencies[curr];
@@ -20,7 +15,7 @@ class WalletModalTransactions extends React.Component {
       let targetClass = target.getAttribute('class');
 
       if(targetClass === "modalWindowOverlay") {
-        this.close(setModalTransactionsOpen);
+        this.props.close();
       }
     }
 
@@ -55,7 +50,7 @@ class WalletModalTransactions extends React.Component {
           <div className="modalHeader">
             <img src={meta.icon} alt={curr} />
             <h3>{meta.name} Transactions</h3>
-            <span className="close" onClick={() => this.close(setModalTransactionsOpen)}>
+            <span className="close" onClick={() => this.props.close()}>
               <img src="/img/close.svg" alt="Close" />
             </span>
           </div>

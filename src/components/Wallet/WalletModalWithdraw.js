@@ -2,6 +2,7 @@ import React from 'react';
 import { Wallet, NXMeta } from '../../js/NXSwapTaker';
 
 import '../../css/Modal.css';
+import { WalletContext } from '../../contexts/WalletContext';
 
 class WalletModalWithdraw extends React.Component {
   constructor(props) {
@@ -25,8 +26,8 @@ class WalletModalWithdraw extends React.Component {
   }
 
   close() {
-    this.setModalWithdrawOpen(false);
     this.setState(this.defaultState);
+    this.props.close();
   }
 
   addressFieldChange(event, curr) {
@@ -426,12 +427,11 @@ class WalletModalWithdraw extends React.Component {
   }
 
   render() {
-    const { modalWithdrawOpen, setModalWithdrawOpen, walletBalances, walletUtxos } = this.context;
-    let curr = modalWithdrawOpen;
+    const { walletBalances, walletUtxos } = this.context;
+    let curr = this.props.showWithdrawModal;
     if (!curr) return false;
 
     let utxos = walletUtxos[curr];
-    this.setModalWithdrawOpen = setModalWithdrawOpen;
     let meta = NXMeta.currencies[curr];
     let availableBalance = walletBalances[curr].available;
     let pendingBalance = walletBalances[curr].pending;
@@ -468,4 +468,5 @@ class WalletModalWithdraw extends React.Component {
   }
 }
 
+WalletModalWithdraw.contextType = WalletContext;
 export default WalletModalWithdraw;
