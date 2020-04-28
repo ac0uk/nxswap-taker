@@ -94,13 +94,12 @@
   opacity: 0.4;
 }
 
-#content
-{
+#content {
   flex-grow: 1;
-  height: calc(100% - 162px); /* - Header & Footer height */
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 50px 0px;
 }
 
 #footer
