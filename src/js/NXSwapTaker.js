@@ -1,4 +1,4 @@
-import { NXLocalStorage, NXRecoveryKey, ExplorerBlockbook, NXWallet, Networks } from '@nxswap/nxswap-js';
+import { NXLocalStorage, NXRecoveryKey, ExplorerBlockbook, NXWallet, NXSwapAPI, Networks } from '@nxswap/nxswap-js';
 import NXMeta from './NXMeta';
 
 const SUPPORTED_CURRENCIES = ["TBTC", "TLTC", "TVTC"];
@@ -47,4 +47,9 @@ RecoveryKey.loadRecoveryKey({
 	autoCreate: false
 });
 
-export { LocalStorage, RecoveryKey, Wallet, NXMeta };
+// Connect to NXSwap API
+const SwapAPI = new NXSwapAPI({
+	WSUrl: 'wss://ws-api-dev56.nxswap.com:8000/connection/websocket'
+});
+
+export { LocalStorage, RecoveryKey, Wallet, SwapAPI, NXMeta };

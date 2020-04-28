@@ -45,6 +45,10 @@
   cursor: pointer;
 }
 
+.swap .swapamountbar .amountfield label.selected {
+  color: white;
+}
+
 .swap .swapamountbar .amountfield input[type=text] {
   background-color: #060606;
   border: 1px solid #393939;

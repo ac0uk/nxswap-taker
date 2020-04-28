@@ -1,5 +1,5 @@
 import React from 'react';
-import { NXMeta } from '../js/NXSwapTaker';
+import { SwapAPI, NXMeta } from '../js/NXSwapTaker';
 
 import '../css/Swap.css';
 
@@ -11,8 +11,12 @@ class Home extends React.Component {
 		this.state = {
 			depositCurrency: 'TBTC',
 			receiveCurrency: 'TVTC',
+			swapAmount: '',
+			forAmount: '',
 			showCurrencySelector: false,
-			showCurrencySelectorFor: false
+			showCurrencySelectorFor: false,
+			editSwapAmount: true,
+			editForAmount: false
 		}
 	}
 
@@ -42,15 +46,120 @@ class Home extends React.Component {
 			newState.receiveCurrency = currency;
 		}
 
-		this.setState(newState);
+		this.setState(newState, () => {
+			this.updateBaseRate();
+		});
+	}
+
+	editSwapAmount() {
+		this.setState({
+			editSwapAmount: true,
+			editForAmount: false
+		})
+	}
+
+	editForAmount() {
+		this.setState({
+			editSwapAmount: false,
+			editForAmount: true
+		})
+	}
+
+	async onChangeSwapAmount(event) {
+		let swapAmount = event.target.value;
+		if( isNaN(swapAmount) ) return false;
+		if( swapAmount.length === 0 || swapAmount <= 0 ) {
+			if(swapAmount.length === 0 ) swapAmount = '';
+			this.setState({
+				swapAmount: swapAmount,
+				forAmount: ''
+			})
+			return;
+		};
+
+		this.setState({
+			swapAmount: swapAmount
+		}, () => {
+			this.updateBaseRate();
+		})
+	}
+
+	async onChangeForAmount(event) {
+		let forAmount = event.target.value;
+		if( isNaN(forAmount) ) return false;
+		if( forAmount.length === 0 || forAmount <= 0 ) {
+			if(forAmount.length === 0 ) forAmount = '';
+			this.setState({
+				swapAmount: '',
+				forAmount: forAmount
+			})
+			return;
+		};
+
+		this.setState({
+			forAmount: forAmount
+		})
+
+		this.setState({
+			forAmount: forAmount
+		}, () => {
+			this.updateBaseRate();
+		})
+	}
+
+	async updateBaseRate() {
+		let payload = {
+			from: this.state.depositCurrency,
+			to: this.state.receiveCurrency,
+		}
+
+		if(this.state.editSwapAmount && ! isNaN(this.state.swapAmount) && this.state.swapAmount > 0) {
+			payload.fromAmount = this.state.swapAmount;
+		} else if( this.state.editForAmount && ! isNaN(this.state.forAmount) && this.state.forAmount > 0 ) {
+			payload.toAmount = this.state.forAmount;
+		} else {
+			return false;
+		}
+
+		let getBaseRate = await SwapAPI.wsAPIRPC({
+			method: 'getSwapBaseRate',
+			payload: payload,
+			sign: false
+		});
+
+		if( getBaseRate.data.error === undefined ) {
+			let data = getBaseRate.data;
+			if( this.state.editSwapAmount ) {
+				let return_amount = data.return_amount;
+				this.setState({
+					forAmount: return_amount
+				})
+			} else if( this.state.editForAmount ) {
+				let deposit_amount = data.deposit_amount;
+				this.setState({
+					swapAmount: deposit_amount
+				})
+			}
+		} else {
+			if( this.state.editSwapAmount ) {
+				this.setState({
+					forAmount: ''
+				})
+			} else if( this.state.editForAmount ) {
+				this.setState({
+					swapAmount: ''
+				})
+			}
+		}
 	}
 
 	render() {
 		let supportedCurrencies = [];
-
 		for( let tick in NXMeta.currencies ) {
 			supportedCurrencies.push(NXMeta.currencies[tick]);
 		}
+
+		//let currencyAvailability = [];
 
 		let depositCurrency = this.state.depositCurrency;
 		let receiveCurrency = this.state.receiveCurrency;
@@ -75,14 +184,22 @@ class Home extends React.Component {
 				<div className="swap">
 					<div className="swapamountbar">
 						<div className="amountfield">
-							<label htmlFor="swap_amount">Swap</label>
-							<input type="text" id="swap_amount" placeholder="0.00000000" />
+							<label className={this.state.editSwapAmount ? 'selected' : ''}>Swap</label>
+							{this.state.editSwapAmount ? (
+								<input type="text" placeholder="0.00000000" value={this.state.swapAmount} onChange={(event) => this.onChangeSwapAmount(event)} />
+							) : (
+								<input type="text" placeholder="0.00000000" value={this.state.swapAmount} readOnly={true} onClick={() => this.editSwapAmount()} />
+							)}
 							<span className="icon"><img src={depositCurrencyMeta.icon} alt={depositCurrency} /></span>
 							<span className="select" onClick={() => {this.showCurrencySelector('deposit')}}>{depositCurrency}</span>
 						</div>
 						<div className="amountfield">
-							<label htmlFor="for_amount">For</label>
-							<input type="text" id="for_amount" placeholder="0.00000000" />
+							<label className={this.state.editForAmount ? 'selected' : ''}>For</label>
+							{this.state.editForAmount ? (
+								<input type="text" placeholder="0.00000000" value={this.state.forAmount} onChange={(event) => this.onChangeForAmount(event)} />
+							) : (
+								<input type="text" placeholder="0.00000000" value={this.state.forAmount} readOnly={true} onClick={() => this.editForAmount()} />
+							)}
 							<span className="icon"><img src={receiveCurrencyMeta.icon} alt={receiveCurrency} /></span>
 							<span className="select" onClick={() => {this.showCurrencySelector('receive')}}>{receiveCurrency}</span>
 						</div>
