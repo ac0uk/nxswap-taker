@@ -1,5 +1,9 @@
 import React from 'react';
+import {
+  Link
+} from "react-router-dom";
 import { SwapAPI, NXMeta } from '../js/NXSwapTaker';
+
 
 import '../css/Swap.css';
 
@@ -204,7 +208,7 @@ class Home extends React.Component {
 							<span className="select" onClick={() => {this.showCurrencySelector('receive')}}>{receiveCurrency}</span>
 						</div>
 						<div className="buttonfield">
-							<button className="swap">Swap</button>
+							<Link to="/swap">Swap</Link>
 						</div>
 					</div>
 				</div>
