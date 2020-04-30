@@ -49,7 +49,17 @@ RecoveryKey.loadRecoveryKey({
 
 // Connect to NXSwap API
 const SwapAPI = new NXSwapAPI({
-	WSUrl: 'wss://ws-api-dev56.nxswap.com:8000/connection/websocket'
+	WSUrl: 'wss://ws-api-dev56.nxswap.com:8000/connection/websocket',
+	sign: Wallet.getUserAuthObject()
+});
+
+Wallet.on('initialised', (state) => {
+	if( state ) {
+		let sign = Wallet.getUserAuthObject();
+		SwapAPI.updateSign(sign);
+	} else {
+		SwapAPI.updateSign(false);
+	}
 });
 
 export { LocalStorage, RecoveryKey, Wallet, SwapAPI, NXMeta };
