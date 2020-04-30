@@ -1,7 +1,4 @@
 import React from 'react';
-import {
-  Link
-} from "react-router-dom";
 import { SwapAPI, NXMeta } from '../../js/NXSwapTaker';
 
 import '../../css/Swap.css';
@@ -21,7 +18,9 @@ class Swap extends React.Component {
 			showCurrencySelectorFor: false,
 			editSwapAmount: true,
       editForAmount: false,
-      showOffers: false
+      showOffers: false,
+      matchedOffers: [],
+      otherOffers: []
 		}
 	}
 
@@ -188,11 +187,12 @@ class Swap extends React.Component {
     }
     
     let baseRate = getOffers.data.baseRate;
-    let offers = getOffers.data.offers;
+    let matchedOffers = getOffers.data.matchedOffers;
+    let otherOffers = getOffers.data.otherOffers;
 
     let state = this.processBaseRateResult(baseRate);
-    state.offers = offers;
-
+    state.matchedOffers = matchedOffers;
+    state.otherOffers = otherOffers;
     this.setState(state);
   }
   
@@ -258,13 +258,14 @@ class Swap extends React.Component {
 							<span className="select" onClick={() => {this.showCurrencySelector('receive')}}>{receiveCurrency}</span>
 						</div>
 						<div className="buttonfield">
-							<Link to="/swap" className={this.state.showOffers ? ('disabled') : ('')} onClick={() => this.clickViewOffers()}>View Offers</Link>
+              <button disabled={this.state.showOffers ? (true) : (false)} onClick={() => this.clickViewOffers()}>View Offers</button>
 						</div>
 					</div>
+          {this.state.showOffers && (
+          <SwapOfferTable parentState={this.state} />
+          )}
 				</div>
-        {this.state.showOffers && (
-        <SwapOfferTable parentState={this.state} />
-        )}
+        
 			</div>
       
 			{this.state.showCurrencySelector !== false && (

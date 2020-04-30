@@ -1,5 +1,5 @@
 .homepage {
-  margin-bottom: 35px;
+  margin-bottom: 70px;
 }
 
 .homepage .meta {
@@ -16,10 +16,6 @@
   padding: 10px 0px;
   max-width: 400px;
   line-height: 27px;
-}
-
-.swap {
-  margin-top: 35px
 }
 
 .swap .swapamountbar {
@@ -111,6 +107,7 @@
   opacity: 0.8;
 }
 
+.swap .swapamountbar .buttonfield button:disabled,
 .swap .swapamountbar .buttonfield a.disabled {
   opacity: 0.3;
   background-color: black;
@@ -118,8 +115,32 @@
   cursor: not-allowed;
 }
 
-.swapOffers {
+.swapOffersHeader {
+  padding: 16px 20px;
+  background: black;
+  width: auto;
+  text-align: left;
+  margin-left: 0px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.swapOffersHeader.margTop {
   margin-top: 50px;
+}
+
+.swapOffersHeader.margTop2 {
+  margin-top: 10px;
+}
+
+.swapOffersHeader span {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.swapOffers {
+  border: 2px solid #000000;
 }
 
 .swapOffers h3 {
@@ -134,22 +155,239 @@
 }
 
 .swapOffers table th {
-  background: #000000;
+  background: #101010;
   color: #818181;
-  font-size: 14px;
+  font-size: 12px;
   text-align: left;
-  padding: 15px 10px;
+  padding: 10px 10px;
+  opacity: 0.7;
   border-bottom: 2px solid #2b2b2b;
 }
 
 .swapOffers table td {
   background: #101010;
-  border-bottom: 1px solid #2b2b2b;
   padding: 10px 10px;
   color: #999;
-  font-size: 14px;
+  opacity: 0.7;
+  font-size: 13px;
 }
 
 .swapOffers table td.amount {
   background: #000000;
+}
+
+.swapOffers .swapBar {
+  background: #1f1f1f;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  width: 100%;
+  padding: 10px 12px 10px 12px;
+  box-sizing: border-box;
+  border-bottom: 1px solid black;
+}
+
+.swapOffers .swapBar:last-of-type {
+  border-bottom: 0px;
+}
+
+.swapOffers .swapBar .profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: right;
+  padding: 0px 16px;
+}
+
+.swapOffers .swapBar .profile img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid black;
+}
+
+.swapOffers .swapBar .profile span {
+  display: block;
+  padding: 4px 5px;
+  border-radius: 8px;
+  font-size: 10px;
+  background: black;
+}
+
+.swapOffers .swapBar .currencySelect {
+  display: flex;
+  flex-direction: row;
+  padding: 18px 14px;
+  margin-right: 24px;
+  align-items: left;
+}
+
+.swapOffers .swapBar .currencySelect span {
+  display: block;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.swapOffers .swapBar .currencySelect span small {
+  display: block;
+  margin-top: 10px;
+  opacity: 0.6;
+  font-weight: normal;
+}
+
+.swapOffers .swapBar .currencySelect img {
+  width: 34px;
+  height: 34px;
+  margin-left: 22px;
+}
+
+.swapOffers .swapBar .metaCol {
+  text-align: center;
+  flex-grow: 1;
+  flex-basis: 0;
+  padding: 0px 20px;
+}
+
+.swapOffers .swapBar .metaCol small {
+  text-transform: uppercase;
+  font-size: 11px;
+  opacity: 0.7;
+  padding: 7px 0px;
+  display: block;
+}
+
+.swapOffers .swapBar .metaCol span {
+  font-size: 14px;
+  padding-left: 1px;
+}
+
+.swapOffers .swapBar .currencyArrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.4;
+  padding: 0px 8px;
+  flex-grow: 1;
+  flex-basis: 0;
+}
+
+.swapOffers .swapBar .currencyArrow img {
+  width: 30px;
+}
+
+.swapOffers .swapBar .flexGrower {
+  flex-grow: 1;
+  display: flex;
+  justify-content: space-between;
+  margin: 0px 10px;
+}
+
+.swapOffers .swapBar .currencyInput {
+  margin-left: 10px;
+  display: flex;
+  align-items: left;
+  flex-direction: column;
+  text-align: left;
+  flex-grow: 1;
+  flex-basis: 0;
+}
+
+.swapOffers .swapBar .currencyInput span {
+  display: block;
+  font-size: 10px;
+  font-weight: 500;
+  text-align: left;
+  line-height: 1;
+  margin-bottom: 10px;
+  opacity: 0.6;
+}
+
+.swapOffers .swapBar .currencyInput span small {
+  display: block;
+  opacity: 0.7;
+  margin-top: 8px;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.swapOffers .swapBar .currencyInput input[type=text] {
+  background-color: #121212;
+  border: 1px solid #2e2e2e;
+  outline: none;
+  font-size: 17px;
+  padding: 14px 16px 14px 16px;
+  width: 100%;
+  box-sizing: border-box;
+  color: white;
+  line-height: 1;
+}
+
+
+.swapOffers .swapBar .balance {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  padding: 0px 20px;
+  margin: 0px 20px;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  flex-grow: 1;
+  flex-basis: 0;
+}
+
+.swapOffers .swapBar .balance small {
+  opacity: 0.7;
+  font-size: 12px;
+}
+
+.swapOffers .swapBar .balance span {
+  display: block;
+  padding-top: 10px;
+  font-size: 14px;
+}
+
+.swapOffers .swapBar .deposit {
+  width: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.swapOffers .swapBar .action button.requestSwap {
+  background-color: rgba(57,57,57,0.3);
+  border: 1px solid #000;
+  color: white;
+  outline: 0;
+  padding: 12px 18px;
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: none;
+  display: block;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.swapOffers .swapBar .action {
+  display: flex;
+  align-items: center;
+  justify-content: right;
+  width: 70px;
+  padding: 0px 20px;
+}
+
+.swapOffers .swapBar .action button.requestSwap small {
+  display: block;
+  font-size: 10px;
+  opacity: 0.5;
+  padding-bottom: 8px;
+}
+
+.swapOffers .swapBar .action button.requestSwap:hover {
+  background-color: rgba(57,57,57,0.4);
 }
