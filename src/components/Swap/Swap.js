@@ -1,14 +1,18 @@
 import React from 'react';
-import { SwapAPI, NXMeta } from '../../js/NXSwapTaker';
+import { SwapAPI, NXMeta, UserAuthObject } from '../../js/NXSwapTaker';
 
 import '../../css/Swap.css';
 import CurrencySelector from './CurrencySelector';
 import SwapOfferTable from './SwapOfferTable';
+import SwapProposalModal from './SwapProposalModal';
 
 class Swap extends React.Component {
 	constructor(props) {
 		super(props);
+		this.interval = false;
+		this.expireInterval = false;
 		this.state = {
+			now: false,
       showHomeHeader: true,
 			depositCurrency: 'TBTC',
 			receiveCurrency: 'TVTC',
@@ -20,7 +24,116 @@ class Swap extends React.Component {
       editForAmount: false,
       showOffers: false,
       matchedOffers: [],
-      otherOffers: []
+			otherOffers: [],
+			offersExpire: false,
+			requestingSwap: false,
+			requestSwap: false,
+			proposingSwap: false,
+			proposeSwap: false
+		}
+	}
+
+	componentWillUnmount() {
+		this.stopNowTimer();
+		SwapAPI.removeListener('swapProposal', this.swapProposalListener)
+	}
+
+	componentDidMount() {
+		SwapAPI.on('swapProposal', (payload) => { this.swapProposalListener(payload) });
+		SwapAPI.on('swapRequestDeclined', this.swapRequestDeclinedListener.bind(this));
+	}
+
+	swapProposalListener(payload) {
+		let requestUUID = payload.requestUUID;
+		if( requestUUID === undefined ) return false;
+
+		if( this.state.requestSwap.requestUUID !== undefined && this.state.requestSwap.requestUUID === requestUUID ) {
+			// Ok..
+			this.setState({
+				proposingSwap: true,
+				proposeSwap: payload
+			});
+		} else {
+			// Not interested? it's not the one we need? multi window? bug? er?
+		}
+	}
+
+	cancelSwapProposal() {
+		this.setState({
+			proposingSwap: false,
+			proposeSwap: false,
+			requestingSwap: false,
+			requestSwap: false
+		}, () => {
+			this.update();
+		});
+	}
+
+	acceptSwapProposal() {
+		if( !this.state.proposingSwap || !this.state.proposeSwap ) return false;
+		let proposeSwap = this.state.proposeSwap;
+
+		console.log(proposeSwap);
+	}
+
+	swapRequestDeclinedListener(payload) {
+		console.log('swapRequestDeclined', payload);
+	}
+
+	startNowTimer() {
+		this.stopNowTimer();
+		this.intervalNow = setInterval(() => {
+			this.setState({
+				now: Math.round((Date.now() / 1000))
+			}, () => {
+				this.processNow();
+			});
+			
+		}, 1000);
+		this.setState({
+			now: Math.round((Date.now() / 1000))
+		});
+	}
+
+	stopNowTimer () {
+		if( this.intervalNow !== false ) clearInterval(this.intervalNow);
+		this.setState({
+			now: false
+		});
+	}
+
+	processNow () {
+		let now = this.state.now;
+		if( this.state.proposingSwap !== false ) {
+			let proposal = this.state.proposeSwap;
+			let proposalExpires = proposal.requestAcceptExpires;
+			
+			if( now >= proposalExpires ) {
+				this.setState({
+					proposingSwap: false,
+					proposeSwap: false,
+					requestingSwap: false,
+					requestSwap: false
+				}, () => {
+					this.update();
+				})
+			}
+		}
+		else if( this.state.requestingSwap !== false ) {
+			let requestExpires = this.state.requestSwap.expires;
+			if( now > requestExpires ) {
+				this.setState({
+					requestingSwap: false,
+					requestSwap: false
+				}, () => {
+					this.update();
+				})
+			}
+		}
+		else if( this.state.showOffers ) {
+			if( now >= this.state.offersExpire ) {
+				this.update();
+			}
 		}
 	}
 
@@ -122,17 +235,21 @@ class Swap extends React.Component {
 		} else if( this.state.editForAmount && ! isNaN(this.state.forAmount) && this.state.forAmount > 0 ) {
 			payload.toAmount = this.state.forAmount;
 		} else {
+			this.stopNowTimer();
 			return false;
-    }
+		}
+		
+		this.startNowTimer();
     
     if( this.state.showOffers ) {
       this.updateOffers(payload);
     } else {
       this.loadBaseRate(payload);
-    }
+		}
   }
 
 	async loadBaseRate(payload) {
+		console.log('loading base rate')
 		let getBaseRate = await SwapAPI.wsAPIRPC({
 			method: 'getSwapBaseRate',
 			payload: payload,
@@ -146,7 +263,7 @@ class Swap extends React.Component {
       state = this.processBaseRateResult(false);
     }
     
-    this.setState(state);
+		this.setState(state);
   }
 
   processBaseRateResult(result) {
@@ -176,6 +293,7 @@ class Swap extends React.Component {
   }
 
   async updateOffers (payload) {
+		console.log('updating offers');
 		let getOffers = await SwapAPI.wsAPIRPC({
 			method: 'getSwapOffers',
 			payload: payload,
@@ -188,12 +306,15 @@ class Swap extends React.Component {
     
     let baseRate = getOffers.data.baseRate;
     let matchedOffers = getOffers.data.matchedOffers;
-    let otherOffers = getOffers.data.otherOffers;
+		let otherOffers = getOffers.data.otherOffers;
+		let offersExpire = getOffers.data.offersExpire;
 
     let state = this.processBaseRateResult(baseRate);
     state.matchedOffers = matchedOffers;
-    state.otherOffers = otherOffers;
-    this.setState(state);
+		state.otherOffers = otherOffers;
+		state.offersExpire = offersExpire;
+
+		this.setState(state);
   }
   
   clickViewOffers () {
@@ -203,6 +324,48 @@ class Swap extends React.Component {
     }, () => {
       this.update();
     });
+	}
+
+	async clickRequestSwap(instanceUUID, hash) {
+    let offers = this.state.matchedOffers;
+    let offer;
+
+    for( let off of offers ) {
+      if( off.instanceUUID === instanceUUID ) {
+        offer = off;
+        break;
+      }
+		}
+		
+		// is subscribed?
+		if( ! SwapAPI.isSubscribed(`$user:${UserAuthObject.pubKeyHash}`)) {
+			console.log('user channel not open?');
+			return false;
+		}
+
+    if( offer === undefined ) return false;
+		if( offer.hash !== hash ) return false;
+		
+		// Stop refresh..
+		if( this.interval !== false ) clearInterval(this.interval);
+
+    // Submit Swap Request..
+    let requestSwap = await SwapAPI.wsAPIRPC({
+      method: 'swap.requestSwap',
+      payload: {
+        offer: offer
+      },
+      sign: true
+		});
+
+		if( requestSwap.data.error !== undefined ) {
+			return false;
+		}
+
+		this.setState({
+			requestingSwap: instanceUUID,
+			requestSwap: requestSwap.data
+		});
   }
 
 	render() {
@@ -240,9 +403,9 @@ class Swap extends React.Component {
 						<div className="amountfield">
 							<label className={this.state.editSwapAmount ? 'selected' : ''}>Swap</label>
 							{this.state.editSwapAmount ? (
-								<input type="text" placeholder="0.00000000" value={this.state.swapAmount} onChange={(event) => this.onChangeSwapAmount(event)} />
+								<input type="text" placeholder="0.00000000" value={this.state.swapAmount} onChange={(event) => this.onChangeSwapAmount(event)} disabled={this.state.requestingSwap !== false && true} />
 							) : (
-								<input type="text" placeholder="0.00000000" value={this.state.swapAmount} readOnly={true} onClick={() => this.editSwapAmount()} />
+								<input type="text" placeholder="0.00000000" value={this.state.swapAmount} readOnly={true} onClick={() => this.editSwapAmount()} disabled={this.state.requestingSwap !== false && true} />
 							)}
 							<span className="icon"><img src={depositCurrencyMeta.icon} alt={depositCurrency} /></span>
 							<span className="select" onClick={() => {this.showCurrencySelector('deposit')}}>{depositCurrency}</span>
@@ -250,9 +413,9 @@ class Swap extends React.Component {
 						<div className="amountfield">
 							<label className={this.state.editForAmount ? 'selected' : ''}>For</label>
 							{this.state.editForAmount ? (
-								<input type="text" placeholder="0.00000000" value={this.state.forAmount} onChange={(event) => this.onChangeForAmount(event)} />
+								<input type="text" placeholder="0.00000000" value={this.state.forAmount} onChange={(event) => this.onChangeForAmount(event)} disabled={this.state.requestingSwap !== false && true} />
 							) : (
-								<input type="text" placeholder="0.00000000" value={this.state.forAmount} readOnly={true} onClick={() => this.editForAmount()} />
+								<input type="text" placeholder="0.00000000" value={this.state.forAmount} readOnly={true} onClick={() => this.editForAmount()} disabled={this.state.requestingSwap !== false && true} />
 							)}
 							<span className="icon"><img src={receiveCurrencyMeta.icon} alt={receiveCurrency} /></span>
 							<span className="select" onClick={() => {this.showCurrencySelector('receive')}}>{receiveCurrency}</span>
@@ -262,14 +425,17 @@ class Swap extends React.Component {
 						</div>
 					</div>
           {this.state.showOffers && (
-          <SwapOfferTable parentState={this.state} />
+          <SwapOfferTable parentState={this.state} clickRequestSwap={(a,b) => this.clickRequestSwap(a,b)} />
           )}
 				</div>
-        
 			</div>
       
 			{this.state.showCurrencySelector !== false && (
 				<CurrencySelector parentState={this.state} supportedCurrencies={supportedCurrencies} onSelectCurrency={this.onSelectCurrency.bind(this)} hideCurrencySelector={this.hideCurrencySelector.bind(this)} />
+			)}
+
+			{this.state.proposingSwap !== false && (
+				<SwapProposalModal parentState={this.state} cancelSwapProposal={() => this.cancelSwapProposal()} acceptSwapProposal={() => this.acceptSwapProposal()} />
 			)}
 			</>
 		)

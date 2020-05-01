@@ -10,7 +10,7 @@ const NXAPIProvider = ({ children }) => {
     const initNXWS = async () => {
       SwapAPI.on('connected', (connected) => {
         setNXAPIConnected(connected)
-      })
+      });
     };
 
     initNXWS();

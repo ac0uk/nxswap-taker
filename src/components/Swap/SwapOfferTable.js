@@ -1,48 +1,13 @@
 import React from 'react';
 import '../../css/Swap.css';
-import { SwapAPI, NXMeta } from '../../js/NXSwapTaker';
+import { NXMeta } from '../../js/NXSwapTaker';
 
 class SwapOfferTable extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-
+      expiry: false
     }
-  }
-
-  async clickRequestSwap(instanceUUID, hash) {
-    let parent = this.props.parentState;
-
-    let offers = parent.matchedOffers;
-    let offer;
-
-    for( let off of offers ) {
-      if( off.instanceUUID === instanceUUID ) {
-        offer = off;
-        break;
-      }
-    }
-
-    if( offer === undefined ) {
-      return false;
-    }
-
-    if( offer.hash !== hash ) {
-      return false;
-    }
-
-    // Submit Swap Request..
-
-    let requestSwap = await SwapAPI.wsAPIRPC({
-      method: 'swap.requestSwap',
-      payload: {
-        offer: offer
-      },
-      sign: true
-    });
-
-    console.log(requestSwap);
-
   }
 
   render() {
@@ -61,10 +26,39 @@ class SwapOfferTable extends React.Component {
   
     let count = offers.length;
     let listOffers = false;
+
+    let now = parent.now;
+
+    let offersExpire = parent.offersExpire;
+    let expiryWindow = '100%';
+    let secondsLeft = false;
+
+    if( offersExpire > 0 ) {
+      secondsLeft = offersExpire - now;
+      if( secondsLeft > 30 ) secondsLeft = 30; // 1 second is allowed for transmission.
+      expiryWindow = ( secondsLeft >= 30 ) ? '100%' : ( Math.round( 100 - ( (100/30) * (30 - secondsLeft) ) ) + '%' );
+    }
+
+    let requestingSwap = parent.requestingSwap;
+    let requestSwap = parent.requestSwap;
+    let requestSecondsLeft = false;
+
+    let proposingSwap = parent.proposingSwap;
+
+    if( requestingSwap !== false && requestSwap !== false && proposingSwap === false ) {
+      requestSecondsLeft = requestSwap.expires - now;
+    }
   
     if( count > 0 ) {
       listOffers = offers.map((offer) => {
         let key = `${offer.instanceUUID}`;
+
+        if( requestingSwap !== false ) {
+          if( offer.instanceUUID !== requestingSwap ) {
+            return false
+          }
+        }
+
         return (
           <div key={key} className="swapBar">
             <div className="profile">
@@ -99,7 +93,16 @@ class SwapOfferTable extends React.Component {
               <span>{offer.toAmount}</span>
             </div>
             <div className="action">
-              <button className="requestSwap" onClick={() => this.clickRequestSwap(offer.instanceUUID, offer.hash)}><small>Request</small>Swap</button>
+              {requestingSwap === false ? (
+                <button className="requestSwap" onClick={() => this.props.clickRequestSwap(offer.instanceUUID, offer.hash)}><i style={{bottom: expiryWindow}} className="expiry"></i><small>Request</small><span>Swap</span></button>
+              ):(
+                <button className="requestSwap" disabled={true}>
+                  {proposingSwap === false && (
+                  <i className="requesting"><div className="lds-ring"><div></div><div></div><div></div><div></div></div></i>
+                  )}
+                  <small>Request</small><span>Swap</span>
+                </button>
+              )}
             </div>
           </div>
         )
@@ -107,14 +110,27 @@ class SwapOfferTable extends React.Component {
     }
 
     return (
-      <>
-      <div className="swapOffersHeader margTop">
+      <div className="swapOffers">  
+      {requestingSwap === false && proposingSwap === false && (
+      <div className="swapOffersHeader">
         <span>Offers <strong>({count})</strong></span>
+        {secondsLeft !== false && (
+          <span>Fixed prices refresh in ({secondsLeft})</span>
+        )}
       </div>
-      <div className="swapOffers">    
+      )}
+      {requestingSwap !== false && (
+      <div className="swapOffersHeader">
+        <span>Requesting Swap..</span>
+        {proposingSwap === false && (
+          <span>Request timeout in ({requestSecondsLeft})</span>
+        )}
+      </div>
+      )}
+      <div className="swapOffersCont">
         {listOffers}
       </div>
-      </>
+      </div>
     )
   }
 }

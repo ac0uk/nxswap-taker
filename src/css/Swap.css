@@ -57,6 +57,10 @@
   line-height: 1;
 }
 
+.swap .swapamountbar .amountfield input[type=text]:disabled {
+  opacity: 0.5;
+}
+
 .swap .swapamountbar .amountfield span.icon {
   position: absolute;
   bottom: 1px;
@@ -126,20 +130,16 @@
   justify-content: space-between;
 }
 
-.swapOffersHeader.margTop {
-  margin-top: 50px;
-}
-
-.swapOffersHeader.margTop2 {
-  margin-top: 10px;
-}
-
 .swapOffersHeader span {
   font-size: 13px;
   font-weight: 500;
 }
 
 .swapOffers {
+  margin-top: 50px;
+}
+
+.swapOffersCont {
   border: 2px solid #000000;
 }
 
@@ -250,15 +250,15 @@
   text-align: center;
   flex-grow: 1;
   flex-basis: 0;
-  padding: 0px 20px;
+  padding: 7px 20px;
 }
 
 .swapOffers .swapBar .metaCol small {
   text-transform: uppercase;
   font-size: 11px;
   opacity: 0.7;
-  padding: 7px 0px;
   display: block;
+  margin-bottom: 7px;
 }
 
 .swapOffers .swapBar .metaCol span {
@@ -360,7 +360,7 @@
 }
 
 .swapOffers .swapBar .action button.requestSwap {
-  background-color: rgba(57,57,57,0.3);
+  background-color: transparent;
   border: 1px solid #000;
   color: white;
   outline: 0;
@@ -371,6 +371,7 @@
   display: block;
   line-height: 1;
   text-transform: uppercase;
+  position: relative;
 }
 
 .swapOffers .swapBar .action {
@@ -386,8 +387,54 @@
   font-size: 10px;
   opacity: 0.5;
   padding-bottom: 8px;
+  z-index: 10;
+}
+
+.swapOffers .swapBar .action button.requestSwap span {
+  display: block;
+  z-index: 10;
+  opacity: 0.99;
 }
 
 .swapOffers .swapBar .action button.requestSwap:hover {
   background-color: rgba(57,57,57,0.4);
+}
+
+.swapOffers .swapBar .action button.requestSwap i.expiry {
+  opacity: 0.9;
+  background: black;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  z-index: 0;
+  transition: bottom 1s ease 0s;
+}
+
+.swapOffers .swapBar .action button.requestSwap i.requesting {
+  opacity: 0.5;
+  background: black;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.swapOffers .swapBar .action button.requestSwap i.requesting .lds-ring {
+  width: 38px;
+  height: 38px;
+  opacity: 1;
+}
+
+.swapOffers .swapBar .action button.requestSwap i.requesting .lds-ring div {
+  width: 32px;
+  height: 32px;
+  border-width: 3px;
+  margin: 3px;
 }
