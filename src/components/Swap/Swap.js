@@ -1,10 +1,12 @@
 import React from 'react';
+import { WalletContext } from '../../contexts/WalletContext';
 import { SwapAPI, NXMeta, UserAuthObject } from '../../js/NXSwapTaker';
 
 import '../../css/Swap.css';
 import CurrencySelector from './CurrencySelector';
 import SwapOfferTable from './SwapOfferTable';
 import SwapProposalModal from './SwapProposalModal';
+import WalletModalDeposit from '../Wallet/WalletModalDeposit';
 
 class Swap extends React.Component {
 	constructor(props) {
@@ -21,7 +23,8 @@ class Swap extends React.Component {
 			showCurrencySelector: false,
 			showCurrencySelectorFor: false,
 			editSwapAmount: true,
-      editForAmount: false,
+			editForAmount: false,
+			showDepositModal: false,
       showOffers: false,
       matchedOffers: [],
 			otherOffers: [],
@@ -104,6 +107,7 @@ class Swap extends React.Component {
 
 	processNow () {
 		let now = this.state.now;
+		let userAuthorised = (UserAuthObject !== false) ? true : false;
 		if( this.state.proposingSwap !== false ) {
 			let proposal = this.state.proposeSwap;
 			let proposalExpires = proposal.requestAcceptExpires;
@@ -182,8 +186,23 @@ class Swap extends React.Component {
 		})
 	}
 
+	showDepositModal(curr) {
+		this.setState({
+			showDepositModal: curr
+		})
+	}
+
+	closeDepositModal() {
+		this.setState({
+			showDepositModal: false
+		})
+	}
+
 	async onChangeSwapAmount(event) {
-		let swapAmount = event.target.value;
+		let swapAmount = event;
+		if( isNaN(swapAmount) ) {
+			swapAmount = event.target.value;
+		}
 		if( isNaN(swapAmount) ) return false;
 		if( swapAmount.length === 0 || swapAmount <= 0 ) {
 			if(swapAmount.length === 0 ) swapAmount = '';
@@ -202,8 +221,12 @@ class Swap extends React.Component {
 	}
 
 	async onChangeForAmount(event) {
-		let forAmount = event.target.value;
+		let forAmount = event;
+		if( isNaN(forAmount) ) {
+			forAmount = event.target.value;
+		}
 		if( isNaN(forAmount) ) return false;
+		
 		if( forAmount.length === 0 || forAmount <= 0 ) {
 			if(forAmount.length === 0 ) forAmount = '';
 			this.setState({
@@ -249,7 +272,6 @@ class Swap extends React.Component {
   }
 
 	async loadBaseRate(payload) {
-		console.log('loading base rate')
 		let getBaseRate = await SwapAPI.wsAPIRPC({
 			method: 'getSwapBaseRate',
 			payload: payload,
@@ -293,7 +315,6 @@ class Swap extends React.Component {
   }
 
   async updateOffers (payload) {
-		console.log('updating offers');
 		let getOffers = await SwapAPI.wsAPIRPC({
 			method: 'getSwapOffers',
 			payload: payload,
@@ -369,6 +390,9 @@ class Swap extends React.Component {
   }
 
 	render() {
+		const { walletBalances } = this.context;
+		let balances = walletBalances;
+
 		let supportedCurrencies = [];
 		for( let tick in NXMeta.currencies ) {
 			supportedCurrencies.push(NXMeta.currencies[tick]);
@@ -381,6 +405,15 @@ class Swap extends React.Component {
 
 		let depositCurrencyMeta = NXMeta.currencies[depositCurrency];
 		let receiveCurrencyMeta = NXMeta.currencies[receiveCurrency];
+
+		let currentBalance = false;
+		let userAuthorised = (UserAuthObject !== false) ? true : false;
+
+		if( balances !== undefined && userAuthorised ) {
+			let thisbal = balances[depositCurrency];
+			if( thisbal === undefined ) return false;
+			currentBalance = thisbal;
+		}
 
 		return (
 			<>
@@ -424,22 +457,36 @@ class Swap extends React.Component {
               <button disabled={this.state.showOffers ? (true) : (false)} onClick={() => this.clickViewOffers()}>View Offers</button>
 						</div>
 					</div>
+					{userAuthorised && (
+						<div className="swapbelowamounts">
+						<div className="balance" onClick={() => this.onChangeSwapAmount(currentBalance.available.formatted)}>
+							<span>{depositCurrency} Available</span> {currentBalance.available.formatted}
+						</div>
+						{currentBalance.pending.raw > 0 && (
+						<div className="balance no">
+							<span>Pending</span> {currentBalance.pending.formatted}
+						</div>
+						)}
+						<button className="deposit" onClick={() => this.showDepositModal(depositCurrency)}>Deposit {depositCurrency}</button>
+					</div>
+					)}
           {this.state.showOffers && (
-          <SwapOfferTable parentState={this.state} clickRequestSwap={(a,b) => this.clickRequestSwap(a,b)} />
+          <SwapOfferTable parentState={this.state} currentBalance={currentBalance} clickRequestSwap={(a,b) => this.clickRequestSwap(a,b)} />
           )}
 				</div>
 			</div>
-      
 			{this.state.showCurrencySelector !== false && (
 				<CurrencySelector parentState={this.state} supportedCurrencies={supportedCurrencies} onSelectCurrency={this.onSelectCurrency.bind(this)} hideCurrencySelector={this.hideCurrencySelector.bind(this)} />
 			)}
-
 			{this.state.proposingSwap !== false && (
 				<SwapProposalModal parentState={this.state} cancelSwapProposal={() => this.cancelSwapProposal()} acceptSwapProposal={() => this.acceptSwapProposal()} />
 			)}
+			<WalletModalDeposit  close={() => {this.closeDepositModal()}} showDepositModal={this.state.showDepositModal} />
 			</>
 		)
 	}
 }
 
+
+Swap.contextType = WalletContext;
 export default Swap;

@@ -117,6 +117,44 @@
   background-color: black;
   border-color: black;
   cursor: not-allowed;
+  pointer-events: none;
+}
+
+.swap .swapbelowamounts {
+  padding: 15px 0px 0px 4px;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+}
+
+.swap .swapbelowamounts .balance {
+  font-size: 14px;
+  cursor: pointer;
+  margin-right: 20px;
+}
+
+.swap .swapbelowamounts .balance.no {
+  cursor: default;
+}
+
+.swap .swapbelowamounts .balance span {
+  opacity: 0.7;
+  display: inline-block;
+  padding-right: 6px;
+}
+
+.swap .swapbelowamounts button.deposit {
+  padding: 4px 8px;
+  background: #363636;
+  border: 1px solid black;
+  color: white;
+  cursor: pointer;
+  outline: 0;
+  opacity: 0.7;
+}
+
+.swap .swapbelowamounts button.deposit:hover {
+  opacity: 1;
 }
 
 .swapOffersHeader {
@@ -135,8 +173,17 @@
   font-weight: 500;
 }
 
+.swapOffersHeader span a.bubble {
+  background: #1470f2;
+  border-radius: 4px;
+  padding: 6px 12px;
+  font-size: 12px;
+  color: white;
+  text-decoration: none;
+}
+
 .swapOffers {
-  margin-top: 50px;
+  margin-top: 30px;
 }
 
 .swapOffersCont {
@@ -372,6 +419,11 @@
   line-height: 1;
   text-transform: uppercase;
   position: relative;
+}
+
+.swapOffers .swapBar .action button.requestSwap:disabled {
+  opacity: 0.3;
+  pointer-events: none;
 }
 
 .swapOffers .swapBar .action {
