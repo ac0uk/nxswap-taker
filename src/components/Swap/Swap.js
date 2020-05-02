@@ -26,8 +26,7 @@ class Swap extends React.Component {
 			editForAmount: false,
 			showDepositModal: false,
       showOffers: false,
-      matchedOffers: [],
-			otherOffers: [],
+      offers: [],
 			offersExpire: false,
 			requestingSwap: false,
 			requestSwap: false,
@@ -214,6 +213,8 @@ class Swap extends React.Component {
 		};
 
 		this.setState({
+			editSwapAmount: true,
+			editForAmount: false,
 			swapAmount: swapAmount
 		}, () => {
 			this.update();
@@ -237,10 +238,8 @@ class Swap extends React.Component {
 		};
 
 		this.setState({
-			forAmount: forAmount
-		})
-
-		this.setState({
+			editSwapAmount: false,
+			editForAmount: true,
 			forAmount: forAmount
 		}, () => {
 			this.update();
@@ -261,7 +260,7 @@ class Swap extends React.Component {
 			this.stopNowTimer();
 			return false;
 		}
-		
+				
 		this.startNowTimer();
     
     if( this.state.showOffers ) {
@@ -326,13 +325,11 @@ class Swap extends React.Component {
     }
     
     let baseRate = getOffers.data.baseRate;
-    let matchedOffers = getOffers.data.matchedOffers;
-		let otherOffers = getOffers.data.otherOffers;
+    let offers = getOffers.data.offers;
 		let offersExpire = getOffers.data.offersExpire;
 
     let state = this.processBaseRateResult(baseRate);
-    state.matchedOffers = matchedOffers;
-		state.otherOffers = otherOffers;
+    state.offers = offers;
 		state.offersExpire = offersExpire;
 
 		this.setState(state);
@@ -348,9 +345,9 @@ class Swap extends React.Component {
 	}
 
 	async clickRequestSwap(instanceUUID, hash) {
-    let offers = this.state.matchedOffers;
-    let offer;
-
+    let offers = this.state.offers;
+		let offer;
+		
     for( let off of offers ) {
       if( off.instanceUUID === instanceUUID ) {
         offer = off;
@@ -366,9 +363,6 @@ class Swap extends React.Component {
 
     if( offer === undefined ) return false;
 		if( offer.hash !== hash ) return false;
-		
-		// Stop refresh..
-		if( this.interval !== false ) clearInterval(this.interval);
 
     // Submit Swap Request..
     let requestSwap = await SwapAPI.wsAPIRPC({
@@ -460,7 +454,12 @@ class Swap extends React.Component {
 					{userAuthorised && (
 						<div className="swapbelowamounts">
 						<div className="balance" onClick={() => this.onChangeSwapAmount(currentBalance.available.formatted)}>
-							<span>{depositCurrency} Available</span> {currentBalance.available.formatted}
+							<small>{depositCurrency} Available</small>
+							{this.state.swapAmount > currentBalance.available.float ? (
+								<span className="invalid">{currentBalance.available.formatted}</span>
+							) : (
+								<span>{currentBalance.available.formatted}</span>
+							)}
 						</div>
 						{currentBalance.pending.raw > 0 && (
 						<div className="balance no">
@@ -471,7 +470,7 @@ class Swap extends React.Component {
 					</div>
 					)}
           {this.state.showOffers && (
-          <SwapOfferTable parentState={this.state} currentBalance={currentBalance} clickRequestSwap={(a,b) => this.clickRequestSwap(a,b)} />
+          <SwapOfferTable parentState={this.state} currentBalance={currentBalance} onChangeSwapAmount={(a) => this.onChangeSwapAmount(a)} onChangeForAmount={(a) => this.onChangeForAmount(a)} clickRequestSwap={(a,b) => this.clickRequestSwap(a,b)} />
           )}
 				</div>
 			</div>

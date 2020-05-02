@@ -74,10 +74,38 @@
 }
 
 .modalWindow .modalText {
-  margin-bottom: 20px;
   line-height: 1.4em;
-  font-size: 14px;
+  font-size: 13px;
   opacity: 0.8;
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+
+.modalWindow .modalText p {
+  margin-bottom: 14px;
+  line-height: 22px;
+}
+
+.modalWindow .modalText p a {
+  color: black;
+  text-decoration: none;
+}
+
+.modalWindow .modalText .highlight {
+  display: inline-block;
+  background: yellow;
+  color: black;
+  margin: 0px 2px;
+  padding: 0px 5px;
+  border-radius: 4px;
+}
+
+.modalWindow .modalText .highlight.big {
+  padding: 5px 8px;
+}
+
+.modalWindow .modalText p:last-of-type {
+  margin-bottom: 0px;
 }
 
 .modalWindow .modalInput {
@@ -413,4 +441,45 @@
 
 .modalWindow .modalAction button:last-of-type {
   margin-right: 0px;
+}
+
+.modalWindow .modalFlexRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.modalWindow .modalFlexColumn {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.modalWindow .modalFlexColumn img.currencyIcon {
+  width: 70px;
+  height: 70px;
+  margin-bottom: 20px;
+}
+
+.modalWindow .modalFlexColumn span.label {
+  font-size: 12px;
+  opacity: 0.7;
+  margin-bottom: 8px;
+}
+.modalWindow .modalFlexColumn span.amount {
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+.modalWindow .modalFlexColumn span.currencyName {
+  font-size: 14px;
+  opacity: 0.4;
+  margin-bottom: 10px;
+}
+
+.modalWindow .modalFlexColumn img.arrowBetween {
+  height: 50px;
 }

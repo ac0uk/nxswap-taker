@@ -20,7 +20,7 @@ class SwapOfferTable extends React.Component {
   SwapMatchedOffersTable() {
     let parent = this.props.parentState;
     let currentBalance = this.props.currentBalance;
-    let offers = parent.matchedOffers;
+    let offers = parent.offers;
   
     let depositCurrencyMeta = NXMeta.currencies[parent.depositCurrency];
     let receiveCurrencyMeta = NXMeta.currencies[parent.receiveCurrency];
@@ -63,8 +63,11 @@ class SwapOfferTable extends React.Component {
           }
         }
 
+        let matched = (offer.matched === true) ? true : false;
+        let barClass = (matched) ? 'swapBar matched' : 'swapBar';
+
         return (
-          <div key={key} className="swapBar">
+          <div key={key} className={barClass}>
             <div className="profile">
               <img src="/img/profile-default.png" alt="Profile" />
               <span>3001</span>
@@ -73,10 +76,28 @@ class SwapOfferTable extends React.Component {
               <span>Swap<small>{depositCurrencyName}</small></span>
               <img src={depositCurrencyMeta.icon} alt={parent.depositCurrency} />
             </div>
+          {matched && (
             <div className="metaCol">
               <small>{parent.depositCurrency} Amount</small>
               <span>{offer.fromAmount}</span>
             </div>
+          )}
+          {!matched && (
+            <div className="metaCol">
+            <small>{parent.depositCurrency} Limits</small>
+            {offer.fromMin > offer.fromAmount ? (
+              <span className="small highlight" onClick={() => {this.props.onChangeSwapAmount(offer.fromMin)}}><i>Min</i>{offer.fromMin}</span>
+            ) : (
+              <span className="small"><i>Min</i>{offer.fromMin}</span>
+            )}
+            {offer.fromMax < offer.fromAmount ? (
+              <span className="small highlight" onClick={() => {this.props.onChangeSwapAmount(offer.fromMax)}}><i>Max</i>{offer.fromMax}</span>
+            ) : (
+              <span className="small"><i>Max</i>{offer.fromMax}</span>
+            )}
+            
+          </div>
+          )}
             <div className="metaCol">
               <small>{parent.depositCurrency} Confs</small>
               <span>{offer.confirmations}</span>
@@ -88,6 +109,8 @@ class SwapOfferTable extends React.Component {
               <span>For<small>{receiveCurrencyName}</small></span>
               <img src={receiveCurrencyMeta.icon} alt={parent.receiveCurrency} />
             </div>
+          {matched && (
+            <>
             <div className="metaCol">
               <small>{parent.receiveCurrency} Fee: <strong>{offer.feeRate}%</strong></small>
               <span>{offer.fee}</span>
@@ -96,9 +119,39 @@ class SwapOfferTable extends React.Component {
               <small>Receive {parent.receiveCurrency}</small>
               <span>{offer.toAmount}</span>
             </div>
+            </>
+          )}
+          {!matched && (
+            <>
+            <div className="metaCol">
+              <small>{parent.receiveCurrency} Fee</small>
+              <span>{offer.feeRate}%</span>
+            </div>
+            <div className="metaCol">
+              <small>{parent.receiveCurrency} Limits</small>
+              {offer.toMin > offer.toAmount ? (
+                <span className="small highlight" onClick={() => {this.props.onChangeForAmount(offer.toMin)}}><i>Min</i>{offer.toMin}</span>
+              ) : (
+                <span className="small"><i>Min</i>{offer.toMin}</span>
+              )}
+              {offer.toAmount > offer.toMax ? (
+                <span className="small highlight" onClick={() => {this.props.onChangeForAmount(offer.toMax)}}><i>Max</i>{offer.toMax}</span>
+              ) : (
+                <span className="small"><i>Max</i>{offer.toMax}</span>
+              )}
+            </div>
+            </>
+          )}
+          {matched && (
             <div className="action">
               {requestingSwap === false && userAuthorised && (
-                <button className="requestSwap" onClick={() => this.props.clickRequestSwap(offer.instanceUUID, offer.hash)}><i style={{bottom: expiryWindow}} className="expiry"></i><small>Request</small><span>Swap</span></button>
+                <>
+                {currentBalance.available.float >= offer.fromAmount ? (
+                  <button className="requestSwap" onClick={() => this.props.clickRequestSwap(offer.instanceUUID, offer.hash)}><i style={{bottom: expiryWindow}} className="expiry"></i><small>Request</small><span>Swap</span></button>
+                ) : (
+                  <button className="requestSwap" disabled={true}><small>Request</small><span>Swap</span></button>
+                )}
+                </>
               )}
               {requestingSwap === false && ! userAuthorised && (
                 <button className="requestSwap" disabled={true}><small>Request</small><span>Swap</span></button>
@@ -112,6 +165,7 @@ class SwapOfferTable extends React.Component {
                 </button>
               )}
             </div>
+          )}
           </div>
         )
       });
