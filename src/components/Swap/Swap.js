@@ -1,6 +1,9 @@
 import React from 'react';
+import {
+  Redirect
+} from "react-router-dom";
 import { WalletContext } from '../../contexts/WalletContext';
-import { SwapAPI, NXMeta, UserAuthObject } from '../../js/NXSwapTaker';
+import { RecoveryKey, SwapAPI, NXMeta, UserAuthObject } from '../../js/NXSwapTaker';
 
 import '../../css/Swap.css';
 import CurrencySelector from './CurrencySelector';
@@ -31,7 +34,8 @@ class Swap extends React.Component {
 			requestingSwap: false,
 			requestSwap: false,
 			proposingSwap: false,
-			proposeSwap: false
+			proposeSwap: false,
+			acceptedSwap: false
 		}
 	}
 
@@ -71,11 +75,50 @@ class Swap extends React.Component {
 		});
 	}
 
-	acceptSwapProposal() {
+	async acceptSwapProposal() {
 		if( !this.state.proposingSwap || !this.state.proposeSwap ) return false;
 		let proposeSwap = this.state.proposeSwap;
+		let requestUUID = proposeSwap.requestUUID;
 
-		console.log(proposeSwap);
+		if( ! requestUUID ) return false;
+		if( ! RecoveryKey.isSwapDBInitialised() ) {
+			return false;
+		}
+
+		// Add the Swap to DB..
+		let addSwap = RecoveryKey.swapDB.insertNewSwap('taker', proposeSwap);
+
+		if( ! addSwap ) {
+			console.log('failed to add swap?!');
+		} else {
+			// Added Swap..
+			// Now submit to API..
+			let agreeProposal = await SwapAPI.wsAPIRPC({
+				method: 'swap.agreeProposal',
+				payload: {
+					agree: proposeSwap
+				},
+				sign: true
+			});
+
+			if( agreeProposal.data.agreed ) {
+				// Update the agreedHash..
+				let updateSwap = RecoveryKey.swapDB.updateSwap('taker', requestUUID, {
+					agreedHash: agreeProposal.data.agreedHash
+				});
+
+				if( updateSwap ) {
+					// Ok good.. move to track Swap..
+					this.setState({
+						acceptedSwap: requestUUID
+					});
+				}
+			} else {
+				// Failed to accept..
+				console.log('failed?')
+				console.log(agreeProposal)
+			}
+		}
 	}
 
 	swapRequestDeclinedListener(payload) {
@@ -384,6 +427,11 @@ class Swap extends React.Component {
   }
 
 	render() {
+		if( this.state.acceptedSwap !== false ) {
+			let redirect = `/track/${this.state.acceptedSwap}`;
+			return (<Redirect to={redirect} />);
+		}
+
 		const { walletBalances } = this.context;
 		let balances = walletBalances;
 
