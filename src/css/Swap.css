@@ -233,7 +233,15 @@
   background: #000000;
 }
 
-.swapOffers .swapBar {
+.trackSwaps .trackSwapsHeader {
+  margin-bottom: 20px;
+}
+
+.trackSwaps .swapRows {
+  border: 2px solid black;
+}
+
+.swapBar {
   background: #1f1f1f;
   flex-grow: 1;
   display: flex;
@@ -248,15 +256,15 @@
   opacity: 0.5;
 }
 
-.swapOffers .swapBar.matched {
+.swapBar.matched {
   opacity: 1;
 }
 
-.swapOffers .swapBar:last-of-type {
+.swapBar:last-of-type {
   border-bottom: 0px;
 }
 
-.swapOffers .swapBar .profile {
+.swapBar .profile {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -264,14 +272,14 @@
   padding: 0px 16px;
 }
 
-.swapOffers .swapBar .profile img {
+.swapBar .profile img {
   width: 30px;
   height: 30px;
   border-radius: 50%;
   border: 1px solid black;
 }
 
-.swapOffers .swapBar .profile span {
+.swapBar .profile span {
   display: block;
   padding: 4px 5px;
   border-radius: 8px;
@@ -279,7 +287,7 @@
   background: black;
 }
 
-.swapOffers .swapBar .currencySelect {
+.swapBar .currencySelect {
   display: flex;
   flex-direction: row;
   padding: 18px 14px;
@@ -287,7 +295,7 @@
   align-items: left;
 }
 
-.swapOffers .swapBar .currencySelect span {
+.swapBar .currencySelect span {
   display: block;
   text-align: left;
   font-size: 14px;
@@ -295,20 +303,20 @@
   line-height: 1;
 }
 
-.swapOffers .swapBar .currencySelect span small {
+.swapBar .currencySelect span small {
   display: block;
   margin-top: 10px;
   opacity: 0.6;
   font-weight: normal;
 }
 
-.swapOffers .swapBar .currencySelect img {
+.swapBar .currencySelect img {
   width: 34px;
   height: 34px;
   margin-left: 22px;
 }
 
-.swapOffers .swapBar .metaCol {
+.swapBar .metaCol {
   text-align: center;
   flex-grow: 1;
   flex-basis: 0;
@@ -320,48 +328,47 @@
   line-height: 1;
 }
 
-.swapOffers .swapBar .metaCol small {
+.swapBar .metaCol small {
   text-transform: uppercase;
   font-size: 11px;
   opacity: 0.7;
   padding-bottom: 8px;
 }
 
-.swapOffers .swapBar .metaCol span {
+.swapBar .metaCol span {
   font-size: 14px;
   padding-left: 1px;
 }
 
-.swapOffers .swapBar .metaCol span.small {
+.swapBar .metaCol span.small {
   font-size: 11px;
   padding: 3px 4px;
-  margin-bottom: 3px;
   border-radius: 3px;
 }
 
-.swapOffers .swapBar .metaCol span.small.highlight {
+.swapBar .metaCol span.small.highlight {
   background: white;
   color:black;
   cursor: pointer;
 }
 
 
-.swapOffers .swapBar .metaCol span.small i {
+.swapBar .metaCol span.small i {
   font-size: 11px;
   opacity: 0.7;
   display: inline-block;
   padding-right: 4px;
 }
 
-.swapOffers .swapBar .metaCol span.small:first-of-type {
+.swapBar .metaCol span.small:first-of-type {
   margin-top: -4px;
 }
 
-.swapOffers .swapBar .metaCol span.small:last-of-type {
+.swapBar .metaCol span.small:last-of-type {
   margin-bottom: 0;
 }
 
-.swapOffers .swapBar .currencyArrow {
+.swapBar .currencyArrow {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -371,18 +378,18 @@
   flex-basis: 0;
 }
 
-.swapOffers .swapBar .currencyArrow img {
+.swapBar .currencyArrow img {
   width: 30px;
 }
 
-.swapOffers .swapBar .flexGrower {
+.swapBar .flexGrower {
   flex-grow: 1;
   display: flex;
   justify-content: space-between;
   margin: 0px 10px;
 }
 
-.swapOffers .swapBar .currencyInput {
+.swapBar .currencyInput {
   margin-left: 10px;
   display: flex;
   align-items: left;
@@ -392,7 +399,7 @@
   flex-basis: 0;
 }
 
-.swapOffers .swapBar .currencyInput span {
+.swapBar .currencyInput span {
   display: block;
   font-size: 10px;
   font-weight: 500;
@@ -402,7 +409,7 @@
   opacity: 0.6;
 }
 
-.swapOffers .swapBar .currencyInput span small {
+.swapBar .currencyInput span small {
   display: block;
   opacity: 0.7;
   margin-top: 8px;
@@ -410,7 +417,7 @@
   line-height: 1;
 }
 
-.swapOffers .swapBar .currencyInput input[type=text] {
+.swapBar .currencyInput input[type=text] {
   background-color: #121212;
   border: 1px solid #2e2e2e;
   outline: none;
@@ -423,7 +430,7 @@
 }
 
 
-.swapOffers .swapBar .balance {
+.swapBar .balance {
   display: flex;
   flex-direction: column;
   text-align: center;
@@ -436,25 +443,25 @@
   flex-basis: 0;
 }
 
-.swapOffers .swapBar .balance small {
+.swapBar .balance small {
   opacity: 0.7;
   font-size: 12px;
 }
 
-.swapOffers .swapBar .balance span {
+.swapBar .balance span {
   display: block;
   padding-top: 10px;
   font-size: 14px;
 }
 
-.swapOffers .swapBar .deposit {
+.swapBar .deposit {
   width: 160px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.swapOffers .swapBar .action button.requestSwap {
+.swapBar .action button.requestSwap {
   background-color: transparent;
   border: 1px solid #000;
   color: white;
@@ -469,12 +476,31 @@
   position: relative;
 }
 
-.swapOffers .swapBar .action button.requestSwap:disabled {
+.swapBar .action button.requestSwap:disabled {
   opacity: 0.3;
   pointer-events: none;
 }
 
-.swapOffers .swapBar .action {
+.swapBar .action button.trackSwap {
+  background-color: transparent;
+  border: 1px solid #000;
+  color: white;
+  outline: 0;
+  padding: 12px 18px;
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: none;
+  display: block;
+  line-height: 1;
+  text-transform: uppercase;
+  position: relative;
+}
+
+.swapBar .action button.trackSwap:hover {
+  opacity: 0.8;
+}
+
+.swapBar .action {
   display: flex;
   align-items: center;
   justify-content: right;
@@ -482,7 +508,7 @@
   padding: 0px 20px;
 }
 
-.swapOffers .swapBar .action button.requestSwap small {
+.swapBar .action button.requestSwap small {
   display: block;
   font-size: 10px;
   opacity: 0.5;
@@ -490,17 +516,17 @@
   z-index: 10;
 }
 
-.swapOffers .swapBar .action button.requestSwap span {
+.swapBar .action button.requestSwap span {
   display: block;
   z-index: 10;
   opacity: 0.99;
 }
 
-.swapOffers .swapBar .action button.requestSwap:hover {
+.swapBar .action button.requestSwap:hover {
   background-color: rgba(57,57,57,0.4);
 }
 
-.swapOffers .swapBar .action button.requestSwap i.expiry {
+.swapBar .action button.requestSwap i.expiry {
   opacity: 0.9;
   background: black;
   position: absolute;
@@ -512,7 +538,7 @@
   transition: bottom 1s ease 0s;
 }
 
-.swapOffers .swapBar .action button.requestSwap i.requesting {
+.swapBar .action button.requestSwap i.requesting {
   opacity: 0.5;
   background: black;
   position: absolute;
@@ -526,13 +552,13 @@
   justify-content: center;
 }
 
-.swapOffers .swapBar .action button.requestSwap i.requesting .lds-ring {
+.swapBar .action button.requestSwap i.requesting .lds-ring {
   width: 38px;
   height: 38px;
   opacity: 1;
 }
 
-.swapOffers .swapBar .action button.requestSwap i.requesting .lds-ring div {
+.swapBar .action button.requestSwap i.requesting .lds-ring div {
   width: 32px;
   height: 32px;
   border-width: 3px;

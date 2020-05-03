@@ -7,7 +7,16 @@ class SwapProposalModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      accepted: false
     }
+  }
+
+  acceptProposal () {
+    this.setState({
+      accepted: true
+    }, () => {
+      this.props.acceptSwapProposal()
+    })
   }
 
   render () {
@@ -59,7 +68,7 @@ class SwapProposalModal extends React.Component {
           </div>
           <div className="modalAction">
             <button className="cancel" onClick={() => this.props.cancelSwapProposal()}>Cancel</button>
-            <button className="confirm" onClick={() => this.props.acceptSwapProposal()}>Start Swap</button>
+            <button className="confirm" disabled={this.state.accepted} onClick={() => this.acceptProposal()}>Start Swap</button>
          </div> 
         </div>
       </div>
