@@ -28,8 +28,8 @@ const NXMeta = {
       testnet: true,
       variableFee: false
     },
-    TDGB: {
-      ticker: 'TDGB',
+    DGBT: {
+      ticker: 'DGBT',
       name: 'DigiByte (Testnet)',
       icon: '/img/currencies/dgb.svg',
       testnet: true,
