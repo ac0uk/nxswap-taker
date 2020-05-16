@@ -3,7 +3,7 @@ import {
   Redirect
 } from "react-router-dom";
 import { RecoveryKeyContext } from "../../contexts/RecoveryKeyContext";
-import { RecoveryKey, SwapAPI, NXMeta, UserAuthObject } from '../../js/NXSwapTaker';
+import { Wallet } from '../../js/NXSwapTaker';
 
 import TrackOverviewTable from './TrackOverviewTable';
 import TrackDetailModal from './TrackDetailModal';
@@ -60,7 +60,7 @@ class TrackOverview extends React.Component {
     }
 
     // Load Swaps..
-    let loadSwaps = RecoveryKey.swapDB.loadSwaps('taker');
+    let loadSwaps = Wallet.swapDB.loadSwaps('taker');
 
     return (
       <>

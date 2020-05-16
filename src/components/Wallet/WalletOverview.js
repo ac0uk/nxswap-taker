@@ -1,6 +1,5 @@
 import React from 'react';
-
-import { NXMeta } from '../../js/NXSwapTaker';
+import { Wallet, NXMeta } from '../../js/NXSwapTaker';
 import { WalletContext } from '../../contexts/WalletContext';
 
 import WalletModalDeposit from './WalletModalDeposit';
@@ -70,8 +69,18 @@ class WalletOverview extends React.Component {
     if( currencies === undefined || currencies.length === 0 ) {
       return false
     }  
+
+    
+    let walletActiveCurrencies = Wallet.supportedCurrencies;
+
+    if( ! walletActiveCurrencies || walletActiveCurrencies.length === 0 ) {
+      return false;
+    }
     
     const listItems = currencies.map((curr) => {
+      if( ! walletActiveCurrencies.includes(curr) ) {
+        return false;
+      }
       let meta = NXMeta.currencies[curr];
       let balance = balances[curr];
       let available = "";

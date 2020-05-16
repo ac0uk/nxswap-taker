@@ -1,8 +1,5 @@
 import React from 'react';
-import {
-  Redirect
-} from "react-router-dom";
-import { RecoveryKey, SwapAPI, NXMeta, UserAuthObject } from '../../js/NXSwapTaker';
+import { Wallet, SwapAPI, NXMeta, UserAuthObject } from '../../js/NXSwapTaker';
 
 class TrackDetailModal extends React.Component {
   constructor() {
@@ -15,7 +12,7 @@ class TrackDetailModal extends React.Component {
     const parent = this.props.parent;
     const viewSwap = parent.viewSwap;
     if( ! viewSwap ) return false;
-    let loadSwap = RecoveryKey.swapDB.loadSwap('taker', viewSwap);
+    let loadSwap = Wallet.swapDB.loadSwap('taker', viewSwap);
 
     if( ! loadSwap ) {
       this.props.closeViewSwap();

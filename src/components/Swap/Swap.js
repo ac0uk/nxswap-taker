@@ -3,7 +3,7 @@ import {
   Redirect
 } from "react-router-dom";
 import { WalletContext } from '../../contexts/WalletContext';
-import { RecoveryKey, SwapAPI, NXMeta, UserAuthObject } from '../../js/NXSwapTaker';
+import { RecoveryKey, Wallet, SwapAPI, NXMeta, UserAuthObject } from '../../js/NXSwapTaker';
 
 import '../../css/Swap.css';
 import CurrencySelector from './CurrencySelector';
@@ -55,6 +55,8 @@ class Swap extends React.Component {
 
 		if( this.state.requestSwap.requestUUID !== undefined && this.state.requestSwap.requestUUID === requestUUID ) {
 			// Ok..
+			// Validate the fromAddress here?!!!!! maybe..
+			
 			this.setState({
 				proposingSwap: true,
 				proposeSwap: payload
@@ -81,12 +83,12 @@ class Swap extends React.Component {
 		let requestUUID = proposeSwap.requestUUID;
 
 		if( ! requestUUID ) return false;
-		if( ! RecoveryKey.isSwapDBInitialised() ) {
+		if( ! Wallet.isSwapDBInitialised() ) {
 			return false;
 		}
 
 		// Add the Swap to DB..
-		let addSwap = RecoveryKey.swapDB.insertNewSwap('taker', proposeSwap);
+		let addSwap = Wallet.swapDB.insertNewSwap('taker', proposeSwap);
 
 		if( ! addSwap ) {
 			console.log('failed to add swap?!');
@@ -103,7 +105,7 @@ class Swap extends React.Component {
 
 			if( agreeProposal.data.agreed ) {
 				// Update the agreedHash..
-				let updateSwap = RecoveryKey.swapDB.updateSwap('taker', requestUUID, {
+				let updateSwap = Wallet.swapDB.updateSwap('taker', requestUUID, {
 					agreedHash: agreeProposal.data.agreedHash
 				});
 
@@ -150,7 +152,8 @@ class Swap extends React.Component {
 	processNow () {
 		let now = this.state.now;
 		let userAuthorised = (UserAuthObject !== false) ? true : false;
-		if( this.state.proposingSwap !== false ) {
+
+		if( this.state.proposingSwap !== false && userAuthorised ) {
 			let proposal = this.state.proposeSwap;
 			let proposalExpires = proposal.requestAcceptExpires;
 			
@@ -407,11 +410,21 @@ class Swap extends React.Component {
     if( offer === undefined ) return false;
 		if( offer.hash !== hash ) return false;
 
+		// Get Next address..
+		let toCurrency = offer.to;
+		let nextAddress = Wallet.getNextAddress(toCurrency, false);
+
+		if( ! nextAddress ) {
+			console.log(`failed to load next address for ${toCurrency}`)
+			return false;
+		}
+
     // Submit Swap Request..
     let requestSwap = await SwapAPI.wsAPIRPC({
       method: 'swap.requestSwap',
       payload: {
-        offer: offer
+				offer: offer,
+				toAddress: nextAddress.nextAddress
       },
       sign: true
 		});

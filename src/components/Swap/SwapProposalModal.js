@@ -1,5 +1,5 @@
 import React from 'react';
-import { Wallet, NXMeta } from '../../js/NXSwapTaker';
+import { NXMeta } from '../../js/NXSwapTaker';
 
 import '../../css/Modal.css';
 

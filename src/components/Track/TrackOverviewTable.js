@@ -39,6 +39,9 @@ class TrackOverviewTable extends React.Component {
             <small>{depositCurrency} Amount</small>
             <span>{swap.fromAmount}</span>
           </div>
+          <div className="currencyArrow">
+              <img src="/img/arrow-right.png" alt=">" />
+            </div>
           <div className="currencySelect">
             <span>For<small>{receiveCurrencyName}</small></span>
             <img src={receiveCurrencyMeta.icon} alt={receiveCurrency} />
