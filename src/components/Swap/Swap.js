@@ -3,7 +3,7 @@ import {
   Redirect
 } from "react-router-dom";
 import { WalletContext } from '../../contexts/WalletContext';
-import { RecoveryKey, Wallet, SwapAPI, NXMeta, UserAuthObject } from '../../js/NXSwapTaker';
+import { RecoveryKey, Wallet, SwapAPI, NXMeta, UserAuthObject, SUPPORTED_CURRENCIES } from '../../js/NXSwapTaker';
 
 import '../../css/Swap.css';
 import CurrencySelector from './CurrencySelector';
@@ -450,7 +450,9 @@ class Swap extends React.Component {
 
 		let supportedCurrencies = [];
 		for( let tick in NXMeta.currencies ) {
-			supportedCurrencies.push(NXMeta.currencies[tick]);
+			if( SUPPORTED_CURRENCIES.includes(tick)) {
+				supportedCurrencies.push(NXMeta.currencies[tick]);
+			}
 		}
 
 		//let currencyAvailability = [];

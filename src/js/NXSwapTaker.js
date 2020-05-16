@@ -93,4 +93,4 @@ RecoveryKey.loadRecoveryKey({
 	autoCreate: false
 });
 
-export { LocalStorage, RecoveryKey, Wallet, SwapAPI, NXMeta, UserAuthObject };
+export { LocalStorage, RecoveryKey, Wallet, SwapAPI, NXMeta, UserAuthObject, SUPPORTED_CURRENCIES };
