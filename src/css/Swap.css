@@ -1,5 +1,5 @@
 .homepage {
-  margin-bottom: 70px;
+
 }
 
 .homepage .meta {
@@ -18,10 +18,56 @@
   line-height: 27px;
 }
 
+.homepage .metaForm {
+  margin-left: 70px;
+  color: rgba(255,255,255,0.7);
+  padding: 10px 0px;
+}
+
+.homepage .metaForm span {
+  font-size: 13px;
+  display: block;
+}
+
+.swap .swappeerbar {
+  display: flex;
+  justify-content: space-between;
+  align-content: flex-end;
+  margin-top: 40px;
+}
+
+.swap .swappeerbar .peerfield {
+  flex-grow: 1;
+  flex-basis: 0;
+  position: relative;
+  margin-right: 20px;
+  margin-left: 20px;
+}
+
+.swap .swappeerbar .peerfield:first-of-type {
+  margin-left: 0px;
+}
+
+.swap .swappeerbar .peerfield:last-of-type {
+  margin-right: 0px;
+}
+
+.swap .swappeerbar .peerfield label {
+  display: block;
+  padding-bottom: 18px;
+  color: rgba(255,255,255,0.7);
+  font-size: 14px;
+  font-weight: 500;
+  padding-left: 2px;
+  cursor: pointer;
+}
+
+
 .swap .swapamountbar {
   display: flex;
   justify-content: space-between;
   align-content: flex-end;
+  margin-top: 40px;
 }
 
 .swap .swapamountbar .amountfield {
@@ -45,7 +91,20 @@
   color: white;
 }
 
-.swap .swapamountbar .amountfield input[type=text] {
+.swap .swapamountbar .amountfield input[type=text].peer {
+  background-color: #060606;
+  border: 1px solid #393939;
+  outline: none;
+  font-size: 14px;
+  padding: 14px 16px;
+  width: 100%;
+  box-sizing: border-box;
+  color: white;
+  line-height: 1;
+  margin-bottom: 30px;
+}
+
+.swap .swapamountbar .amountfield input[type=text].amount {
   background-color: #060606;
   border: 1px solid #393939;
   outline: none;

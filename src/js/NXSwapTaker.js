@@ -20,7 +20,6 @@ for( let net of SUPPORTED_CURRENCIES ) {
 }
 
 // Connect to PBMsgr
-
 const PBMsgr = new NXPBMsgr({
 	WSUrl: 'wss://api-dev.pbmsgr.com:8000/connection/websocket',
 	sign: false
@@ -32,13 +31,18 @@ PBMsgr.on('connected', (state) => {
 
 // NXWallet
 const Wallet = new NXWallet();
-
 let UserAuthObject = false;
 
 Wallet.on('initialised', (state) => {
 	console.log(`wallet init ${state}`)
 	if( state ) {
 		let sign = Wallet.getUserAuthObject();
+		let pubKey = sign.pubKey.toString('hex');
+		let pubKeyHash = crypto.createHash('sha256').update(pubKey).digest('hex');
+		UserAuthObject = {
+			pubKey: pubKey,
+			pubKeyHash: pubKeyHash
+		}
 		PBMsgr.updateSign(sign);
 		PBMsgr.connectWebsocket();
 	

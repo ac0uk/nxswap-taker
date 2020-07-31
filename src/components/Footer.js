@@ -12,11 +12,11 @@ class Footer extends React.Component {
 			<div id="footer">
 				<div className="max-width">
 					<div className="left">
-						<Link to="/about">About NXSwap</Link>
+						<Link to="/request">Request A Swap</Link>
+						<span>|</span>
+						<Link to="/propose">Propose A Swap</Link>
 						<span>|</span>
 						<Link to="/market-makers">Market Makers</Link>
-						<span>|</span>
-						<Link to="/support">Get Support</Link>
 					</div>
 					<div className="right">
 						<Link to="/security">Security</Link>
