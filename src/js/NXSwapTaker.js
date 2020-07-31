@@ -1,4 +1,4 @@
-import { NXLocalStorage, NXRecoveryKey, ExplorerBlockbook, NXWallet, NXSwapAPI, Networks } from '@nxswap/nxswap-js';
+import { NXLocalStorage, NXRecoveryKey, ExplorerBlockbook, NXWallet, NXPBMsgr, Networks } from '@nxswap/nxswap-js';
 import NXMeta from './NXMeta';
 import crypto from 'crypto'
 
@@ -19,26 +19,16 @@ for( let net of SUPPORTED_CURRENCIES ) {
 	explorers[net] = explorer;
 }
 
-// Connect to NXSwap API
-const SwapAPI = new NXSwapAPI({
-	WSUrl: 'wss://ws-api-dev56.nxswap.com:8000/connection/websocket',
+// Connect to PBMsgr
+
+const PBMsgr = new NXPBMsgr({
+	WSUrl: 'wss://api-dev.pbmsgr.com:8000/connection/websocket',
 	sign: false
 });
 
-SwapAPI.on('connected', (state) => {
-	if(state) {
-		let sign = Wallet.getUserAuthObject();
-		if( !sign) return false;
-		subscribeUserChannel(sign.pubKey.toString('hex'));
-	}
+PBMsgr.on('connected', (state) => {
+	console.log(`pbmsgr connected ${state}`);
 });
-
-function subscribeUserChannel () {
-	if( !UserAuthObject) return false;
-	let pubKeyHash = UserAuthObject.pubKeyHash;
-	let privChannel = `$user:${pubKeyHash}`;
-	SwapAPI.subscribeChannel(privChannel, false);
-}
 
 // NXWallet
 const Wallet = new NXWallet();
@@ -46,21 +36,14 @@ const Wallet = new NXWallet();
 let UserAuthObject = false;
 
 Wallet.on('initialised', (state) => {
+	console.log(`wallet init ${state}`)
 	if( state ) {
 		let sign = Wallet.getUserAuthObject();
-		SwapAPI.updateSign(sign);
-		let pubKey = sign.pubKey.toString('hex');
-		let pubKeyHash = crypto.createHash('sha256').update(pubKey).digest('hex');
-		UserAuthObject = {
-			pubKey: pubKey,
-			pubKeyHash: pubKeyHash
-		}
-		// Subscribe..
-		if( SwapAPI.wsConnected ) {
-			subscribeUserChannel(sign.pubKey.toString('hex'));
-		}
+		PBMsgr.updateSign(sign);
+		PBMsgr.connectWebsocket();
+	
 	} else {
-		SwapAPI.updateSign(false);
+		PBMsgr.updateSign(false);
 		// disconnect from channel
 		// add in unsubscribe here..!!!
 	}
@@ -93,4 +76,4 @@ RecoveryKey.loadRecoveryKey({
 	autoCreate: false
 });
 
-export { LocalStorage, RecoveryKey, Wallet, SwapAPI, NXMeta, UserAuthObject, SUPPORTED_CURRENCIES };
+export { LocalStorage, RecoveryKey, Wallet, NXMeta, UserAuthObject, SUPPORTED_CURRENCIES };

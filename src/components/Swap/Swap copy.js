@@ -463,6 +463,7 @@ class Swap extends React.Component {
 		}
 
 		//let currencyAvailability = [];
+
 		let depositCurrency = this.state.depositCurrency;
 		let receiveCurrency = this.state.receiveCurrency;
 

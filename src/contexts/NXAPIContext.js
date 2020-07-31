@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { SwapAPI } from '../js/NXSwapTaker';
+//import { SwapAPI } from '../js/NXSwapTaker';
 
 const NXAPIContext = React.createContext();
 
@@ -8,9 +8,9 @@ const NXAPIProvider = ({ children }) => {
 
   useEffect(() => {
     const initNXWS = async () => {
-      SwapAPI.on('connected', (connected) => {
-        setNXAPIConnected(connected)
-      });
+      //SwapAPI.on('connected', (connected) => {
+        //setNXAPIConnected(connected)
+     // });
     };
 
     initNXWS();
