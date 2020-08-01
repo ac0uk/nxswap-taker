@@ -21,14 +21,17 @@ class SwapForm extends React.Component {
 			now: false,
       showHomeHeader: true,
 			depositCurrency: 'TBTC',
-			receiveCurrency: 'TVTC',
+      receiveCurrency: 'TVTC',
+      peerID: false,
+      peerIDError: false,
 			swapAmount: '',
 			forAmount: '',
 			showCurrencySelector: false,
 			showCurrencySelectorFor: false,
 			editSwapAmount: true,
 			editForAmount: false,
-			showDepositModal: false,
+      showDepositModal: false,
+      canPropose: false,
       showOffers: false,
       offers: [],
 			offersExpire: false,
@@ -244,22 +247,25 @@ class SwapForm extends React.Component {
 		this.setState({
 			showDepositModal: false
 		})
-	}
+  }
+  
+  async onChangePeerID(event) {
+    let peerID = (event.target.value.length > 0 ) ? event.target.value : false;
+    this.setState({
+      peerID: peerID
+    }, () => {
+      this.update();
+    });
+  }
 
 	async onChangeSwapAmount(event) {
 		let swapAmount = event;
 		if( isNaN(swapAmount) ) {
 			swapAmount = event.target.value;
 		}
-		if( isNaN(swapAmount) ) return false;
-		if( swapAmount.length === 0 || swapAmount <= 0 ) {
-			if(swapAmount.length === 0 ) swapAmount = '';
-			this.setState({
-				swapAmount: swapAmount,
-				forAmount: ''
-			})
-			return;
-		};
+		if( isNaN(swapAmount) ) {
+      swapAmount = false;
+    }
 
 		this.setState({
 			editSwapAmount: true,
@@ -275,16 +281,9 @@ class SwapForm extends React.Component {
 		if( isNaN(forAmount) ) {
 			forAmount = event.target.value;
 		}
-		if( isNaN(forAmount) ) return false;
-		
-		if( forAmount.length === 0 || forAmount <= 0 ) {
-			if(forAmount.length === 0 ) forAmount = '';
-			this.setState({
-				swapAmount: '',
-				forAmount: forAmount
-			})
-			return;
-		};
+		if( isNaN(forAmount) ) {
+      forAmount = false;
+    }
 
 		this.setState({
 			editSwapAmount: false,
@@ -296,27 +295,79 @@ class SwapForm extends React.Component {
   }
   
   async update() {
-    let payload = {
-			from: this.state.depositCurrency,
-			to: this.state.receiveCurrency,
-		}
+    if(this.type === "propose") {
+      this.updateProposeForm();
+    } else if ( this.type === "request" ) {
+      this.updateRequestForm();
+    }
+  }
 
-		if(this.state.editSwapAmount && ! isNaN(this.state.swapAmount) && this.state.swapAmount > 0) {
-			payload.fromAmount = this.state.swapAmount;
-		} else if( this.state.editForAmount && ! isNaN(this.state.forAmount) && this.state.forAmount > 0 ) {
-			payload.toAmount = this.state.forAmount;
-		} else {
-			this.stopNowTimer();
-			return false;
-		}
-				
-		this.startNowTimer();
+  async updateProposeForm () {
+    // Validate peer id..
+    let peerID = this.state.peerID;
+    if( ! peerID || peerID.length === 0 ) {
+      this.setState({
+        canPropose: false,
+        peerIDError: false
+      });
+      return false;
+    } else {
+      let bufPeerID = false;
+      try {
+        bufPeerID = Buffer.from(peerID, 'hex');
+        if( bufPeerID.length !== 33 ) {
+          bufPeerID = false;
+        }
+      } catch(e) { }
+
+      if( ! bufPeerID ) {
+        // Not a valid length public key?
+        this.setState({
+          canPropose: false,
+          peerIDError: true
+        });
+        return false;
+      }
+    }
+    let newState = {
+      peerIDError: false
+    }
+    // Peer ID is good..
+    // Valid amounts?
+
+    if( this.state.depositCurrency === this.state.receiveCurrency && this.state.swapAmount > 0 ) {
+      newState.canPropose = true;
+    } else if ( this.state.depositCurrency !== this.state.receiveCurrency && this.state.swapAmount > 0 && this.state.forAmount > 0 ) {
+      newState.canPropose = true;
+    } else {
+      newState.canPropose = false;
+    }
+
+    this.setState(newState);
+  }
+
+  async updateRequestForm () {
+    let payload = {
+      from: this.state.depositCurrency,
+      to: this.state.receiveCurrency,
+    }
+
+    if(this.state.editSwapAmount && ! isNaN(this.state.swapAmount) && this.state.swapAmount > 0) {
+      payload.fromAmount = this.state.swapAmount;
+    } else if( this.state.editForAmount && ! isNaN(this.state.forAmount) && this.state.forAmount > 0 ) {
+      payload.toAmount = this.state.forAmount;
+    } else {
+      this.stopNowTimer();
+      return false;
+    }
+        
+    this.startNowTimer();
     
     if( this.state.showOffers ) {
       this.updateOffers(payload);
     } else {
       this.loadBaseRate(payload);
-		}
+    }
   }
 
 	async loadBaseRate(payload) {
@@ -384,6 +435,12 @@ class SwapForm extends React.Component {
 		state.offersExpire = offersExpire;
 
 		this.setState(state);*/
+  }
+
+  clickProposeSwap () {
+    if(! this.state.canPropose) return false;
+    // Build Proposal..
+    
   }
   
   clickViewOffers () {
@@ -520,9 +577,9 @@ class SwapForm extends React.Component {
               )}
 							<label className={this.state.editSwapAmount ? 'selected' : ''}>Swap</label>
 							{this.state.editSwapAmount ? (
-								<input type="text" class="amount" placeholder="0.00000000" value={this.state.swapAmount} onChange={(event) => this.onChangeSwapAmount(event)} disabled={this.state.requestingSwap !== false && true} />
+								<input type="text" className="amount" placeholder="0.00000000" value={this.state.swapAmount} onChange={(event) => this.onChangeSwapAmount(event)} disabled={this.state.requestingSwap !== false && true} />
 							) : (
-								<input type="text" class="amount" placeholder="0.00000000" value={this.state.swapAmount} readOnly={true} onClick={() => this.editSwapAmount()} disabled={this.state.requestingSwap !== false && true} />
+								<input type="text" className="amount" placeholder="0.00000000" value={this.state.swapAmount} readOnly={true} onClick={() => this.editSwapAmount()} disabled={this.state.requestingSwap !== false && true} />
 							)}
 							<span className="icon"><img src={depositCurrencyMeta.icon} alt={depositCurrency} /></span>
 							<span className="select" onClick={() => {this.showCurrencySelector('deposit')}}>{depositCurrency}</span>
@@ -531,22 +588,32 @@ class SwapForm extends React.Component {
               {this.type == "propose" && (
                 <>
                 <label>Propose Swap To</label>
-                <input type="text" className="peer" placeholder="Your Peers Public Key" />
+                <input type="text" className={`peer ${(this.state.peerIDError ? ('error') : false)}`} placeholder="Your Peers Public Key" onChange={(event) => this.onChangePeerID(event)} />
                 </>
               )}
 							<label className={this.state.editForAmount ? 'selected' : ''}>For</label>
-							{this.state.editForAmount ? (
-								<input type="text" class="amount" placeholder="0.00000000" value={this.state.forAmount} onChange={(event) => this.onChangeForAmount(event)} disabled={this.state.requestingSwap !== false && true} />
-							) : (
-								<input type="text" class="amount" placeholder="0.00000000" value={this.state.forAmount} readOnly={true} onClick={() => this.editForAmount()} disabled={this.state.requestingSwap !== false && true} />
-							)}
+              {this.state.depositCurrency === this.state.receiveCurrency && (
+                <>
+                <input type="text" className="amount" placeholder="auto" disabled={true} />
+                </>
+              )}
+              {this.state.depositCurrency !== this.state.receiveCurrency && (
+                <>
+                {this.state.editForAmount ? (
+                  <input type="text" className="amount" placeholder="0.00000000" value={this.state.forAmount} onChange={(event) => this.onChangeForAmount(event)} disabled={this.state.requestingSwap !== false && true} />
+                ) : (
+                  <input type="text" className="amount" placeholder="0.00000000" value={this.state.forAmount} readOnly={true} onClick={() => this.editForAmount()} disabled={this.state.requestingSwap !== false && true} />
+                )}
+                </>
+              )}
+							
 							<span className="icon"><img src={receiveCurrencyMeta.icon} alt={receiveCurrency} /></span>
 							<span className="select" onClick={() => {this.showCurrencySelector('receive')}}>{receiveCurrency}</span>
 						</div>
 						<div className="buttonfield">
               {this.type == "propose" && (
                 <>
-                <button disabled={false}>Propose Swap</button>
+                <button disabled={this.state.canPropose ? (false) : (true)} onClick={() => this.clickProposeSwap()}>Propose Swap</button>
                 </>
               )}
               {this.type == "request" && (
@@ -554,7 +621,6 @@ class SwapForm extends React.Component {
                 <button disabled={this.state.showOffers ? (true) : (false)} onClick={() => this.clickViewOffers()}>View Offers</button>
                 </>
               )}
-              
 						</div>
 					</div>
 					{userAuthorised && (

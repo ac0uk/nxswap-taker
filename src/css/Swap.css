@@ -104,6 +104,10 @@
   margin-bottom: 30px;
 }
 
+.swap .swapamountbar .amountfield input[type=text].peer.error {
+  border-color: red;
+}
+
 .swap .swapamountbar .amountfield input[type=text].amount {
   background-color: #060606;
   border: 1px solid #393939;

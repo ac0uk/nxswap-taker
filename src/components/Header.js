@@ -14,7 +14,6 @@ function Header() {
 					<Link to="/"></Link>
 				</div>
 				<nav>
-					<Link to="/how-it-works">How It Works</Link>
 					<HeaderLinks />
 					<a href="https://www.twitter.com/nxswap" rel="noopener noreferrer" target="_blank" className="twitter">&nbsp;</a>
 				</nav>
@@ -41,9 +40,9 @@ function HeaderLinks() {
 	} else if (recoveryKeyLoaded && !recoveryKeyLocked) {
 		return (
 			<>
-				<Link to="/wallet" className={`${linkClass}`}>Wallet</Link>
 				<Link to="/track" className={`featured ${linkClass}`}>Track Your Swaps</Link>
-				<Link to="/wallet/lock" className={linkClass}>Lock</Link>
+				<Link to="/wallet" className={`${linkClass}`}>Wallet</Link>
+				<Link to="/wallet/lock" className={`lock ${linkClass}`}></Link>
 			</>
 		)
 	} else {
