@@ -80,4 +80,4 @@ RecoveryKey.loadRecoveryKey({
 	autoCreate: false
 });
 
-export { LocalStorage, RecoveryKey, Wallet, NXMeta, UserAuthObject, SUPPORTED_CURRENCIES };
+export { LocalStorage, RecoveryKey, Wallet, PBMsgr, NXMeta, UserAuthObject, SUPPORTED_CURRENCIES };

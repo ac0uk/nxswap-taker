@@ -177,7 +177,6 @@
 .swap .swapamountbar .buttonfield button:disabled,
 .swap .swapamountbar .buttonfield a.disabled {
   opacity: 0.3;
-  background-color: black;
   border-color: black;
   cursor: not-allowed;
   pointer-events: none;

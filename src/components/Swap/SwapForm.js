@@ -3,7 +3,7 @@ import {
   Redirect
 } from "react-router-dom";
 import { WalletContext } from '../../contexts/WalletContext';
-import { RecoveryKey, Wallet, NXMeta, UserAuthObject, SUPPORTED_CURRENCIES } from '../../js/NXSwapTaker';
+import { RecoveryKey, Wallet, PBMsgr, NXMeta, UserAuthObject, SUPPORTED_CURRENCIES } from '../../js/NXSwapTaker';
 
 import '../../css/Swap.css';
 import CurrencySelector from './CurrencySelector';
@@ -437,10 +437,35 @@ class SwapForm extends React.Component {
 		this.setState(state);*/
   }
 
-  clickProposeSwap () {
+  async clickProposeSwap () {
     if(! this.state.canPropose) return false;
     // Build Proposal..
-    
+    let createProposal = Wallet.createSwapProposal({
+      a_currency: this.state.depositCurrency,
+      a_amount: this.state.swapAmount,
+      a_expires: 60,
+      b_pubkey: this.state.peerID,
+      b_currency: this.state.receiveCurrency,
+      b_amount: this.state.forAmount
+    });
+
+    if( ! createProposal ) {
+      return false;
+    }
+
+    // ok we have created a proposal..
+    // now we need to send it..
+    let send = await PBMsgr.RESTAPIPost('message/send', {
+      send: {
+        to: createProposal.party_b.pubkey,
+        message: {
+          proposal: createProposal
+        }
+      }
+    })
+
+    console.log(send);
+
   }
   
   clickViewOffers () {
@@ -560,7 +585,7 @@ class SwapForm extends React.Component {
 							<h2>Swap directly with a known peer!</h2>
 						</div>
             <div className="metaSub">
-							<span>blah blah?</span>
+							<span>Trade directly with someone you know without having to trust them. No fees, no middle man, no risks.</span>
 						</div>
 					</div>
 				</div>
