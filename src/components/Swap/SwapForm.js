@@ -303,6 +303,13 @@ class SwapForm extends React.Component {
   }
 
   async updateProposeForm () {
+    let userAuthorised = (UserAuthObject !== false) ? true : false;
+    if( ! userAuthorised ) {
+      this.setState({
+        canPropose: false,
+        peerIDError: false
+      });
+    }
     // Validate peer id..
     let peerID = this.state.peerID;
     if( ! peerID || peerID.length === 0 ) {
@@ -597,7 +604,7 @@ class SwapForm extends React.Component {
               {this.type == "propose" && (
                 <>
                 <label>Your Public Key</label>
-                <input type="text" className="peer" disabled={true} value={UserAuthObject.pubKey} />
+                <input type="text" className="peer" disabled={true} value={userAuthorised ? UserAuthObject.pubKey : `You must Get Started or Unlock your Wallet first`} />
                 </>
               )}
 							<label className={this.state.editSwapAmount ? 'selected' : ''}>Swap</label>
@@ -613,7 +620,7 @@ class SwapForm extends React.Component {
               {this.type == "propose" && (
                 <>
                 <label>Propose Swap To</label>
-                <input type="text" className={`peer ${(this.state.peerIDError ? ('error') : false)}`} placeholder="Your Peers Public Key" onChange={(event) => this.onChangePeerID(event)} />
+                <input type="text" className={`peer ${(this.state.peerIDError ? ('error') : false)}`} placeholder="Your Peers Public Key" onChange={(event) => this.onChangePeerID(event)} disabled={userAuthorised ? false : true} />
                 </>
               )}
 							<label className={this.state.editForAmount ? 'selected' : ''}>For</label>
