@@ -585,7 +585,7 @@ class SwapForm extends React.Component {
 							<h2>Swap directly with a known peer!</h2>
 						</div>
             <div className="metaSub">
-							<span>Trade directly with someone you know without having to trust them. No fees, no middle man, no risks.</span>
+							<span>Trade directly with someone you know without having to trust them. No trading fees, no middle man, no risks.</span>
 						</div>
 					</div>
 				</div>

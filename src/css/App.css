@@ -114,7 +114,6 @@
   flex-grow: 1;
   display: flex;
   justify-content: center;
-  align-items: center;
   padding: 50px 0px;
 }
 
@@ -157,6 +156,10 @@
   display: flex;
   justify-content: center;
   flex-direction: column;
+}
+
+.singlecolumn.top {
+  justify-content: start;
 }
 
 .splitcolumn

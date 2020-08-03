@@ -53,6 +53,10 @@ Wallet.on('initialised', (state) => {
 	}
 });
 
+PBMsgr.on('publish', (message) => {
+	Wallet.handleIncomingPeerMessage(message);
+})
+
 // NXRecoveryKey
 const RecoveryKey = new NXRecoveryKey({
 	storage: LocalStorage
