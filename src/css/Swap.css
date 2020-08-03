@@ -565,9 +565,18 @@
 .swapBar .action {
   display: flex;
   align-items: center;
-  justify-content: right;
+  justify-content: center;
   width: 86px;
   padding: 0px 20px;
+}
+
+.swapBar .action span.info {
+  display: block;
+  font-size: 13px;
+  line-height: 20px;
+  text-align: center;
+  font-weight: bold;
+  opacity: 0.8;
 }
 
 .swapBar .action button.requestSwap small {

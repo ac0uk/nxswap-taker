@@ -26,7 +26,7 @@ function Header() {
 
 function HeaderLinks() {
 	const { recoveryKeyLoading, recoveryKeyLocked, recoveryKeyLoaded } = useRecoveryKeyContext();
-	const { proposalsRequiringAttention } = useWalletContext();
+	const { activeProposals } = useWalletContext();
 
 	let linkClass = (recoveryKeyLoading) ? "disabled" : "";
 
@@ -43,8 +43,8 @@ function HeaderLinks() {
 	} else if (recoveryKeyLoaded && !recoveryKeyLocked) {
 		let proposalCount = 0;
 
-		if( proposalsRequiringAttention !== false && proposalsRequiringAttention !== undefined ) {
-			proposalCount = proposalsRequiringAttention.length;
+		if( activeProposals !== false && activeProposals !== undefined ) {
+			proposalCount = activeProposals.length;
 		}
 
 		let proposalClass = (proposalCount > 0 ) ? `featured ${linkClass}` : linkClass;
@@ -52,7 +52,7 @@ function HeaderLinks() {
 		return (
 			<>
 				<Link to="/proposals" className={proposalClass}>Proposals ({proposalCount})</Link>
-				<Link to="/track" className={`${linkClass}`}>Track Your Swaps (x)</Link>
+				<Link to="/track" className={`${linkClass}`}>Your Swaps (x)</Link>
 				<Link to="/wallet" className={`${linkClass}`}>Wallet</Link>
 				<Link to="/wallet/lock" className={`lock ${linkClass}`}></Link>
 			</>

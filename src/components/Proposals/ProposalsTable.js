@@ -11,13 +11,24 @@ class ProposalsTable extends React.Component {
   }
 
   render () {
-    let proposalsRequiringAttention = this.props.proposalsRequiringAttention;
-    let listProposals = proposalsRequiringAttention.map((proposal) => {
+    let activeProposals = this.props.activeProposals;
+    let my_pubkey = this.props.my_pubkey;
+
+    let listProposals = activeProposals.map((proposal) => {
       let proposal_id = proposal.proposal_id;
       let key = `${proposal_id}`;
 
-      let depositCurrency = proposal.party_a.currency;
-      let receiveCurrency = proposal.party_b.currency;
+      let party_a = proposal.party_a;
+      let party_b = proposal.party_b;
+
+      let party_a_pubkey = party_a.pubkey;
+      let party_b_pubkey = party_b.pubkey;
+
+      let iampartya = (party_a_pubkey === my_pubkey) ? true : false;
+      let iampartyb = (party_b_pubkey === my_pubkey) ? true : false;
+
+      let depositCurrency = party_a.currency;
+      let receiveCurrency = party_b.currency;
 
       let depositCurrencyMeta = NXMeta.currencies[depositCurrency];
       let receiveCurrencyMeta = NXMeta.currencies[receiveCurrency];
@@ -37,7 +48,8 @@ class ProposalsTable extends React.Component {
               <span>3001</span>
             </div>
           <div className="currencySelect">
-            <span>Swap Their<small>{depositCurrencyName}</small></span>
+            <span>{iampartya ? (`Swap Your`) : (`Swap Their`)}
+              <small>{depositCurrencyName}</small></span>
             <img src={depositCurrencyMeta.icon} alt={depositCurrency} />
           </div>
           <div className="metaCol">
@@ -48,7 +60,7 @@ class ProposalsTable extends React.Component {
               <img src="/img/arrow-right.png" alt=">" />
             </div>
           <div className="currencySelect">
-            <span>For Your<small>{receiveCurrencyName}</small></span>
+            <span>{iampartyb ? (`For Your`) : (`For Their`)}<small>{receiveCurrencyName}</small></span>
             <img src={receiveCurrencyMeta.icon} alt={receiveCurrency} />
           </div>
           <div className="metaCol">
@@ -59,12 +71,27 @@ class ProposalsTable extends React.Component {
             <small>Expires In</small>
             <span>{seconds}</span>
           </div>
-          <div className="action">
-            <button className="trackSwap" onClick={() => this.props.viewSwap(proposal_id)}>Accept</button>
-          </div>
-          <div className="action">
-            <button className="trackSwap" onClick={() => this.props.viewSwap(proposal_id)}>Decline</button>
-          </div>
+          {iampartyb && (
+            <>
+            <div className="action">
+              <button className="trackSwap" onClick={() => this.props.viewSwap(proposal_id)}>Accept</button>
+            </div>
+            <div className="action">
+              <button className="trackSwap" onClick={() => this.props.viewSwap(proposal_id)}>Decline</button>
+            </div>
+            </>
+          )}
+          {iampartya && !iampartyb && (
+            <>
+            <div className="action">
+            <span className="info">Awaiting<br />Response</span>
+            </div>
+            <div className="action">
+            <button className="trackSwap">Cancel</button>
+            </div>
+            </>
+          )}
+          
         </div>
       )
     });

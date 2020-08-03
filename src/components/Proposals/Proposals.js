@@ -3,7 +3,7 @@ import {
   Redirect
 } from "react-router-dom";
 import { WalletContext } from "../../contexts/WalletContext";
-import { Wallet } from '../../js/NXSwapTaker';
+import { Wallet, UserAuthObject } from '../../js/NXSwapTaker';
 
 import ProposalsTable from './ProposalsTable';
 
@@ -28,8 +28,13 @@ class Proposals extends React.Component {
   }
 
   render () {
-    const { proposalsRequiringAttention } = this.context;
-    if( proposalsRequiringAttention === undefined ) return false;
+    const { activeProposals } = this.context;
+    if( activeProposals === undefined ) return false;
+
+    let userAuthorised = (UserAuthObject !== false) ? true : false;
+    if( ! userAuthorised ) return false;
+
+    let my_pubkey = UserAuthObject.pubKey;
 
     return (
       <>
@@ -40,14 +45,14 @@ class Proposals extends React.Component {
             <span className="desc">Any current proposals to Swap with peers will appear here, once the proposal has expired it will be removed.</span>
           </div>
           <div className="swapRows">
-          { ! proposalsRequiringAttention ? (
+          { ! activeProposals ? (
             <>
             <div className="swapBar">
               You don't currently have any current proposals to Swap.
             </div>
             </>
           ) : (
-            <ProposalsTable parent={this.state} proposalsRequiringAttention={proposalsRequiringAttention} viewSwap={(a) => this.viewSwap(a)} />
+            <ProposalsTable parent={this.state} activeProposals={activeProposals} my_pubkey={my_pubkey} viewSwap={(a) => this.viewSwap(a)} />
           )}
           </div>
         </div>

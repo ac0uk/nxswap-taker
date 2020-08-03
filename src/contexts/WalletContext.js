@@ -7,7 +7,7 @@ const WalletProvider = ({ children }) => {
 	const [walletInitialised, setWalletInitialised] = useState(false);
 	const [walletBalances, setWalletBalances] = useState(false);
 	const [walletUtxos, setWalletUtxos] = useState(false);
-	const [proposalsRequiringAttention, setProposalsRequiringAttention] = useState(false);
+	const [activeProposals, setActiveProposals] = useState(false);
 
 	useEffect(() => {
     const Setup = async () => {
@@ -25,8 +25,8 @@ const WalletProvider = ({ children }) => {
 				setWalletUtxos(state);
 			});
 
-			Wallet.on('proposalsRequiringAttention', (state) => {
-				setProposalsRequiringAttention(state);
+			Wallet.on('activeProposals', (state) => {
+				setActiveProposals(state);
 			})
     };
 
@@ -39,7 +39,7 @@ const WalletProvider = ({ children }) => {
 				walletInitialised,
 				walletBalances,
 				walletUtxos,
-				proposalsRequiringAttention
+				activeProposals
 			}}
 		>
 			{children}
