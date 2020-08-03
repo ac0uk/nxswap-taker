@@ -2,7 +2,7 @@ import { NXLocalStorage, NXRecoveryKey, ExplorerBlockbook, NXWallet, NXPBMsgr, N
 import NXMeta from './NXMeta';
 import crypto from 'crypto'
 
-const SUPPORTED_CURRENCIES = ["TBTC", "TLTC", "TVTC", "TGRS", "DGBT"];
+const SUPPORTED_CURRENCIES = ["TBTC", "TLTC", "TVTC"];
 
 // NXLocalStorage
 const LocalStorage = new NXLocalStorage();
