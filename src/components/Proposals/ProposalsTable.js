@@ -15,7 +15,7 @@ class ProposalsTable extends React.Component {
     let my_pubkey = this.props.my_pubkey;
 
     let listProposals = activeProposals.map((proposal) => {
-      let proposal_id = proposal.proposal_id;
+      let proposal_id = proposal.id;
       let key = `${proposal_id}`;
 
       let party_a = proposal.party_a;
@@ -36,7 +36,7 @@ class ProposalsTable extends React.Component {
       let depositCurrencyName = depositCurrencyMeta.name.replace( '(Testnet)', '' );
       let receiveCurrencyName = receiveCurrencyMeta.name.replace( '(Testnet)', '' );
 
-      let expires = proposal.party_a.proposal_expires;
+      let expires = proposal.expires;
       let now = new Date().getTime();
       let diff = expires - now;
       let seconds = Math.round(diff / 1000);
