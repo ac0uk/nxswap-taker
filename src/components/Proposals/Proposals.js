@@ -1,9 +1,6 @@
 import React from 'react';
-import {
-  Redirect
-} from "react-router-dom";
 import { WalletContext } from "../../contexts/WalletContext";
-import { Wallet, UserAuthObject } from '../../js/NXSwapTaker';
+import { Wallet, PBMsgr, UserAuthObject } from '../../js/NXSwapTaker';
 
 import ProposalsTable from './ProposalsTable';
 
@@ -13,6 +10,34 @@ class Proposals extends React.Component {
     this.state = {
       viewSwap: false
     }
+  }
+
+  async acceptProposal(id) {
+    let accept = Wallet.acceptSwapProposal(id);
+    if( ! accept ) return false;
+
+    await PBMsgr.RESTAPIPost('message/send', {
+      send: {
+        to: accept.proposal.party_a.pubkey,
+        message: {
+          proposal_accept: accept
+        }
+      }
+    });
+	}
+
+  async declineProposal(id) {
+    let decline = Wallet.declineSwapProposal(id);
+    if( ! decline ) return false;
+
+    await PBMsgr.RESTAPIPost('message/send', {
+      send: {
+        to: decline.proposal.party_a.pubkey,
+        message: {
+          proposal_decline: decline
+        }
+      }
+    });
   }
 
   viewSwap(requestUUID) {
@@ -52,7 +77,7 @@ class Proposals extends React.Component {
             </div>
             </>
           ) : (
-            <ProposalsTable parent={this.state} activeProposals={activeProposals} my_pubkey={my_pubkey} viewSwap={(a) => this.viewSwap(a)} />
+            <ProposalsTable parent={this.state} activeProposals={activeProposals} my_pubkey={my_pubkey} acceptProposal={(a) => this.acceptProposal(a)} declineProposal={(a) => this.declineProposal(a)} />
           )}
           </div>
         </div>

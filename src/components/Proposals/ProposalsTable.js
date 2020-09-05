@@ -1,5 +1,4 @@
 import React from 'react';
-import date from 'date-and-time';
 import { NXMeta } from '../../js/NXSwapTaker';
 
 class ProposalsTable extends React.Component {
@@ -10,6 +9,8 @@ class ProposalsTable extends React.Component {
     }
   }
 
+ 
+  
   render () {
     let activeProposals = this.props.activeProposals;
     let my_pubkey = this.props.my_pubkey;
@@ -41,6 +42,9 @@ class ProposalsTable extends React.Component {
       let diff = expires - now;
       let seconds = Math.round(diff / 1000);
 
+      let accepted = ( proposal.accepted > 0 ) ? true : false;
+      let declined = ( proposal.declined > 0 ) ? true : false;
+
       return (
         <div key={key} className="swapBar matched">
           <div className="profile">
@@ -71,17 +75,37 @@ class ProposalsTable extends React.Component {
             <small>Expires In</small>
             <span>{seconds}</span>
           </div>
-          {iampartyb && (
+          {accepted && (
             <>
             <div className="action">
-              <button className="trackSwap" onClick={() => this.props.viewSwap(proposal_id)}>Accept</button>
+            <span className="info">Status<br />Accepted</span>
             </div>
             <div className="action">
-              <button className="trackSwap" onClick={() => this.props.viewSwap(proposal_id)}>Decline</button>
+            &nbsp;
             </div>
             </>
           )}
-          {iampartya && !iampartyb && (
+          {declined && (
+            <>
+            <div className="action">
+            <span className="info">Status<br />Declined</span>
+            </div>
+            <div className="action">
+            &nbsp;
+            </div>
+            </>
+          )}
+          {iampartyb && !declined && !accepted && (
+            <>
+            <div className="action">
+              <button className="trackSwap" onClick={() => this.props.acceptProposal(proposal_id)}>Accept</button>
+            </div>
+            <div className="action">
+              <button className="trackSwap" onClick={() => this.props.declineProposal(proposal_id)}>Decline</button>
+            </div>
+            </>
+          )}
+          {iampartya && !iampartyb && !declined && !accepted && (
             <>
             <div className="action">
             <span className="info">Awaiting<br />Response</span>
@@ -91,7 +115,6 @@ class ProposalsTable extends React.Component {
             </div>
             </>
           )}
-          
         </div>
       )
     });

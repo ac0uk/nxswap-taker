@@ -6,15 +6,12 @@ import * as serviceWorker from './serviceWorker';
 
 import { RecoveryKeyProvider } from "./contexts/RecoveryKeyContext";
 import { WalletProvider } from "./contexts/WalletContext";
-import { NXAPIProvider } from "./contexts/NXAPIContext";
 
 ReactDOM.render(
   <React.StrictMode>
     <RecoveryKeyProvider>
       <WalletProvider>
-      <NXAPIProvider>
       <App />
-      </NXAPIProvider>
       </WalletProvider>
     </RecoveryKeyProvider>
   </React.StrictMode>,

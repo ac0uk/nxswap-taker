@@ -3,7 +3,7 @@ import {
   Redirect
 } from "react-router-dom";
 import { WalletContext } from '../../contexts/WalletContext';
-import { RecoveryKey, Wallet, PBMsgr, NXMeta, UserAuthObject, SUPPORTED_CURRENCIES } from '../../js/NXSwapTaker';
+import { Wallet, PBMsgr, NXMeta, UserAuthObject, SUPPORTED_CURRENCIES } from '../../js/NXSwapTaker';
 
 import '../../css/Swap.css';
 import CurrencySelector from './CurrencySelector';
@@ -462,18 +462,15 @@ class SwapForm extends React.Component {
 
     // ok we have created a proposal..
     // now we need to send it..
-    let send = await PBMsgr.RESTAPIPost('message/send', {
+    await PBMsgr.RESTAPIPost('message/send', {
       send: {
         to: createProposal.party_b.pubkey,
         message: {
           proposal: createProposal
         }
       }
-    })
-
-    console.log(send);
-
-  }
+    });
+	}
   
   clickViewOffers () {
     this.setState({
@@ -571,7 +568,7 @@ class SwapForm extends React.Component {
 		return (
 			<>
 			<div className="singlecolumn">
-        {this.type == "request" && this.state.showHomeHeader && (
+        {this.type === "request" && this.state.showHomeHeader && (
 				<div className="homepage">
 					<div className="meta">
 						<div className="metaMain">
@@ -584,7 +581,7 @@ class SwapForm extends React.Component {
 					</div>
 				</div>
         )}
-        {this.type == "propose" && this.state.showHomeHeader && (
+        {this.type === "propose" && this.state.showHomeHeader && (
 				<div className="homepage">
 					<div className="meta">
 						<div className="metaMain">
@@ -597,11 +594,11 @@ class SwapForm extends React.Component {
 					</div>
 				</div>
         )}
-        {this.type == "propose" && (
+        {this.type === "propose" && (
 				<div className="swap">
 					<div className="swapamountbar">
 						<div className="amountfield">
-              {this.type == "propose" && (
+              {this.type === "propose" && (
                 <>
                 <label>Your Public Key</label>
                 <input type="text" className="peer" disabled={true} value={userAuthorised ? UserAuthObject.pubKey : `You must Get Started or Unlock your Wallet first`} />
@@ -617,7 +614,7 @@ class SwapForm extends React.Component {
 							<span className="select" onClick={() => {this.showCurrencySelector('deposit')}}>{depositCurrency}</span>
 						</div>
 						<div className="amountfield">
-              {this.type == "propose" && (
+              {this.type === "propose" && (
                 <>
                 <label>Propose Swap To</label>
                 <input type="text" className={`peer ${(this.state.peerIDError ? ('error') : false)}`} placeholder="Your Peers Public Key" onChange={(event) => this.onChangePeerID(event)} disabled={userAuthorised ? false : true} />
@@ -643,12 +640,12 @@ class SwapForm extends React.Component {
 							<span className="select" onClick={() => {this.showCurrencySelector('receive')}}>{receiveCurrency}</span>
 						</div>
 						<div className="buttonfield">
-              {this.type == "propose" && (
+              {this.type === "propose" && (
                 <>
                 <button disabled={this.state.canPropose ? (false) : (true)} onClick={() => this.clickProposeSwap()}>Propose Swap</button>
                 </>
               )}
-              {this.type == "request" && (
+              {this.type === "request" && (
                 <>
                 <button disabled={this.state.showOffers ? (true) : (false)} onClick={() => this.clickViewOffers()}>View Offers</button>
                 </>
