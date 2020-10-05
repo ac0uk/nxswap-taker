@@ -19,8 +19,7 @@ class ProposalsTable extends React.Component {
 
     if( ! activeIncomingProposals && ! activeOutgoingProposals ) return false;
 
-    let activeProposals = ( activeOutgoingProposals && activeOutgoingProposals.length > 0 ) ? activeOutgoingProposals : activeIncomingProposals;
-    let incomingOutgoing = ( activeOutgoingProposals && activeOutgoingProposals.length > 0 ) ? "outgoing" : "incoming";
+    let activeProposals = ( activeOutgoingProposals.length > 0 ) ? activeOutgoingProposals : activeIncomingProposals;
 
     let listProposals = activeProposals.map((proposal) => {
       let proposal_id = proposal.id;
@@ -53,39 +52,34 @@ class ProposalsTable extends React.Component {
       let declined = ( proposal.declined > 0 ) ? true : false;
 
       return (
-        <div key={key} className="swapBar swapRows">
-          <div className="swapRow">
-          <div className="currencyArrow">
-              <img src="/img/arrow-right.png" alt=">" />
-            </div>
-            <div className="currencySelect">
-              <span>{iampartya ? (`Swap Your`) : (`Swap Their`)}
-                <small>{depositCurrencyName}</small></span>
-              <img src={depositCurrencyMeta.icon} alt={depositCurrency} />
-            </div>
-            <div className="metaCol">
-              <small>{depositCurrency} Amount</small>
-              <span>{proposal.party_a.amount}</span>
-            </div>
-            <div className="metaCol">
-              <small>Expires In</small>
-              <span>{seconds}</span>
-            </div>
-          </div>
-          <div className="swapRow">
-           <div className="profile">
+        <div key={key} className="proposalBar">
+          <div className="profile">
               <img src="/img/profile-default.png" alt="Profile" />
               <span>3001</span>
             </div>
-            <div className="currencySelect">
-              <span>{iampartyb ? (`For Your`) : (`For Their`)}<small>{receiveCurrencyName}</small></span>
-              <img src={receiveCurrencyMeta.icon} alt={receiveCurrency} />
+          <div className="currencySelect">
+            <span>{iampartya ? (`Swap Your`) : (`Swap Their`)}
+              <small>{depositCurrencyName}</small></span>
+            <img src={depositCurrencyMeta.icon} alt={depositCurrency} />
+          </div>
+          <div className="metaCol">
+            <small>{depositCurrency} Amount</small>
+            <span>{proposal.party_a.amount}</span>
+          </div>
+          <div className="currencyArrow">
+              <img src="/img/arrow-right.png" alt=">" />
             </div>
-            <div className="metaCol">
-              <small>{receiveCurrency} Amount</small>
-              <span>{proposal.party_b.amount}</span>
-            </div>
-            
+          <div className="currencySelect">
+            <span>{iampartyb ? (`For Your`) : (`For Their`)}<small>{receiveCurrencyName}</small></span>
+            <img src={receiveCurrencyMeta.icon} alt={receiveCurrency} />
+          </div>
+          <div className="metaCol">
+            <small>{receiveCurrency} Amount</small>
+            <span>{proposal.party_b.amount}</span>
+          </div>
+          <div className="metaCol">
+            <small>Expires In</small>
+            <span>{seconds}</span>
           </div>
           {accepted && (
             <>
@@ -107,7 +101,7 @@ class ProposalsTable extends React.Component {
             </div>
             </>
           )}
-          {incomingOutgoing == "incoming" && !declined && !accepted && (
+          {iampartyb && !declined && !accepted && (
             <>
             <div className="action">
               <button className="trackSwap" onClick={() => this.props.acceptProposal(proposal_id)}>Accept</button>
@@ -117,7 +111,7 @@ class ProposalsTable extends React.Component {
             </div>
             </>
           )}
-          {incomingOutgoing == "outgoing" && !declined && !accepted && (
+          {iampartya && !iampartyb && !declined && !accepted && (
             <>
             <div className="action">
             <span className="info">Awaiting<br />Response</span>

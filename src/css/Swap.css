@@ -299,7 +299,7 @@
   margin-bottom: 20px;
 }
 
-.trackSwaps .swapRows {
+.trackSwaps .swapBars {
   border: 2px solid black;
 }
 
@@ -315,11 +315,19 @@
   padding: 10px 12px 10px 12px;
   box-sizing: border-box;
   border-bottom: 1px solid black;
-  opacity: 0.5;
 }
 
-.swapBar.matched {
-  opacity: 1;
+.swapBar.swapRows {
+  flex-direction: column;
+  align-items: inherit;
+}
+
+.swapBar .swapRow {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .swapBar:last-of-type {

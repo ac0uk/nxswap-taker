@@ -6,12 +6,15 @@ import * as serviceWorker from './serviceWorker';
 
 import { RecoveryKeyProvider } from "./contexts/RecoveryKeyContext";
 import { WalletProvider } from "./contexts/WalletContext";
+import { NegotiatorProvider } from "./contexts/NegotiatorContext";
 
 ReactDOM.render(
   <React.StrictMode>
     <RecoveryKeyProvider>
       <WalletProvider>
-      <App />
+        <NegotiatorProvider>
+        <App />
+        </NegotiatorProvider>
       </WalletProvider>
     </RecoveryKeyProvider>
   </React.StrictMode>,

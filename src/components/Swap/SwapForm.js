@@ -3,7 +3,7 @@ import {
   Redirect
 } from "react-router-dom";
 import { WalletContext } from '../../contexts/WalletContext';
-import { Wallet, PBMsgr, NXMeta, UserAuthObject, SUPPORTED_CURRENCIES } from '../../js/NXSwapTaker';
+import { Wallet, PBMsgr, Negotiator, NXMeta, UserAuthObject, SUPPORTED_CURRENCIES } from '../../js/NXSwapTaker';
 
 import '../../css/Swap.css';
 import CurrencySelector from './CurrencySelector';
@@ -447,7 +447,7 @@ class SwapForm extends React.Component {
   async clickProposeSwap () {
     if(! this.state.canPropose) return false;
     // Build Proposal..
-    let createProposal = Wallet.createSwapProposal({
+    let createProposal = Negotiator.createSwapProposal({
       a_currency: this.state.depositCurrency,
       a_amount: this.state.swapAmount,
       a_expires: 60,
@@ -458,7 +458,9 @@ class SwapForm extends React.Component {
 
     if( ! createProposal ) {
       return false;
-    }
+		}
+		
+		console.log('createProposal', createProposal);
 
     // ok we have created a proposal..
     // now we need to send it..

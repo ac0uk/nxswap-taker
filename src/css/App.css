@@ -158,17 +158,18 @@
   flex-direction: column;
 }
 
-.singlecolumn.top {
-  justify-content: start;
-}
 
-.splitcolumn
-{
+
+.splitcolumn {
   flex-grow: 1;
   max-width: 1200px;
   display: flex;
-  align-items: center;
   height: 100%;
+}
+
+.singlecolumn.top,
+.splitcolumn.top {
+  justify-content: start;
 }
 
 .splitcolumn .divider {
@@ -187,11 +188,16 @@
   flex-basis: 0;
 }
 
-.splitcolumn .column,
-.singlecolumn .column {
+.splitcolumn .column.flex,
+.singlecolumn .column.flex {
   display: flex;
-  align-items: center;
-  justify-content: center;
+}
+
+.splitcolumn .column.marg {
+  margin: 0px 10px;
+}
+.splitcolumn .column.outline {
+  border: 1px solid #000000;
 }
 
 .desc {
