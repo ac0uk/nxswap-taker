@@ -1,16 +1,7 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
 import { NXMeta } from '../../js/NXSwapTaker';
 
 class ProposalsTable extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-
-    }
-  }
-
- 
   
   render () {
     let activeOutgoingProposals = this.props.activeOutgoingProposals;
@@ -107,7 +98,7 @@ class ProposalsTable extends React.Component {
             </div>
             </>
           )}
-          {incomingOutgoing == "incoming" && !declined && !accepted && (
+          {incomingOutgoing === "incoming" && !declined && !accepted && (
             <>
             <div className="action">
               <button className="trackSwap" onClick={() => this.props.acceptProposal(proposal_id)}>Accept</button>
@@ -117,7 +108,7 @@ class ProposalsTable extends React.Component {
             </div>
             </>
           )}
-          {incomingOutgoing == "outgoing" && !declined && !accepted && (
+          {incomingOutgoing === "outgoing" && !declined && !accepted && (
             <>
             <div className="action">
             <span className="info">Awaiting<br />Response</span>
