@@ -460,16 +460,12 @@ class SwapForm extends React.Component {
       return false;
 		}
 		
-		console.log('createProposal', createProposal);
-
     // ok we have created a proposal..
     // now we need to send it..
     await PBMsgr.RESTAPIPost('message/send', {
       send: {
-        to: createProposal.party_b.pubkey,
-        message: {
-          proposal: createProposal
-        }
+        to: createProposal.proposal.party_b.pubkey,
+        message: createProposal
       }
     });
 	}

@@ -29,14 +29,11 @@ class Proposals extends React.Component {
   async declineProposal(id) {
     let decline = Negotiator.declineSwapProposal(id);
     if( ! decline ) return false;
-    console.log('decline', decline);
 
     await PBMsgr.RESTAPIPost('message/send', {
       send: {
         to: decline.proposal.party_a.pubkey,
-        message: {
-          proposal_decline: decline
-        }
+        message: decline
       }
     });
   }
@@ -54,8 +51,8 @@ class Proposals extends React.Component {
   }
 
   render () {
-    const { activeOutgoingProposals, activeIncomingProposals } = this.context;
-    if( activeOutgoingProposals === undefined && activeIncomingProposals === false ) return false;
+    const { activeProposals } = this.context;
+    if( activeProposals === undefined ) return false;
 
     let userAuthorised = (UserAuthObject !== false) ? true : false;
     if( ! userAuthorised ) return false;
@@ -68,37 +65,18 @@ class Proposals extends React.Component {
         <div className="column marg">
           <div className="trackSwaps">
             <div className="trackSwapsHeader">
-              <h3>Incoming Proposals</h3>
-              <span className="desc">Any current proposals that you have received will appear here.</span>
+              <h3>Swap Proposals</h3>
+              <span className="desc">Any current proposals that you have received or have made will appear here.</span>
             </div>
             <div className="swapBars">
-            { ! activeIncomingProposals ? (
+            { ! activeProposals ? (
               <>
               <div className="swapBar">
                 You don't currently have any current proposals to Swap.
               </div>
               </>
             ) : (
-              <ProposalsTable parent={this.state} activeIncomingProposals={activeIncomingProposals} my_pubkey={my_pubkey} acceptProposal={(a) => this.acceptProposal(a)} declineProposal={(a) => this.declineProposal(a)} />
-            )}
-            </div>
-          </div>
-        </div>
-        <div className="column marg">
-        <div className="trackSwaps">
-            <div className="trackSwapsHeader">
-              <h3>Outgoing Proposals</h3>
-              <span className="desc">Any current proposals that you have sent will appear here.</span>
-            </div>
-            <div className="swapBars">
-            { ! activeOutgoingProposals ? (
-              <>
-              <div className="swapBar">
-                You don't currently have any current proposals to Swap.
-              </div>
-              </>
-            ) : (
-              <ProposalsTable parent={this.state} activeOutgoingProposals={activeOutgoingProposals} my_pubkey={my_pubkey} acceptProposal={(a) => this.acceptProposal(a)} declineProposal={(a) => this.declineProposal(a)} />
+              <ProposalsTable parent={this.state} activeProposals={activeProposals} my_pubkey={my_pubkey} acceptProposal={(a) => this.acceptProposal(a)} declineProposal={(a) => this.declineProposal(a)} />
             )}
             </div>
           </div>

@@ -4,14 +4,10 @@ import { NXMeta } from '../../js/NXSwapTaker';
 class ProposalsTable extends React.Component {
   
   render () {
-    let activeOutgoingProposals = this.props.activeOutgoingProposals;
-    let activeIncomingProposals = this.props.activeIncomingProposals;
+    let activeProposals = this.props.activeProposals;
     let my_pubkey = this.props.my_pubkey;
 
-    if( ! activeIncomingProposals && ! activeOutgoingProposals ) return false;
-
-    let activeProposals = ( activeOutgoingProposals && activeOutgoingProposals.length > 0 ) ? activeOutgoingProposals : activeIncomingProposals;
-    let incomingOutgoing = ( activeOutgoingProposals && activeOutgoingProposals.length > 0 ) ? "outgoing" : "incoming";
+    if( ! activeProposals ) return false;
 
     let listProposals = activeProposals.map((proposal) => {
       let proposal_id = proposal.id;
@@ -35,7 +31,7 @@ class ProposalsTable extends React.Component {
       let depositCurrencyName = depositCurrencyMeta.name.replace( '(Testnet)', '' );
       let receiveCurrencyName = receiveCurrencyMeta.name.replace( '(Testnet)', '' );
 
-      let expires = proposal.expires;
+      let expires = proposal.party_a.expires;
       let now = new Date().getTime();
       let diff = expires - now;
       let seconds = Math.round(diff / 1000);
@@ -43,82 +39,64 @@ class ProposalsTable extends React.Component {
       let accepted = ( proposal.accepted > 0 ) ? true : false;
       let declined = ( proposal.declined > 0 ) ? true : false;
 
+      let incomingOutgoing = "incoming"
+
       return (
-        <div key={key} className="swapBar swapRows">
-          <div className="swapRow">
-          <div className="currencyArrow">
-              <img src="/img/arrow-right.png" alt=">" />
+        <div key={key} className="swapBar">
+            <div className="profile">
+              <img src="/img/profile-default.png" alt="Profile" />
+              {proposal.role === 'maker' ? ( <span>YOU</span> ) : ( <span>3001</span> )}
             </div>
             <div className="currencySelect">
-              <span>{iampartya ? (`Swap Your`) : (`Swap Their`)}
-                <small>{depositCurrencyName}</small></span>
+              <span>Swap<small>{depositCurrencyName}</small></span>
               <img src={depositCurrencyMeta.icon} alt={depositCurrency} />
             </div>
             <div className="metaCol">
               <small>{depositCurrency} Amount</small>
               <span>{proposal.party_a.amount}</span>
             </div>
-            <div className="metaCol">
-              <small>Expires In</small>
-              <span>{seconds}</span>
+            <div className="currencyArrow">
+              <img src="/img/arrow-right.png" alt=">" />
             </div>
-          </div>
-          <div className="swapRow">
-           <div className="profile">
+            <div className="profile">
               <img src="/img/profile-default.png" alt="Profile" />
-              <span>3001</span>
+              {proposal.role === 'taker' ? ( <span>YOU</span> ) : ( <span>3001</span> )}
             </div>
             <div className="currencySelect">
-              <span>{iampartyb ? (`For Your`) : (`For Their`)}<small>{receiveCurrencyName}</small></span>
+              <span>For<small>{receiveCurrencyName}</small></span>
               <img src={receiveCurrencyMeta.icon} alt={receiveCurrency} />
             </div>
             <div className="metaCol">
               <small>{receiveCurrency} Amount</small>
               <span>{proposal.party_b.amount}</span>
             </div>
+            <div className="metaCol">
+              <small>Expires In</small>
+              <span>{seconds}</span>
+            </div>
+            {proposal.role === 'taker' && (
+              <>
+              <div className="action">
+                <button className="trackSwap" onClick={() => this.props.acceptProposal(proposal_id)}>Accept</button>
+              </div>
+              <div className="action">
+                <button className="trackSwap" onClick={() => this.props.declineProposal(proposal_id)}>Decline</button>
+              </div>
+              </>
+            )}
+            {proposal.role === 'maker' && (
+              <>
+              <div className="action">
+              <span className="info">Awaiting<br />Response</span>
+              </div>
+              <div className="action">
+              <button className="trackSwap">Cancel</button>
+              </div>
+              </>
+            )}
             
           </div>
-          {accepted && (
-            <>
-            <div className="action">
-            <span className="info">Status<br />Accepted</span>
-            </div>
-            <div className="action">
-            &nbsp;
-            </div>
-            </>
-          )}
-          {declined && (
-            <>
-            <div className="action">
-            <span className="info">Status<br />Declined</span>
-            </div>
-            <div className="action">
-            &nbsp;
-            </div>
-            </>
-          )}
-          {incomingOutgoing === "incoming" && !declined && !accepted && (
-            <>
-            <div className="action">
-              <button className="trackSwap" onClick={() => this.props.acceptProposal(proposal_id)}>Accept</button>
-            </div>
-            <div className="action">
-              <button className="trackSwap" onClick={() => this.props.declineProposal(proposal_id)}>Decline</button>
-            </div>
-            </>
-          )}
-          {incomingOutgoing === "outgoing" && !declined && !accepted && (
-            <>
-            <div className="action">
-            <span className="info">Awaiting<br />Response</span>
-            </div>
-            <div className="action">
-            <button className="trackSwap">Cancel</button>
-            </div>
-            </>
-          )}
-        </div>
+          
       )
     });
 

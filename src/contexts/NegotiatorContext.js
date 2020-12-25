@@ -4,18 +4,14 @@ import { Negotiator } from '../js/NXSwapTaker';
 const NegotiatorContext = React.createContext();
 
 const NegotiatorProvider = ({ children }) => {
-	const [activeOutgoingProposals, setActiveOutgoingProposals] = useState(false);
-	const [activeIncomingProposals, setActiveIncomingProposals] = useState(false);
+	const [activeProposals, setActiveProposals] = useState(false);
 
 	useEffect(() => {
     const Setup = async () => {
 
-			Negotiator.on('activeOutgoingProposals', (state) => {
-				setActiveOutgoingProposals(state);
+			Negotiator.on('activeProposals', (state) => {
+				setActiveProposals(state);
       })
-      Negotiator.on('activeIncomingProposals', (state) => {
-				setActiveIncomingProposals(state);
-			})
     };
 
     Setup();
@@ -24,8 +20,7 @@ const NegotiatorProvider = ({ children }) => {
 	return (
 		<NegotiatorContext.Provider
 			value={{
-        activeOutgoingProposals,
-        activeIncomingProposals
+        activeProposals
 			}}
 		>
 			{children}
