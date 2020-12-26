@@ -1,8 +1,9 @@
 import React from 'react';
 import { NegotiatorContext } from "../../contexts/NegotiatorContext";
-import { Negotiator, PBMsgr, UserAuthObject } from '../../js/NXSwapTaker';
+import { Negotiator, UserAuthObject } from '../../js/NXSwapTaker';
 
 import ProposalsTable from './ProposalsTable';
+import ProposalsTableExpired from './ProposalsTableExpired';
 
 class Proposals extends React.Component {
   constructor(props) {
@@ -12,30 +13,23 @@ class Proposals extends React.Component {
     }
   }
 
+  async cancelProposal(id) {
+    let cancel = Negotiator.cancelSwapProposal(id);
+    if( ! cancel ) return false;
+  }
+
+  async trashProposal(id) {
+    Negotiator.deleteSwapProposal(id);
+  }
+
   async acceptProposal(id) {
     let accept = Negotiator.acceptSwapProposal(id);
     if( ! accept ) return false;
-
-    await PBMsgr.RESTAPIPost('message/send', {
-      send: {
-        to: accept.proposal.party_a.pubkey,
-        message: {
-          proposal_accept: accept
-        }
-      }
-    });
 	}
 
   async declineProposal(id) {
     let decline = Negotiator.declineSwapProposal(id);
     if( ! decline ) return false;
-
-    await PBMsgr.RESTAPIPost('message/send', {
-      send: {
-        to: decline.proposal.party_a.pubkey,
-        message: decline
-      }
-    });
   }
 
   viewSwap(requestUUID) {
@@ -51,8 +45,9 @@ class Proposals extends React.Component {
   }
 
   render () {
-    const { activeProposals } = this.context;
-    if( activeProposals === undefined ) return false;
+    const { activeProposals, expiredProposals } = this.context;
+
+    if( activeProposals === undefined && expiredProposals === undefined ) return false;
 
     let userAuthorised = (UserAuthObject !== false) ? true : false;
     if( ! userAuthorised ) return false;
@@ -65,18 +60,35 @@ class Proposals extends React.Component {
         <div className="column marg">
           <div className="trackSwaps">
             <div className="trackSwapsHeader">
-              <h3>Swap Proposals</h3>
+              <h3>Active Swap Proposals</h3>
               <span className="desc">Any current proposals that you have received or have made will appear here.</span>
             </div>
             <div className="swapBars">
             { ! activeProposals ? (
               <>
               <div className="swapBar">
-                You don't currently have any current proposals to Swap.
+                You don't currently have any active proposals.
               </div>
               </>
             ) : (
-              <ProposalsTable parent={this.state} activeProposals={activeProposals} my_pubkey={my_pubkey} acceptProposal={(a) => this.acceptProposal(a)} declineProposal={(a) => this.declineProposal(a)} />
+              <ProposalsTable parent={this.state} activeProposals={activeProposals} my_pubkey={my_pubkey} cancelProposal={(a) => this.cancelProposal(a)} acceptProposal={(a) => this.acceptProposal(a)} declineProposal={(a) => this.declineProposal(a)} />
+            )}
+            </div>
+          </div>
+          <div className="trackSwaps">
+            <div className="trackSwapsHeader">
+              <h3>Expired Swap Proposals</h3>
+              <span className="desc">Any expired proposals that you have received or have made will appear here. They are automatically deleted after 1 hour.</span>
+            </div>
+            <div className="swapBars">
+            { ! expiredProposals ? (
+              <>
+              <div className="swapBar">
+                You don't currently have any expired proposals.
+              </div>
+              </>
+            ) : (
+              <ProposalsTableExpired parent={this.state} expiredProposals={expiredProposals} my_pubkey={my_pubkey} trashProposal={(a) => this.trashProposal(a)}  />
             )}
             </div>
           </div>

@@ -5,12 +5,17 @@ const NegotiatorContext = React.createContext();
 
 const NegotiatorProvider = ({ children }) => {
 	const [activeProposals, setActiveProposals] = useState(false);
+	const [expiredProposals, setExpiredProposals] = useState(false);
 
 	useEffect(() => {
     const Setup = async () => {
 
 			Negotiator.on('activeProposals', (state) => {
 				setActiveProposals(state);
+			})
+			
+			Negotiator.on('expiredProposals', (state) => {
+				setExpiredProposals(state);
       })
     };
 
@@ -20,7 +25,8 @@ const NegotiatorProvider = ({ children }) => {
 	return (
 		<NegotiatorContext.Provider
 			value={{
-        activeProposals
+				activeProposals,
+				expiredProposals
 			}}
 		>
 			{children}

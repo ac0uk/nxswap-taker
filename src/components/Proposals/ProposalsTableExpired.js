@@ -1,13 +1,14 @@
 import React from 'react';
 import { NXMeta } from '../../js/NXSwapTaker';
 
-class ProposalsTable extends React.Component {
+class ProposalsTableExpired extends React.Component {
   
   render () {
-    let activeProposals = this.props.activeProposals;
-    if( ! activeProposals ) return false;
+    let expiredProposals = this.props.expiredProposals;
 
-    let listProposals = activeProposals.map((proposal) => {
+    if( ! expiredProposals ) return false;
+
+    let listProposals = expiredProposals.map((proposal) => {
       let proposal_id = proposal.id;
       let key = `${proposal_id}`;
 
@@ -23,22 +24,11 @@ class ProposalsTable extends React.Component {
       let depositCurrencyName = depositCurrencyMeta.name.replace( '(Testnet)', '' );
       let receiveCurrencyName = receiveCurrencyMeta.name.replace( '(Testnet)', '' );
 
-      let expires = proposal.party_a.expires;
-      let negotiating = proposal.negotiating;
-
-      if( negotiating !== undefined && negotiating !== false ) {
-        expires = proposal.party_b.expires;
-      }
-      
-      let now = new Date().getTime();
-      let diff = expires - now;
-      let seconds = Math.round(diff / 1000);
-
       return (
         <div key={key} className="swapBar">
             <div className="profile">
               <img src="/img/profile-default.png" alt="Profile" />
-              {proposal.me_party_a ? ( <span>YOU</span> ) : ( <span>3001</span> )}
+              {proposal.role === 'maker' ? ( <span>YOU</span> ) : ( <span>3001</span> )}
             </div>
             <div className="currencySelect">
               <span>Swap<small>{depositCurrencyName}</small></span>
@@ -53,7 +43,7 @@ class ProposalsTable extends React.Component {
             </div>
             <div className="profile">
               <img src="/img/profile-default.png" alt="Profile" />
-              {proposal.me_party_b ? ( <span>YOU</span> ) : ( <span>3001</span> )}
+              {proposal.role === 'taker' ? ( <span>YOU</span> ) : ( <span>3001</span> )}
             </div>
             <div className="currencySelect">
               <span>For<small>{receiveCurrencyName}</small></span>
@@ -64,42 +54,14 @@ class ProposalsTable extends React.Component {
               <span>{proposal.party_b.amount}</span>
             </div>
             <div className="metaCol">
-              <small>Expires In</small>
-              <span>{seconds}</span>
+              <span>Expired</span>
             </div>
-            {negotiating && (
-              <>
-              <div className="action">
-                <span className="info">Negotiation<br />In Progress</span>
-              </div>
-              </>
-            )}
-            {!negotiating && proposal.me_party_b && (
-              <>
-              <div className="action">
-                <button className="trackSwap" onClick={() => this.props.acceptProposal(proposal_id)}>Accept</button>
-              </div>
-              <div className="action">
-                <button className="trackSwap" onClick={() => this.props.declineProposal(proposal_id)}>Decline</button>
-              </div>
-              </>
-            )}
-            {!negotiating && proposal.me_party_a && (
-              <>
-              <div className="action">
-              <span className="info">Awaiting<br />Response</span>
-              </div>
-              <div className="action">
-              <button className="trackSwap" onClick={() => this.props.cancelProposal(proposal_id)}>Cancel</button>
-              </div>
-              </>
-            )}
-            
+            <div className="action">
+              <button className="trackSwap" onClick={() => this.props.trashProposal(proposal_id)}>Delete</button>
+            </div>
           </div>
-          
       )
     });
-
 
     return (
       <>
@@ -109,4 +71,4 @@ class ProposalsTable extends React.Component {
   }
 }
 
-export default ProposalsTable;
+export default ProposalsTableExpired;

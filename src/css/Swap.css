@@ -295,6 +295,14 @@
   background: #000000;
 }
 
+.trackSwaps {
+  margin-bottom: 50px;
+}
+
+.trackSwaps:last-of-type {
+  margin-bottom: 0px;
+}
+
 .trackSwaps .trackSwapsHeader {
   margin-bottom: 20px;
 }

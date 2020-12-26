@@ -3,7 +3,7 @@ import {
   Redirect
 } from "react-router-dom";
 import { WalletContext } from '../../contexts/WalletContext';
-import { Wallet, PBMsgr, Negotiator, NXMeta, UserAuthObject, SUPPORTED_CURRENCIES } from '../../js/NXSwapTaker';
+import { Wallet, Negotiator, NXMeta, UserAuthObject, SUPPORTED_CURRENCIES } from '../../js/NXSwapTaker';
 
 import '../../css/Swap.css';
 import CurrencySelector from './CurrencySelector';
@@ -79,54 +79,6 @@ class SwapForm extends React.Component {
 		}, () => {
 			this.update();
 		});
-	}
-
-	async acceptSwapProposal() {
-		if( !this.state.proposingSwap || !this.state.proposeSwap ) return false;
-		let proposeSwap = this.state.proposeSwap;
-		let requestUUID = proposeSwap.requestUUID;
-
-		if( ! requestUUID ) return false;
-		if( ! Wallet.isSwapDBInitialised() ) {
-			return false;
-		}
-
-		// Add the Swap to DB..
-		let addSwap = Wallet.swapDB.insertNewSwap('taker', proposeSwap);
-
-		if( ! addSwap ) {
-			console.log('failed to add swap?!');
-		} else {
-			// Added Swap..
-			// Now submit to API..
-			/*
-			let agreeProposal = await SwapAPI.wsAPIRPC({
-				method: 'swap.agreeProposal',
-				payload: {
-					agree: proposeSwap
-				},
-				sign: true
-			});
-
-			if( agreeProposal.data.agreed ) {
-				// Update the agreedHash..
-				let updateSwap = Wallet.swapDB.updateSwap('taker', requestUUID, {
-					agreedHash: agreeProposal.data.agreedHash
-				});
-
-				if( updateSwap ) {
-					// Ok good.. move to track Swap..
-					this.setState({
-						acceptedSwap: requestUUID
-					});
-				}
-			} else {
-				// Failed to accept..
-				console.log('failed?')
-				console.log(agreeProposal)
-			}
-			*/
-		}
 	}
 
 	swapRequestDeclinedListener(payload) {
@@ -462,12 +414,8 @@ class SwapForm extends React.Component {
 		
     // ok we have created a proposal..
     // now we need to send it..
-    await PBMsgr.RESTAPIPost('message/send', {
-      send: {
-        to: createProposal.proposal.party_b.pubkey,
-        message: createProposal
-      }
-    });
+		
+		Negotiator.sendSwapProposal(createProposal);
 	}
   
   clickViewOffers () {
