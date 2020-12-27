@@ -4,6 +4,7 @@ import {
 } from "react-router-dom";
 
 import { useRecoveryKeyContext } from "../contexts/RecoveryKeyContext.js"
+import { useNegotiatorContext } from "../contexts/NegotiatorContext.js"
 import { useWalletContext } from "../contexts/WalletContext.js"
 
 
@@ -26,7 +27,8 @@ function Header() {
 
 function HeaderLinks() {
 	const { recoveryKeyLoading, recoveryKeyLocked, recoveryKeyLoaded } = useRecoveryKeyContext();
-	const { activeProposals } = useWalletContext();
+	const { activeProposals } = useNegotiatorContext();
+	const { loadSwaps } = useWalletContext();
 
 	let linkClass = (recoveryKeyLoading) ? "disabled" : "";
 
@@ -49,10 +51,18 @@ function HeaderLinks() {
 
 		let proposalClass = (proposalCount > 0 ) ? `featured ${linkClass}` : linkClass;
 
+		let swapCount = 0;
+
+		if( loadSwaps !== undefined && loadSwaps !== false ) {
+			swapCount = loadSwaps.length;
+		}
+
+		let swapClass = (swapCount > 0 ) ? `featured ${linkClass}` : linkClass;
+
 		return (
 			<>
 				<Link to="/proposals" className={proposalClass}>Proposals ({proposalCount})</Link>
-				<Link to="/track" className={`${linkClass}`}>Your Swaps (x)</Link>
+				<Link to="/track" className={swapClass}>Your Swaps ({swapCount})</Link>
 				<Link to="/wallet" className={`${linkClass}`}>Wallet</Link>
 				<Link to="/wallet/lock" className={`lock ${linkClass}`}></Link>
 			</>

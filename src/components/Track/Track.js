@@ -10,7 +10,7 @@ import TrackOverview from './TrackOverview';
 function Wallet() {
   return (
     <Switch>
-      <Route path="/track/:requestUUID" component={TrackOverview}></Route>
+      <Route path="/track/:id" component={TrackOverview}></Route>
       <Route path="/track" component={TrackOverview}></Route>
     </Switch>
   )

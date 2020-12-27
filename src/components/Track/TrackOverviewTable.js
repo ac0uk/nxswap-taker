@@ -13,11 +13,15 @@ class TrackOverviewTable extends React.Component {
   render () {
     let loadSwaps = this.props.loadSwaps;
     let listSwaps = loadSwaps.map((swap) => {
-      let requestUUID = swap.requestUUID;
-      let key = `${requestUUID}`;
+      let swap_id = swap.id;
+      let key = `${swap_id}`;
 
-      let depositCurrency = swap.fromCurrency;
-      let receiveCurrency = swap.toCurrency;
+      let proposal = swap.proposal;
+      let party_a = proposal.party_a;
+      let party_b = proposal.party_b;
+
+      let depositCurrency = party_a.currency;
+      let receiveCurrency = party_b.currency;
 
       let depositCurrencyMeta = NXMeta.currencies[depositCurrency];
       let receiveCurrencyMeta = NXMeta.currencies[receiveCurrency];
@@ -25,30 +29,38 @@ class TrackOverviewTable extends React.Component {
       let depositCurrencyName = depositCurrencyMeta.name.replace( '(Testnet)', '' );
       let receiveCurrencyName = receiveCurrencyMeta.name.replace( '(Testnet)', '' );
 
-      let started = new Date(Math.round(swap.requestSubmitted * 1000));
-      let startedDate = date.format(started, 'YYYY/MM/DD');
+      let started = new Date(swap.created);
+      let startedDate = date.format(started, 'DD/MM/YYYY');
       let startedTime = date.format(started, 'HH:mm:ss');
 
       return (
-        <div key={key} className="swapBar matched">
+        <div key={key} className="swapBar">
+          <div className="profile">
+            <img src="/img/profile-default.png" alt="Profile" />
+            {swap.me_party_a ? ( <span>YOU</span> ) : ( <span>3001</span> )}
+          </div>
           <div className="currencySelect">
             <span>Swap<small>{depositCurrencyName}</small></span>
             <img src={depositCurrencyMeta.icon} alt={depositCurrency} />
           </div>
           <div className="metaCol">
             <small>{depositCurrency} Amount</small>
-            <span>{swap.fromAmount}</span>
+            <span>{proposal.party_a.amount}</span>
           </div>
           <div className="currencyArrow">
-              <img src="/img/arrow-right.png" alt=">" />
-            </div>
+            <img src="/img/arrow-right.png" alt=">" />
+          </div>
+          <div className="profile">
+            <img src="/img/profile-default.png" alt="Profile" />
+            {swap.me_party_b ? ( <span>YOU</span> ) : ( <span>3001</span> )}
+          </div>
           <div className="currencySelect">
             <span>For<small>{receiveCurrencyName}</small></span>
             <img src={receiveCurrencyMeta.icon} alt={receiveCurrency} />
           </div>
           <div className="metaCol">
             <small>{receiveCurrency} Amount</small>
-            <span>{swap.toAmount}</span>
+            <span>{proposal.party_b.amount}</span>
           </div>
           <div className="metaCol">
             <small>Started</small>
@@ -60,7 +72,7 @@ class TrackOverviewTable extends React.Component {
             <span>Unknown</span>
           </div>
           <div className="action">
-            <button className="trackSwap" onClick={() => this.props.viewSwap(requestUUID)}>View</button>
+            <button className="trackSwap" onClick={() => this.props.viewSwap(swap_id)}>View</button>
           </div>
         </div>
       )

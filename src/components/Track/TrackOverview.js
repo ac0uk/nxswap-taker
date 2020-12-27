@@ -2,8 +2,8 @@ import React from 'react';
 import {
   Redirect
 } from "react-router-dom";
-import { RecoveryKeyContext } from "../../contexts/RecoveryKeyContext";
-import { Wallet } from '../../js/NXSwapTaker';
+import { WalletContext } from "../../contexts/WalletContext";
+import { Wallet, UserAuthObject } from '../../js/NXSwapTaker';
 
 import TrackOverviewTable from './TrackOverviewTable';
 import TrackDetailModal from './TrackDetailModal';
@@ -18,14 +18,14 @@ class TrackOverview extends React.Component {
     let match = this.props.match;
     let params = match.params;
 
-    if( params.requestUUID !== false ) {
-      this.state.viewSwap = params.requestUUID;
+    if( params.id !== false ) {
+      this.state.viewSwap = params.id;
     }
   }
 
-  viewSwap(requestUUID) {
+  viewSwap(id) {
     this.setState({
-      viewSwap: requestUUID
+      viewSwap: id
     });
   }
 
@@ -44,23 +44,34 @@ class TrackOverview extends React.Component {
   }
 
   render () {
-    const { recoveryKeyLoading, recoveryKeyLocked, recoveryKeyLoaded } = this.context;
+    const { loadSwaps } = this.context;
+    if( loadSwaps === undefined ) return false;
 
-    if (recoveryKeyLoading) return false;
-    if (recoveryKeyLoaded && recoveryKeyLocked) return (<Redirect to="/wallet/unlock" />)
-    if (!recoveryKeyLoaded) return (<Redirect to="/get-started" />)
+    let userAuthorised = (UserAuthObject !== false) ? true : false;
+    if( ! userAuthorised ) return false;
 
     let match = this.props.match;
     let params = match.params;
 
-    if( params.requestUUID !== undefined ) {
-      if( params.requestUUID !== this.state.viewSwap ) {
+    if( params.id !== undefined ) {
+      if( params.id !== this.state.viewSwap ) {
         return (<Redirect to="/track" />)
       }
     }
 
-    // Load Swaps..
-    let loadSwaps = Wallet.swapDB.loadSwaps('taker');
+    let loadSwap = false;
+
+    if( this.state.viewSwap !== undefined && this.state.viewSwap !== false ) {
+      console.log('load swap', this.state.viewSwap)
+
+      for( let sid in loadSwaps ) {
+        let s = loadSwaps[sid];
+        if(s.id === this.state.viewSwap ) {
+          loadSwap = s;
+          break;
+        }
+      }
+    }
 
     return (
       <>
@@ -79,12 +90,12 @@ class TrackOverview extends React.Component {
       )}
       </div>
       {this.state.viewSwap !== false && (
-        <TrackDetailModal parent={this.state} closeViewSwap={() => this.closeViewSwap()} />
+        <TrackDetailModal parent={this.state} loadSwap={loadSwap} closeViewSwap={() => this.closeViewSwap()} />
       )}
       </>
     )
   }
 }
 
-TrackOverview.contextType = RecoveryKeyContext;
+TrackOverview.contextType = WalletContext;
 export default TrackOverview;

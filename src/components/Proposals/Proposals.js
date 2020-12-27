@@ -46,7 +46,6 @@ class Proposals extends React.Component {
 
   render () {
     const { activeProposals, expiredProposals } = this.context;
-
     if( activeProposals === undefined && expiredProposals === undefined ) return false;
 
     let userAuthorised = (UserAuthObject !== false) ? true : false;
