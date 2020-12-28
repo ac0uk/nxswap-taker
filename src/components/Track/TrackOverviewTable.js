@@ -20,6 +20,8 @@ class TrackOverviewTable extends React.Component {
       let party_a = proposal.party_a;
       let party_b = proposal.party_b;
 
+      let swap_meta = swap.meta;
+
       let depositCurrency = party_a.currency;
       let receiveCurrency = party_b.currency;
 
@@ -33,11 +35,13 @@ class TrackOverviewTable extends React.Component {
       let startedDate = date.format(started, 'DD/MM/YYYY');
       let startedTime = date.format(started, 'HH:mm:ss');
 
+      let completed = ( swap.completed !== false && swap.completed > 0 ) ? true : false;
+
       return (
         <div key={key} className="swapBar">
           <div className="profile">
             <img src="/img/profile-default.png" alt="Profile" />
-            {swap.me_party_a ? ( <span>YOU</span> ) : ( <span>3001</span> )}
+            {swap_meta.me_party_a ? ( <span>YOU</span> ) : ( <span>3001</span> )}
           </div>
           <div className="currencySelect">
             <span>Swap<small>{depositCurrencyName}</small></span>
@@ -52,7 +56,7 @@ class TrackOverviewTable extends React.Component {
           </div>
           <div className="profile">
             <img src="/img/profile-default.png" alt="Profile" />
-            {swap.me_party_b ? ( <span>YOU</span> ) : ( <span>3001</span> )}
+            {swap_meta.me_party_b ? ( <span>YOU</span> ) : ( <span>3001</span> )}
           </div>
           <div className="currencySelect">
             <span>For<small>{receiveCurrencyName}</small></span>
@@ -69,7 +73,7 @@ class TrackOverviewTable extends React.Component {
           </div>
           <div className="metaCol">
             <small>Status</small>
-            <span>Unknown</span>
+            <span>{completed ? ( <>Completed</> ) : (<>In Progress</>)}</span>
           </div>
           <div className="action">
             <button className="trackSwap" onClick={() => this.props.viewSwap(swap_id)}>View</button>
